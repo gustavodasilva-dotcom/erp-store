@@ -4,14 +4,14 @@
     "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Services\\ERP.Store.API.Services.csproj": {}
   },
   "projects": {
-    "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Services\\ERP.Store.API.Services.csproj": {
+    "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Entities\\ERP.Store.API.Entities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Services\\ERP.Store.API.Services.csproj",
-        "projectName": "ERP.Store.API.Services",
-        "projectPath": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Services\\ERP.Store.API.Services.csproj",
+        "projectUniqueName": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Entities\\ERP.Store.API.Entities.csproj",
+        "projectName": "ERP.Store.API.Entities",
+        "projectPath": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Entities\\ERP.Store.API.Entities.csproj",
         "packagesPath": "C:\\Users\\gusta\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Services\\obj\\",
+        "outputPath": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Entities\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -42,6 +42,155 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.403\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Repositories\\ERP.Store.API.Repositories.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Repositories\\ERP.Store.API.Repositories.csproj",
+        "projectName": "ERP.Store.API.Repositories",
+        "projectPath": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Repositories\\ERP.Store.API.Repositories.csproj",
+        "packagesPath": "C:\\Users\\gusta\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Repositories\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\gusta\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Entities\\ERP.Store.API.Entities.csproj": {
+                "projectPath": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Entities\\ERP.Store.API.Entities.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.123, )"
+            },
+            "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.403\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Services\\ERP.Store.API.Services.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Services\\ERP.Store.API.Services.csproj",
+        "projectName": "ERP.Store.API.Services",
+        "projectPath": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Services\\ERP.Store.API.Services.csproj",
+        "packagesPath": "C:\\Users\\gusta\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Services\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\gusta\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Entities\\ERP.Store.API.Entities.csproj": {
+                "projectPath": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Entities\\ERP.Store.API.Entities.csproj"
+              },
+              "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Repositories\\ERP.Store.API.Repositories.csproj": {
+                "projectPath": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.Repositories\\ERP.Store.API.Repositories.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[6.15.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.15.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

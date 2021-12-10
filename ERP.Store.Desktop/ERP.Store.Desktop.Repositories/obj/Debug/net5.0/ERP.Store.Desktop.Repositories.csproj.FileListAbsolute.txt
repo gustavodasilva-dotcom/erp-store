@@ -1,0 +1,12 @@
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\bin\Debug\net5.0\ERP.Store.Desktop.Repositories.deps.json
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\bin\Debug\net5.0\ERP.Store.Desktop.Repositories.dll
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\bin\Debug\net5.0\ref\ERP.Store.Desktop.Repositories.dll
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\bin\Debug\net5.0\ERP.Store.Desktop.Repositories.pdb
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\obj\Debug\net5.0\ERP.Store.Desktop.Repositories.csproj.AssemblyReference.cache
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\obj\Debug\net5.0\ERP.Store.Desktop.Repositories.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\obj\Debug\net5.0\ERP.Store.Desktop.Repositories.AssemblyInfoInputs.cache
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\obj\Debug\net5.0\ERP.Store.Desktop.Repositories.AssemblyInfo.cs
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\obj\Debug\net5.0\ERP.Store.Desktop.Repositories.csproj.CoreCompileInputs.cache
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\obj\Debug\net5.0\ERP.Store.Desktop.Repositories.dll
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\obj\Debug\net5.0\ref\ERP.Store.Desktop.Repositories.dll
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\obj\Debug\net5.0\ERP.Store.Desktop.Repositories.pdb

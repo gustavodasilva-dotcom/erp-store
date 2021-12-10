@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "ERP.Store.Desktop.Services/1.0.0": {
+        "runtime": {
+          "ERP.Store.Desktop.Services.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ERP.Store.Desktop.Services/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
