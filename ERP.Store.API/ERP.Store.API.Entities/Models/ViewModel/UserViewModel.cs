@@ -16,6 +16,6 @@
 
         public string Role { get; set; }
 
-        public int AcessLevelID { get; set; }
+        public int AccessLevelID { get; set; }
     }
 }

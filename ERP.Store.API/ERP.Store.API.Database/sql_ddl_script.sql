@@ -90,16 +90,12 @@ CREATE TABLE Client
 	,MiddleName			VARCHAR(50)
 	,LastName			VARCHAR(50)		NOT NULL
 	,Identification		VARCHAR(50)		NOT NULL
-	,User_InfoID		INT				NOT NULL
 	,ContactID			INT				NOT NULL
 	,AddressID			INT				NOT NULL
 	,Deleted			BIT				NOT NULL
 	,InsertDate			DATETIME		NOT NULL
 
 	CONSTRAINT PK_ClientID PRIMARY KEY(ClientID)
-
-	CONSTRAINT FK_Client_User_InfoID FOREIGN KEY(User_InfoID)
-	REFERENCES User_Info(User_InfoID),
 
 	CONSTRAINT FK_Client_ContactID FOREIGN KEY(ContactID)
 	REFERENCES Contact(ContactID),
@@ -221,7 +217,7 @@ CREATE TABLE Items
 );
 
 DROP TABLE IF EXISTS Order_Item
-CREATE TABLE Order_Items
+CREATE TABLE Order_Item
 (
 	 Order_ItemID	INT			NOT NULL	IDENTITY(10000000, 1)
 	,OrderID		INT			NOT NULL
@@ -238,8 +234,8 @@ CREATE TABLE Order_Items
 	REFERENCES Items(ItemID)
 );
 
-DROP TABLE IF EXISTS Inventory_Item
-CREATE TABLE Inventory
+DROP TABLE IF EXISTS Items_Inventory
+CREATE TABLE Items_Inventory
 (
 	 Inventory_ItemID	INT			NOT NULL	IDENTITY(10000000, 1)
 	,Quantity			INT			NOT NULL
@@ -257,6 +253,20 @@ CREATE TABLE Inventory
 	REFERENCES Supplier(SupplierID)
 );
 
+DROP TABLE IF EXISTS Logs
+CREATE TABLE Logs
+(
+	 LogID			INT				NOT NULL	IDENTITY(1, 1)
+	,Message		VARCHAR(200)	NOT NULL
+	,Json			VARCHAR(MAX)
+	,ProcedureName	VARCHAR(100)
+	,Process		VARCHAR(100)
+	,ID				INT
+	,Deleted		BIT			NOT NULL
+	,InsertDate		DATETIME	NOT NULL
+
+	CONSTRAINT PK_LogID PRIMARY KEY(LogID)
+);
 
 /***********************************************************************************************
 INSERTING DEFAULT USER ADMINISTRATOR:

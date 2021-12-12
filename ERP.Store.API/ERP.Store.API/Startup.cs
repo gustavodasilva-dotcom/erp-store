@@ -30,6 +30,13 @@ namespace ERP.Store.API
 
             services.AddScoped<ITokenService, TokenService>();
 
+            services.AddScoped<IAddressRepository, AddressRepository>();
+
+            services.AddScoped<IContactRepository, ContactRepository>();
+
+            services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
 

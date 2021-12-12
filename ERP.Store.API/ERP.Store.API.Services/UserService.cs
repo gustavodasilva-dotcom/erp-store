@@ -35,7 +35,7 @@ namespace ERP.Store.API.Services
                     Username = user.Username,
                     Identification = user.Identification,
                     Role = user.Description,
-                    AcessLevelID = user.Acess_LevelID
+                    AccessLevelID = user.Access_LevelID
                 };
             }
             catch (Exception)

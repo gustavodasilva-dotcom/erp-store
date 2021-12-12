@@ -16,6 +16,6 @@
 
         public string Description { get; set; }
 
-        public int Acess_LevelID { get; set; }
+        public int Access_LevelID { get; set; }
     }
 }

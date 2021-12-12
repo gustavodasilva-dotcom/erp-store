@@ -30,8 +30,9 @@ namespace ERP.Store.API.Services
                 {
                     Subject = new ClaimsIdentity(new[]
                     {
+                        new Claim("ID", user.EmployeeID.ToString()),
                         new Claim(ClaimTypes.Name, user.Username),
-                        new Claim(ClaimTypes.Role, user.AcessLevelID.ToString())
+                        new Claim(ClaimTypes.Role, user.AccessLevelID.ToString())
                     }),
                     Expires = DateTime.UtcNow.AddHours(8),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

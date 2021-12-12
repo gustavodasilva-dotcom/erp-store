@@ -23,6 +23,8 @@ namespace ERP.Store.API.Repositories
             {
                 using (var db = new SqlConnection(_connectionString))
                 {
+                    #region SQL
+
                     var query =
                     $@" IF (SELECT	1
                         	FROM	User_Info
@@ -47,6 +49,8 @@ namespace ERP.Store.API.Repositories
                         	  AND	E.Deleted = 0;
                         
                         END;";
+
+                    #endregion SQL
 
                     return await db.QueryFirstOrDefaultAsync<UserTable>(query, commandTimeout: 30);
                 }
