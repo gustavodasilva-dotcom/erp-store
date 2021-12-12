@@ -34,6 +34,8 @@ namespace ERP.Store.API
 
             services.AddScoped<IContactRepository, ContactRepository>();
 
+            services.AddScoped<IImageRepository, ImageRepository>();
+
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 

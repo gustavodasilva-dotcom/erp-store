@@ -11,6 +11,7 @@ CREATE TABLE Address
 	 AddressID		INT				NOT NULL	IDENTITY(10000000, 1)
 	,Zip			VARCHAR(10)		NOT NULL
 	,Street			VARCHAR(50)		NOT NULL
+	,Number			VARCHAR(10)		NOT NULL
 	,Comment		VARCHAR(50)		NOT NULL
 	,Neighborhood	VARCHAR(50)		NOT NULL
 	,City			VARCHAR(50)		NOT NULL
@@ -153,19 +154,33 @@ CREATE TABLE Employee_Job
 	REFERENCES Jobs(JobID)
 );
 
+DROP TABLE IF EXISTS Image
+CREATE TABLE Image
+(
+	 ImageID		INT				NOT NULL	IDENTITY(10000000, 1)
+	,Base64			VARCHAR(MAX)	NOT NULL
+	,Deleted		BIT				NOT NULL
+	,InsertDate		DATETIME		NOT NULL
+
+	CONSTRAINT PK_ImagemID PRIMARY KEY(ImageID)
+);
+
 DROP TABLE IF EXISTS Employee_Image
 CREATE TABLE Employee_Image
 (
 	 Employee_ImageID	INT				NOT NULL	IDENTITY(10000000, 1)
-	,Base64				VARCHAR(MAX)	NOT NULL
 	,EmployeeID			INT				NOT NULL
+	,ImageID			INT				NOT NULL
 	,Deleted			BIT				NOT NULL
 	,InsertDate			DATETIME		NOT NULL
 
 	CONSTRAINT PK_Employee_ImagemID PRIMARY KEY(Employee_ImageID)
 
 	CONSTRAINT FK_Employee_Imagem_EmployeeID FOREIGN KEY(EmployeeID)
-	REFERENCES Employee(EmployeeID)
+	REFERENCES Employee(EmployeeID),
+
+	CONSTRAINT FK_Employee_ImagemID FOREIGN KEY(ImageID)
+	REFERENCES Image(ImageID)
 );
 
 DROP TABLE IF EXISTS Supplier
@@ -280,6 +295,7 @@ BEGIN TRANSACTION;
 		(
 			 '01310300'
 			,'Avenida Paulista'
+			,'0'
 			,''
 			,'Bela Vista'
 			,'São Paulo'

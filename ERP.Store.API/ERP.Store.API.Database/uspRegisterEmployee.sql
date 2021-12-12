@@ -10,10 +10,10 @@ CREATE PROCEDURE [dbo].[uspRegisterEmployee]
 	,@Password			VARCHAR(50)
 	,@AddressID			INT
 	,@ContactID			INT
+	,@ImageID			INT
 	,@Access_LevelID	INT
 	,@Salary			MONEY
 	,@JobID				INT
-	,@Base64			VARCHAR(MAX)
 AS
 /**********************************************************************************
 Create date: 2021-12-11
@@ -130,36 +130,41 @@ Description: This procedure registers new employees in the database.
 /**********************************************************************************
 3 - INSERTING USER EMPLOYEE_JOB.
 **********************************************************************************/
-	
+
 /**********************************************************************************
-4 - INSERTING USER EMPLOYEE_IMAGE:
+4 - INSERTING EMPLOYEE_IMAGE:
 **********************************************************************************/
-		BEGIN TRANSACTION;
-	
-			BEGIN TRY
-	
-				INSERT INTO Employee_Image
-				VALUES
-				(
-					 @Base64
-					,@EmployeeID
-					,0
-					,GETDATE()
-				);
-	
-			END TRY
-	
-			BEGIN CATCH
-	
-				IF @@TRANCOUNT > 0
-					ROLLBACK TRANSACTION;
-	
-			END CATCH;
-	
-		IF @@TRANCOUNT > 0
-			COMMIT TRANSACTION;
+		IF @ImageID != 0
+		BEGIN
+
+			BEGIN TRANSACTION;
+		
+				BEGIN TRY
+
+					INSERT INTO Employee_Image
+					VALUES
+					(
+						 @EmployeeID
+						,@ImageID
+						,0
+						,GETDATE()
+					);
+
+				END TRY
+
+				BEGIN CATCH
+
+					IF @@TRANCOUNT > 0
+						ROLLBACK TRANSACTION;
+
+				END CATCH;
+
+			IF @@TRANCOUNT > 0
+				COMMIT TRANSACTION;
+
+		END;
 /**********************************************************************************
-4 - INSERTING USER EMPLOYEE_IMAGE.
+4 - INSERTING EMPLOYEE_IMAGE.
 **********************************************************************************/
 	END;
 GO

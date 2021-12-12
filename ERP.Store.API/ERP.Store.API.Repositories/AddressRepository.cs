@@ -25,7 +25,7 @@ namespace ERP.Store.API.Repositories
                 {
                     #region SQL
 
-                    var query = @" EXEC uspInsertAddress @Zip, @Street, @Comment, @Neighborhood, @City, @State, @Country;";
+                    var query = @" EXEC uspInsertAddress @Zip, @Street, @Number, @Comment, @Neighborhood, @City, @State, @Country;";
 
                     #endregion SQL
 
@@ -33,6 +33,7 @@ namespace ERP.Store.API.Repositories
                     { 
                        @Zip = address.Zip,
                        @Street = address.Street,
+                       @Number = address.Number,
                        @Comment = address.Comment,
                        @Neighborhood = address.Neighborhood,
                        @City = address.City,

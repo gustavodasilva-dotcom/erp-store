@@ -6,6 +6,8 @@
 
         public string Street { get; set; }
 
+        public string Number { get; set; }
+
         public string Comment { get; set; }
 
         public string Neighborhood { get; set; }

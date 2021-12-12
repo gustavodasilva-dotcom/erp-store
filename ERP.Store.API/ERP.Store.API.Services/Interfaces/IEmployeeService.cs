@@ -5,6 +5,6 @@ namespace ERP.Store.API.Services.Interfaces
 {
     public interface IEmployeeService
     {
-        Task RegisterEmployeeAsync(EmployeeInputModel employeeInputModel);
+        Task RegisterEmployeeAsync(EmployeeInputModel input);
     }
 }

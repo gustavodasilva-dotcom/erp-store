@@ -1,66 +1,52 @@
 USE ERP_Order;
 GO
 
-CREATE PROCEDURE [dbo].[uspInsertAddress]
-	 @Zip				VARCHAR(10)
-	,@Street			VARCHAR(50)
-	,@Number			VARCHAR(10)
-	,@Comment			VARCHAR(50)
-	,@Neighborhood		VARCHAR(50)
-	,@City				VARCHAR(50)
-	,@State				VARCHAR(2)
-	,@Country			VARCHAR(50)
+CREATE PROCEDURE [dbo].[uspInsertImage]
+	 @Base64 VARCHAR(MAX)
 AS
 /**********************************************************************************
-Create date: 2021-12-11
+Create date: 2021-12-12
 
-Description: This procedure registers address data in the database.
+Description: This procedure registers new employees' image in the database.
 **********************************************************************************/
 	BEGIN
-
+	
 		SET NOCOUNT ON;
 
-		DECLARE @AddressID INT;
+		DECLARE @ImageID INT;
 
 /**********************************************************************************
-1 - INSERTING ADDRESS DATA:
+1 - INSERTING IMAGE:
 **********************************************************************************/
-		BEGIN TRANSACTION
-	
+		BEGIN TRANSACTION;
+		
 			BEGIN TRY
-	
-				INSERT INTO Address
+
+				INSERT INTO Image
 				VALUES
 				(
-					 @Zip
-					,@Street
-					,@Number
-					,@Comment
-					,@Neighborhood
-					,@City
-					,@State
-					,@Country
+					 @Base64
 					,0
 					,GETDATE()
 				);
-	
+
 			END TRY
-	
+
 			BEGIN CATCH
-	
+
 				IF @@TRANCOUNT > 0
 					ROLLBACK TRANSACTION;
-	
+
 			END CATCH;
-	
+
 		IF @@TRANCOUNT > 0
 			COMMIT TRANSACTION;
-	
-		SET @AddressID = @@IDENTITY;
+		
+		SET @ImageID = @@IDENTITY;
 /**********************************************************************************
-1 - INSERTING ADDRESS DATA.
+1 - INSERTING IMAGE.
 **********************************************************************************/
 
-		SELECT @AddressID;
+		SELECT @ImageID;
 	END;
 GO

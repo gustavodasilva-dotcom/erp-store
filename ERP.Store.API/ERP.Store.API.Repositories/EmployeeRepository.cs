@@ -34,10 +34,10 @@ namespace ERP.Store.API.Repositories
                                     @Password,
                                     @AddressID,
                                     @ContactID,
+                                    @ImageID,
                                     @Access_LevelID,
                                     @Salary,
-                                    @JobID,
-                                    @Base64;";
+                                    @JobID;";
 
                     #endregion SQL
 
@@ -51,10 +51,10 @@ namespace ERP.Store.API.Repositories
                         @Password = employee.User.Password,
                         @AddressID = employee.Address.ID,
                         @ContactID = employee.Contact.ID,
+                        @ImageID = employee.Image.ID,
                         @Access_LevelID = employee.ExtraInfo.AccessLevelID,
                         @Salary = employee.ExtraInfo.Salary,
-                        @JobID = employee.ExtraInfo.JobID,
-                        @Base64 = employee.Image.Base64
+                        @JobID = employee.ExtraInfo.JobID
                     }, commandTimeout: 30);
                 }
             }
