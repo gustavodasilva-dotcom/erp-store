@@ -5,6 +5,8 @@ namespace ERP.Store.API.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        Task<UserTable> CheckUserAsync(string username, string password);
+        Task<UserInfoData> GetUserInfoAsync(int userInfoID);
+
+        Task<UserData> CheckUserAsync(string username, string password);
     }
 }

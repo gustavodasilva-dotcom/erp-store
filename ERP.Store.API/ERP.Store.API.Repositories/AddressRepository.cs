@@ -2,6 +2,7 @@
 using Dapper;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using ERP.Store.API.Entities.Tables;
 using ERP.Store.API.Entities.Entities;
 using Microsoft.Extensions.Configuration;
 using ERP.Store.API.Repositories.Interfaces;
@@ -15,6 +16,27 @@ namespace ERP.Store.API.Repositories
         public AddressRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("Default");
+        }
+
+        public async Task<AddressData> GetAddressAsync(int addressID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"SELECT * FROM Address (NOLOCK) WHERE AddressID = @addressID AND Deleted = 0;";
+
+                    #endregion SQL
+
+                    return await db.QueryFirstOrDefaultAsync<AddressData>(query, new { @addressID = addressID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<int> InsertAddressAsync(Address address)

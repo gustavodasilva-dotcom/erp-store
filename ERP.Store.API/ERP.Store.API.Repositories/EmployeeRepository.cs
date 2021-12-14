@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ERP.Store.API.Entities.Entities;
 using Microsoft.Extensions.Configuration;
 using ERP.Store.API.Repositories.Interfaces;
+using ERP.Store.API.Entities.Tables;
 
 namespace ERP.Store.API.Repositories
 {
@@ -15,6 +16,46 @@ namespace ERP.Store.API.Repositories
         public EmployeeRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("Default");
+        }
+
+        public async Task<EmployeeData> GetEmployeeAsync(string identification)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  SELECT		 E.EmployeeID
+			                        ,FirstName
+			                        ,MiddleName
+			                        ,LastName
+			                        ,Identification
+			                        ,Access_LevelID
+			                        ,User_InfoID
+			                        ,ContactID
+			                        ,AddressID
+			                        ,Salary
+			                        ,J.JobID
+			                        ,Description
+                        FROM		Employee		E  (NOLOCK)
+                        INNER JOIN	Employee_Job	EJ (NOLOCK)	ON EJ.EmployeeID	= E.EmployeeID
+                        INNER JOIN	Jobs			J  (NOLOCK)	ON J.JobID			= EJ.JobID
+                        WHERE		E.Identification = @identification
+                          AND		E.Deleted		 = 0
+                          AND       EJ.Deleted       = 0
+                          AND       J.Deleted        = 0;";
+
+                    #endregion SQL
+
+                    return await db.QueryFirstOrDefaultAsync<EmployeeData>(query, new { @identification = identification }, commandTimeout: 30);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task InsertEmployeeAsync(Employee employee)

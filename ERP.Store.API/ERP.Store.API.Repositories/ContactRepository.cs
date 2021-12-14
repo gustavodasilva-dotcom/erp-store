@@ -2,6 +2,7 @@
 using Dapper;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using ERP.Store.API.Entities.Tables;
 using ERP.Store.API.Entities.Entities;
 using Microsoft.Extensions.Configuration;
 using ERP.Store.API.Repositories.Interfaces;
@@ -15,6 +16,27 @@ namespace ERP.Store.API.Repositories
         public ContactRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("Default");
+        }
+
+        public async Task<ContactData> GetContactAsync(int contactID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"SELECT * FROM Contact (NOLOCK) WHERE ContactID = @contactID AND Deleted = 0;";
+
+                    #endregion SQL
+
+                    return await db.QueryFirstOrDefaultAsync<ContactData>(query, new { @contactID = contactID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<int> InsertContactAsync(Contact contact)

@@ -17,7 +17,28 @@ namespace ERP.Store.API.Repositories
             _connectionString = configuration.GetConnectionString("Default");
         }
 
-        public async Task<UserTable> CheckUserAsync(string username, string password)
+        public async Task<UserInfoData> GetUserInfoAsync(int userInfoID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"SELECT * FROM User_Info (NOLOCK) WHERE User_InfoID = @userInfoID AND Deleted = 0;";
+
+                    #endregion SQL
+
+                    return await db.QueryFirstOrDefaultAsync<UserInfoData>(query, new { @userInfoID = userInfoID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<UserData> CheckUserAsync(string username, string password)
         {
             try
             {
@@ -52,7 +73,7 @@ namespace ERP.Store.API.Repositories
 
                     #endregion SQL
 
-                    return await db.QueryFirstOrDefaultAsync<UserTable>(query, commandTimeout: 30);
+                    return await db.QueryFirstOrDefaultAsync<UserData>(query, commandTimeout: 30);
                 }
             }
             catch (Exception)
