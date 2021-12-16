@@ -10,3 +10,6 @@ C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.St
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\obj\Debug\net5.0\ERP.Store.Desktop.Repositories.dll
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\obj\Debug\net5.0\ref\ERP.Store.Desktop.Repositories.dll
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\obj\Debug\net5.0\ERP.Store.Desktop.Repositories.pdb
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\bin\Debug\net5.0\ERP.Store.Desktop.Entities.dll
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\bin\Debug\net5.0\ERP.Store.Desktop.Entities.pdb
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop.Repositories\obj\Debug\net5.0\ERP.Store.Desktop.Repositories.csproj.CopyComplete

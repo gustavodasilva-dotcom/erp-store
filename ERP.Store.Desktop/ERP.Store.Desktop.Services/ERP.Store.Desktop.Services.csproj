@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\ERP.Store.API\ClassLibrary1\ERP.Store.Desktop.Entities.csproj" />
+    <ProjectReference Include="..\ERP.Store.Desktop.Repositories\ERP.Store.Desktop.Repositories.csproj" />
+  </ItemGroup>
+
 </Project>
