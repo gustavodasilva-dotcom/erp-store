@@ -14,7 +14,7 @@ namespace ERP.Store.Desktop
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmLogin());
+            Application.Run(new Forms.Login.frmLogin());
         }
     }
 }

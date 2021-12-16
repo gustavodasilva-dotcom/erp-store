@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using ERP.Store.Desktop.Services;
 using ERP.Store.Desktop.Entities.JSON.Request;
 
-namespace ERP.Store.Desktop
+namespace ERP.Store.Desktop.Forms.Login
 {
     public partial class frmLogin : Form
     {
         private readonly UserService _userService;
 
+        private readonly ErrorService _errorService;
+
         public frmLogin()
         {
             _userService = new UserService();
+
+            _errorService = new ErrorService();
 
             InitializeComponent();
         }
@@ -33,38 +36,26 @@ namespace ERP.Store.Desktop
                 {
                     var response = _userService.Login(user);
 
-                    if (!string.IsNullOrEmpty(response.Token.Token))
+                    if (response != null)
                     {
-                        // TODO: create the menu form and a functionality to open the said form.
+                        var home = new Home.frmHome(response);
+
+                        Hide();
+                        home.Show();
+                    }
+                    else
+                    {
+                        throw new Exception("Could not verify the user data. Please, contact the administrator.");
                     }
                 }
                 else
                 {
-                    DeserializeErros(errors);
+                    _errorService.DeserializeErros(errors);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"The following error(s) ocurred: {ex.Message}");
-            }
-        }
-
-        private static void DeserializeErros(List<string> errors)
-        {
-            try
-            {
-                var errorConcat = string.Empty;
-
-                foreach (var error in errors)
-                {
-                    errorConcat += error;
-                }
-
-                throw new Exception(errorConcat);
-            }
-            catch (Exception)
-            {
-                throw;
             }
         }
     }
