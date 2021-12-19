@@ -60,7 +60,7 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _employeeService.RegisterEmployeeAsync(model);
 
-                return Ok(await _employeeService.GetEmployeeAsync(model.Identification));
+                return Created("Created", await _employeeService.GetEmployeeAsync(model.Identification));
             }
             catch (ConflictException e)
             {

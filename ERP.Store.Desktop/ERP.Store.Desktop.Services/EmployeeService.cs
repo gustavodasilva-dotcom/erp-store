@@ -1,0 +1,26 @@
+﻿using System;
+using ERP.Store.Desktop.Repositories;
+using ERP.Store.Desktop.Entities.JSON.Request;
+using ERP.Store.Desktop.Entities.JSON.Response;
+
+namespace ERP.Store.Desktop.Services
+{
+    public class EmployeeService
+    {
+        private readonly EmployeeRepository _employeeRepository;
+
+        public EmployeeService()
+        {
+            _employeeRepository = new EmployeeRepository();
+        }
+
+        public int Post(EmployeeRequest employee, UserResponse user)
+        {
+            try
+            {
+                return _employeeRepository.Post(employee, user);
+            }
+            catch (Exception) { throw; }
+        }
+    }
+}

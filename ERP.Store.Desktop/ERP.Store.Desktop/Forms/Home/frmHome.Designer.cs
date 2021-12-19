@@ -99,8 +99,8 @@ namespace ERP.Store.Desktop.Forms.Home
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "frmHome";
-            this.Text = "frmHome";
+            this.Name = "Home";
+            this.Text = "Home";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

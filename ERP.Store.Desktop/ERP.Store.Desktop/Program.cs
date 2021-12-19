@@ -15,6 +15,7 @@ namespace ERP.Store.Desktop
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Forms.Login.frmLogin());
+            //Application.Run(new Forms.Employees.frmRegisterNewEmployee());
         }
     }
 }

@@ -168,12 +168,12 @@ namespace ERP.Store.API.Services
 
                 var addressID = await _addressRepository.InsertAddressAsync(employeeInput.Address);
 
-                if (addressID != 0)
+                if (addressID == 0)
                     throw new Exception("An error ocurred while inserting the employee's address data.");
 
                 var contactID = await _contactRepository.InsertContactAsync(employeeInput.Contact);
 
-                if (contactID != 0)
+                if (contactID == 0)
                     throw new Exception("An error ocurred while inserting the employee's contact data.");
 
                 if (input.Image.IsImage)
