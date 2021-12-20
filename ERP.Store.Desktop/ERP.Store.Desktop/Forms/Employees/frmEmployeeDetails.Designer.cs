@@ -1,7 +1,7 @@
 ﻿
 namespace ERP.Store.Desktop.Forms.Employees
 {
-    partial class frmRegisterNewEmployee
+    partial class frmEmployeeDetails
     {
         /// <summary>
         /// Required designer variable.
@@ -51,7 +51,7 @@ namespace ERP.Store.Desktop.Forms.Employees
             this.comboBoxJob = new System.Windows.Forms.ComboBox();
             this.buttonUploadImage = new System.Windows.Forms.Button();
             this.pictureBoxImage = new System.Windows.Forms.PictureBox();
-            this.buttonRegister = new System.Windows.Forms.Button();
+            this.buttonSend = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).BeginInit();
             this.SuspendLayout();
             // 
@@ -253,23 +253,23 @@ namespace ERP.Store.Desktop.Forms.Employees
             this.pictureBoxImage.TabIndex = 21;
             this.pictureBoxImage.TabStop = false;
             // 
-            // buttonRegister
+            // buttonSend
             // 
-            this.buttonRegister.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonRegister.Location = new System.Drawing.Point(553, 389);
-            this.buttonRegister.Name = "buttonRegister";
-            this.buttonRegister.Size = new System.Drawing.Size(216, 36);
-            this.buttonRegister.TabIndex = 22;
-            this.buttonRegister.Text = "Register";
-            this.buttonRegister.UseVisualStyleBackColor = true;
-            this.buttonRegister.Click += new System.EventHandler(this.buttonRegister_Click);
+            this.buttonSend.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonSend.Location = new System.Drawing.Point(553, 389);
+            this.buttonSend.Name = "buttonSend";
+            this.buttonSend.Size = new System.Drawing.Size(216, 36);
+            this.buttonSend.TabIndex = 22;
+            this.buttonSend.Text = "Send";
+            this.buttonSend.UseVisualStyleBackColor = true;
+            this.buttonSend.Click += new System.EventHandler(this.buttonRegister_Click);
             // 
-            // frmRegisterNewEmployee
+            // frmEmployeeDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 503);
-            this.Controls.Add(this.buttonRegister);
+            this.Controls.Add(this.buttonSend);
             this.Controls.Add(this.pictureBoxImage);
             this.Controls.Add(this.buttonUploadImage);
             this.Controls.Add(this.comboBoxJob);
@@ -292,8 +292,8 @@ namespace ERP.Store.Desktop.Forms.Employees
             this.Controls.Add(this.textBoxLastName);
             this.Controls.Add(this.textBoxMiddleName);
             this.Controls.Add(this.textBoxFirstName);
-            this.Name = "frmRegisterNewEmployee";
-            this.Text = "Register New Employee";
+            this.Name = "frmEmployeeDetails";
+            this.Text = "Employee Details";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -324,6 +324,6 @@ namespace ERP.Store.Desktop.Forms.Employees
         private System.Windows.Forms.ComboBox comboBoxJob;
         private System.Windows.Forms.Button buttonUploadImage;
         private System.Windows.Forms.PictureBox pictureBoxImage;
-        private System.Windows.Forms.Button buttonRegister;
+        private System.Windows.Forms.Button buttonSend;
     }
 }

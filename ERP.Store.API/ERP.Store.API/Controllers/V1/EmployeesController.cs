@@ -21,19 +21,6 @@ namespace ERP.Store.API.Controllers.V1
             _employeeService = employeeService;
         }
 
-        //[HttpGet("page={page:int}&quantity={quantity:int}")]
-        //public async Task<ActionResult> GetEmployeesAsync([FromQuery] int page, [FromQuery] int quantity)
-        //{
-        //    try
-        //    {
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return StatusCode(500, $"The following error ocurred: {e.Message}");
-        //    }
-        //}
-
         [HttpGet("{identification}")]
         [Authorize(Roles = "1")]
         public async Task<ActionResult<EmployeeViewModel>> GetEmployeeAsync([FromRoute] string identification)

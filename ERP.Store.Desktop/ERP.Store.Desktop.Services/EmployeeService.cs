@@ -22,5 +22,14 @@ namespace ERP.Store.Desktop.Services
             }
             catch (Exception) { throw; }
         }
+
+        public EmployeeResponse Get(string identification, UserResponse user)
+        {
+            try
+            {
+                return _employeeRepository.Get(identification, user);
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

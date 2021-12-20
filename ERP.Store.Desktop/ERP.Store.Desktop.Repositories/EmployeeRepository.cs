@@ -3,6 +3,7 @@ using System;
 using System.Configuration;
 using ERP.Store.Desktop.Entities.JSON.Request;
 using ERP.Store.Desktop.Entities.JSON.Response;
+using Newtonsoft.Json;
 
 namespace ERP.Store.Desktop.Repositories
 {
@@ -107,6 +108,53 @@ namespace ERP.Store.Desktop.Repositories
                 IRestResponse response = client.Execute(request);
 
                 return (int)response.StatusCode;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public EmployeeResponse Get(string identification, UserResponse user)
+        {
+            try
+            {
+                var client = new RestClient(_endpoint + identification)
+                {
+                    Timeout = -1
+                };
+
+                var request = new RestRequest(Method.GET);
+
+                request.AddHeader("Authorization", $"Bearer {user.Token.Token}");
+
+                request.AddHeader("Content-Type", "application/json");
+
+                request.AddParameter("application/json", ParameterType.RequestBody);
+
+                IRestResponse response = client.Execute(request);
+
+                if ((int)response.StatusCode != 200)
+                {
+                    var message = string.Empty;
+
+                    switch ((int)response.StatusCode)
+                    {
+                        case 400:
+                            message = $"Invalid request. Please, check your input data.";
+                            break;
+                        case 403:
+                            message = $"This user doens't have authorization to complete this request.";
+                            break;
+                        case 404:
+                            message = $"No data found to identification {identification}.";
+                            break;
+                        default:
+                            message = "An error occurred while processing the request.";
+                            break;
+                    }
+
+                    throw new Exception(message);
+                }
+
+                return JsonConvert.DeserializeObject<EmployeeResponse>(response.Content);
             }
             catch (Exception) { throw; }
         }

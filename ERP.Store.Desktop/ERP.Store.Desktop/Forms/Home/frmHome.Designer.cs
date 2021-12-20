@@ -36,6 +36,7 @@ namespace ERP.Store.Desktop.Forms.Home
             this.suppliersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.employeesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.registerNewEmployeeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findEmployeeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,7 +81,8 @@ namespace ERP.Store.Desktop.Forms.Home
             // employeesToolStripMenuItem
             // 
             this.employeesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.registerNewEmployeeToolStripMenuItem});
+            this.registerNewEmployeeToolStripMenuItem,
+            this.findEmployeeToolStripMenuItem});
             this.employeesToolStripMenuItem.Name = "employeesToolStripMenuItem";
             this.employeesToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
             this.employeesToolStripMenuItem.Text = "Employees";
@@ -92,6 +94,13 @@ namespace ERP.Store.Desktop.Forms.Home
             this.registerNewEmployeeToolStripMenuItem.Text = "Register new employee";
             this.registerNewEmployeeToolStripMenuItem.Click += new System.EventHandler(this.registerNewEmployeeToolStripMenuItem_Click);
             // 
+            // findEmployeeToolStripMenuItem
+            // 
+            this.findEmployeeToolStripMenuItem.Name = "findEmployeeToolStripMenuItem";
+            this.findEmployeeToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.findEmployeeToolStripMenuItem.Text = "Find employee";
+            this.findEmployeeToolStripMenuItem.Click += new System.EventHandler(this.findEmployeeToolStripMenuItem_Click);
+            // 
             // frmHome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -99,7 +108,7 @@ namespace ERP.Store.Desktop.Forms.Home
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Home";
+            this.Name = "frmHome";
             this.Text = "Home";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -117,5 +126,6 @@ namespace ERP.Store.Desktop.Forms.Home
         private System.Windows.Forms.ToolStripMenuItem suppliersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem employeesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem registerNewEmployeeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem findEmployeeToolStripMenuItem;
     }
 }
