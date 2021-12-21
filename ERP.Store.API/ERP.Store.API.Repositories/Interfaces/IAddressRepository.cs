@@ -9,5 +9,7 @@ namespace ERP.Store.API.Repositories.Interfaces
         Task<AddressData> GetAddressAsync(int addressID);
 
         Task<int> InsertAddressAsync(Address address);
+
+        Task UpdateAddressAsync(Address address);
     }
 }

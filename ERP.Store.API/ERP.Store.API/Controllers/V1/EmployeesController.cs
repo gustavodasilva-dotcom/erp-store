@@ -58,5 +58,25 @@ namespace ERP.Store.API.Controllers.V1
                 return StatusCode(500, $"The following error ocurred: {e.Message}");
             }
         }
+
+        [HttpPut]
+        [Authorize(Roles = "1")]
+        public async Task<ActionResult> UpdateEmployeeAsync([FromBody] EmployeeInputModel model)
+        {
+            try
+            {
+                await _employeeService.UpdateEmployeeAsync(model);
+                
+                return Ok(await _employeeService.GetEmployeeAsync(model.Identification));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"The following error ocurred: {e.Message}");
+            }
+        }
     }
 }

@@ -52,10 +52,7 @@ namespace ERP.Store.API.Repositories
                     return await db.QueryFirstOrDefaultAsync<EmployeeData>(query, new { @identification = identification }, commandTimeout: 30);
                 }
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            catch (Exception) { throw; }
         }
 
         public async Task InsertEmployeeAsync(Employee employee)
@@ -99,10 +96,50 @@ namespace ERP.Store.API.Repositories
                     }, commandTimeout: 30);
                 }
             }
-            catch (Exception)
+            catch (Exception) { throw; }
+        }
+
+        public async Task UpdateEmployeeAsync(Employee employee)
+        {
+            try
             {
-                throw;
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"EXEC uspUpdateEmployee
+                                  @EmployeeID,
+                                  @Access_LevelID,
+                                  @JobID,
+                                  @User_InfoID,
+                                  @FirstName,
+                                  @MiddleName,
+                                  @LastName,
+                                  @Identification,
+                                  @Username,
+                                  @Password,
+                                  @Salary;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new
+                    {
+                        @EmployeeID = employee.ID,
+                        @Access_LevelID = employee.ExtraInfo.AccessLevelID,
+                        @JobID = employee.ExtraInfo.JobID,
+                        @User_InfoID = employee.User.ID,
+                        @FirstName = employee.FirstName,
+                        @MiddleName = employee.MiddleName,
+                        @LastName = employee.LastName,
+                        @Identification = employee.Identification,
+                        @Username = employee.User.Username,
+                        @Password = employee.User.Password,
+                        @Salary = employee.ExtraInfo.Salary,
+                        
+                    }, commandTimeout: 30);
+                }
             }
+            catch (Exception) { throw; }
         }
     }
 }

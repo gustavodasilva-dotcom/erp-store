@@ -9,5 +9,7 @@ namespace ERP.Store.API.Repositories.Interfaces
         Task<EmployeeData> GetEmployeeAsync(string identification);
 
         Task InsertEmployeeAsync(Employee employee);
+
+        Task UpdateEmployeeAsync(Employee employee);
     }
 }

@@ -33,10 +33,7 @@ namespace ERP.Store.API.Repositories
                     return await db.QueryFirstOrDefaultAsync<AddressData>(query, new { @addressID = addressID }, commandTimeout: 30);
                 }
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            catch (Exception) { throw; }
         }
 
         public async Task<int> InsertAddressAsync(Address address)
@@ -65,10 +62,37 @@ namespace ERP.Store.API.Repositories
                     commandTimeout: 30);
                 }
             }
-            catch (Exception)
+            catch (Exception) { throw; }
+        }
+
+        public async Task UpdateAddressAsync(Address address)
+        {
+            try
             {
-                throw;
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"EXEC uspUpdateAddress @AddressID, @Zip, @Street, @Number, @Comment, @Neighborhood, @City, @State, @Country;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new
+                    {
+                        @AddressID = address.ID,
+                        @Zip = address.Zip,
+                        @Street = address.Street,
+                        @Number = address.Number,
+                        @Comment = address.Comment,
+                        @Neighborhood = address.Neighborhood,
+                        @City = address.City,
+                        @State = address.State,
+                        @Country = address.Country
+                    },
+                    commandTimeout: 30);
+                }
             }
+            catch (Exception) { throw; }
         }
     }
 }
