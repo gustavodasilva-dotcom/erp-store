@@ -42,6 +42,9 @@ namespace ERP.Store.API
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
 
+            services.AddScoped<ILogService, LogService>();
+            services.AddScoped<ILogRepository, LogRepository>();
+
             services.AddControllers();
 
             var key = Encoding.ASCII.GetBytes(Configuration["Jwt:Key"]);

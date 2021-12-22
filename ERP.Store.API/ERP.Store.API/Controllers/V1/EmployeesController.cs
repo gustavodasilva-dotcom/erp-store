@@ -14,10 +14,14 @@ namespace ERP.Store.API.Controllers.V1
     [ApiController]
     public class EmployeesController : ControllerBase
     {
+        private readonly ILogService _logService;
+
         private readonly IEmployeeService _employeeService;
 
-        public EmployeesController(IEmployeeService employeeService)
+        public EmployeesController(ILogService logService, IEmployeeService employeeService)
         {
+            _logService = logService;
+
             _employeeService = employeeService;
         }
 
@@ -31,10 +35,14 @@ namespace ERP.Store.API.Controllers.V1
             }
             catch (NotFoundException e)
             {
+                await _logService.LogAsync(identification, e.Message, "GetEmployeeAsync() : EmployeesController");
+
                 return NotFound(e.Message);
             }
             catch (Exception e)
             {
+                await _logService.LogAsync(identification, e.Message, "GetEmployeeAsync() : EmployeesController");
+
                 return StatusCode(500, $"The following error ocurred: {e.Message}");
             }
         }
@@ -47,14 +55,22 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _employeeService.RegisterEmployeeAsync(model);
 
-                return Created("Created", await _employeeService.GetEmployeeAsync(model.Identification));
+                var employee = await _employeeService.GetEmployeeAsync(model.Identification);
+
+                await _logService.LogAsync(model, "Employee registered successfully.", "RegisterEmployeeAsync() : EmployeesController", employee.ID);
+
+                return Created("Created", employee);
             }
             catch (ConflictException e)
             {
+                await _logService.LogAsync(model, e.Message, "RegisterEmployeeAsync() : EmployeesController");
+
                 return Conflict(e.Message);
             }
             catch (Exception e)
             {
+                await _logService.LogAsync(model, e.Message, "RegisterEmployeeAsync() : EmployeesController");
+
                 return StatusCode(500, $"The following error ocurred: {e.Message}");
             }
         }
@@ -66,15 +82,23 @@ namespace ERP.Store.API.Controllers.V1
             try
             {
                 await _employeeService.UpdateEmployeeAsync(model);
-                
-                return Ok(await _employeeService.GetEmployeeAsync(model.Identification));
+
+                var employee = await _employeeService.GetEmployeeAsync(model.Identification);
+
+                await _logService.LogAsync(model, "Employee updated successfully.", "UpdateEmployeeAsync() : EmployeesController", employee.ID);
+
+                return Ok(employee);
             }
             catch (NotFoundException e)
             {
+                await _logService.LogAsync(model, e.Message, "UpdateEmployeeAsync() : EmployeesController");
+
                 return NotFound(e.Message);
             }
             catch (Exception e)
             {
+                await _logService.LogAsync(model, e.Message, "UpdateEmployeeAsync() : EmployeesController");
+
                 return StatusCode(500, $"The following error ocurred: {e.Message}");
             }
         }

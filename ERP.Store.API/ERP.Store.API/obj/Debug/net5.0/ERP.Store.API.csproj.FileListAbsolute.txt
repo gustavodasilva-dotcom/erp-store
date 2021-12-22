@@ -50,3 +50,4 @@ C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API\bin\Debug\net5.0\ERP.Store.API.Entities.pdb
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API\bin\Debug\net5.0\ERP.Store.API.Repositories.pdb
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API\bin\Debug\net5.0\ERP.Store.API.Services.pdb
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API\bin\Debug\net5.0\Newtonsoft.Json.dll
