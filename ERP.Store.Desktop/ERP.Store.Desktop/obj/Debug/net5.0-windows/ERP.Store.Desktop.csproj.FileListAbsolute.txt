@@ -14,7 +14,6 @@ C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.St
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ref\ERP.Store.Desktop.dll
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.pdb
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.genruntimeconfig.cache
-C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.frmLogin.resources
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.csproj.GenerateResource.cache
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\bin\Debug\net5.0-windows\ERP.Store.Desktop.Entities.dll
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\bin\Debug\net5.0-windows\ERP.Store.Desktop.Services.dll
@@ -39,3 +38,8 @@ C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.St
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\bin\Debug\net5.0-windows\ERP.Store.Desktop.Repositories.pdb
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\bin\Debug\net5.0-windows\Newtonsoft.Json.dll
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\bin\Debug\net5.0-windows\RestSharp.dll
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.Forms.Home.frmHome.resources
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.Forms.Login.frmLogin.resources
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.Properties.Resources.resources
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.Forms.Employees.frmEmployeeDetails.resources
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.Forms.Find.frmFind.resources

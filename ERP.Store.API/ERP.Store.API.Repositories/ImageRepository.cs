@@ -3,6 +3,7 @@ using Dapper;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using ERP.Store.API.Entities.Tables;
+using ERP.Store.API.Entities.Entities;
 using Microsoft.Extensions.Configuration;
 using ERP.Store.API.Repositories.Interfaces;
 
@@ -41,10 +42,7 @@ namespace ERP.Store.API.Repositories
                     return await db.QueryFirstOrDefaultAsync<ImageData>(query, new { @employeeID = employeeID }, commandTimeout: 30);
                 }
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            catch (Exception) { throw; }
         }
 
         public async Task<int> InsertImageAsync(string base64)
@@ -62,10 +60,47 @@ namespace ERP.Store.API.Repositories
                     return await db.ExecuteScalarAsync<int>(query, new { @base64 = base64 }, commandTimeout: 30);
                 }
             }
-            catch (Exception)
+            catch (Exception) { throw; }
+        }
+
+        public async Task UpdateImageAsync(Image image)
+        {
+            try
             {
-                throw;
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"EXEC uspUpdateImage @ImageID, @Base64;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new { @ImageID = image.ID, @Base64 = image.Base64 }, commandTimeout: 30);
+                }
             }
+            catch (Exception) { throw; }
+        }
+
+        public async Task DeleteImageAsync(int imageID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  UPDATE	Image
+				        SET
+				        	Deleted = 1
+				        WHERE	ImageID = @imageID;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new { @imageID = imageID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
         }
     }
 }

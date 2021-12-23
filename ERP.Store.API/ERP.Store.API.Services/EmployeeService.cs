@@ -99,8 +99,8 @@ namespace ERP.Store.API.Services
                     },
                     Image = new ImageViewModel
                     {
-                        IsImage = !string.IsNullOrEmpty(imageData.Base64),
-                        Base64 = imageData.Base64
+                        IsImage = imageData == null ? false : true,
+                        Base64 = imageData == null ? string.Empty : imageData.Base64
                     },
                     ExtraInfo = new ExtraInfoViewModel
                     {
@@ -110,10 +110,7 @@ namespace ERP.Store.API.Services
                     }
                 };
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            catch (Exception) { throw; }
         }
 
         public async Task RegisterEmployeeAsync(EmployeeInputModel input)
@@ -168,12 +165,12 @@ namespace ERP.Store.API.Services
 
                 var addressID = await _addressRepository.InsertAddressAsync(employeeInput.Address);
 
-                if (addressID != 0)
+                if (addressID == 0)
                     throw new Exception("An error ocurred while inserting the employee's address data.");
 
                 var contactID = await _contactRepository.InsertContactAsync(employeeInput.Contact);
 
-                if (contactID != 0)
+                if (contactID == 0)
                     throw new Exception("An error ocurred while inserting the employee's contact data.");
 
                 if (input.Image.IsImage)
@@ -185,10 +182,110 @@ namespace ERP.Store.API.Services
 
                 await _employeeRepository.InsertEmployeeAsync(employeeInput);
             }
-            catch (Exception)
+            catch (Exception) { throw; }
+        }
+
+        public async Task UpdateEmployeeAsync(EmployeeInputModel input)
+        {
+            try
             {
-                throw;
+                var employeeInput = new Employee
+                {
+                    FirstName = input.FirstName,
+                    MiddleName = input.MiddleName,
+                    LastName = input.LastName,
+                    Identification = input.Identification,
+                    Address = new Address
+                    {
+                        Zip = input.Address.Zip,
+                        Street = input.Address.Street,
+                        Number = input.Address.Number,
+                        Comment = input.Address.Comment,
+                        Neighborhood = input.Address.Neighborhood,
+                        City = input.Address.City,
+                        State = input.Address.State,
+                        Country = input.Address.Country
+                    },
+                    User = new User
+                    {
+                        Username = input.UserInfo.Username,
+                        Password = input.UserInfo.Password
+                    },
+                    Contact = new Contact
+                    {
+                        Email = input.Contact.Email,
+                        Cellphone = input.Contact.Cellphone,
+                        Phone = input.Contact.Phone
+                    },
+                    ExtraInfo = new ExtraInfo
+                    {
+                        AccessLevelID = input.ExtraInfo.AccessLevelID,
+                        Salary = input.ExtraInfo.Salary,
+                        JobID = input.ExtraInfo.JobID
+                    },
+                    Image = new Image
+                    {
+                        IsImage = input.Image.IsImage,
+                        Base64 = input.Image.Base64
+                    }
+                };
+
+                var employeeData = await _employeeRepository.GetEmployeeAsync(employeeInput.Identification);
+
+                if (employeeData == null)
+                    throw new NotFoundException($"There's no employee registered with the {employeeInput.Identification} identification number.");
+
+                employeeInput.ID = employeeData.EmployeeID;
+                employeeInput.Address.ID = employeeData.AddressID;
+                employeeInput.User.ID = employeeData.User_InfoID;
+                employeeInput.Contact.ID = employeeData.ContactID;
+
+                await _addressRepository.UpdateAddressAsync(employeeInput.Address);
+
+                await _contactRepository.UpdateContactAsync(employeeInput.Contact);
+
+                var employeeImage = await _imageRepository.GetEmployeesImage(employeeInput.ID);
+
+                if (employeeImage != null)
+                {
+                    employeeInput.Image.ID = employeeImage.ImageID;
+
+                    await _imageRepository.UpdateImageAsync(employeeInput.Image);
+                }
+
+                await _employeeRepository.UpdateEmployeeAsync(employeeInput);
             }
+            catch (Exception) { throw; }
+        }
+
+        public async Task<bool> DeleteEmployeeAsync(string identification)
+        {
+            try
+            {
+                var employeeData = await _employeeRepository.GetEmployeeAsync(identification);
+
+                if (employeeData == null)
+                    throw new NotFoundException($"There's no employee registered with the {identification} identification number.");
+
+                await _addressRepository.DeleteAddress(employeeData.AddressID);
+
+                await _contactRepository.DeleteContactAsync(employeeData.ContactID);
+
+                var employeeImage = await _imageRepository.GetEmployeesImage(employeeData.EmployeeID);
+
+                if (employeeImage != null)
+                    await _imageRepository.DeleteImageAsync(employeeImage.ImageID);
+
+                await _employeeRepository.DeleteEmployeeAsync(employeeData.EmployeeID);
+
+                employeeData = await _employeeRepository.GetEmployeeAsync(identification);
+
+                if (employeeData == null)
+                    return true;
+
+                return false;
+            }
+            catch (Exception) { throw; }
         }
     }
 }

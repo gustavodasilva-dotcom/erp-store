@@ -65,5 +65,52 @@ namespace ERP.Store.API.Repositories
                 throw;
             }
         }
+
+        public async Task UpdateContactAsync(Contact contact)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"EXEC uspUpdateContact @ContactID, @Email, @Cellphone, @Phone;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new
+                    {
+                        @ContactID = contact.ID,
+                        @Email = contact.Email,
+                        @Cellphone = contact.Cellphone,
+                        @Phone = contact.Phone
+                    },
+                    commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task DeleteContactAsync(int contactID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  UPDATE	Contact
+                        SET
+                        	Deleted = 1
+                        WHERE	ContactID = @contactID;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new { @contactID = contactID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

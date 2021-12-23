@@ -25,7 +25,15 @@ namespace ERP.Store.API.Repositories
                 {
                     #region SQL
 
-                    var query = @"SELECT * FROM User_Info (NOLOCK) WHERE User_InfoID = @userInfoID AND Deleted = 0;";
+                    var query =
+                    @" SELECT	 User_InfoID
+                        		,Username
+                        		,CAST(DECRYPTBYPASSPHRASE('key', Password) AS VARCHAR) AS Password
+                        		,Deleted
+                        		,InsertDate
+                        FROM	User_Info (NOLOCK)
+                        WHERE	User_InfoID = @userInfoID
+                          AND	Deleted     = 0;";
 
                     #endregion SQL
 
@@ -47,33 +55,24 @@ namespace ERP.Store.API.Repositories
                     #region SQL
 
                     var query =
-                    $@" IF (SELECT	1
-                        	FROM	User_Info
-                        	WHERE	Username = '{username}'
-                        	  AND	DECRYPTBYPASSPHRASE('key', Password) = '{password}')
-                        IS NOT NULL
-                        BEGIN
-                        
-                        	SELECT		 E.EmployeeID
-                        				,E.FirstName
-                        				,E.MiddleName
-                        				,E.LastName
-                        				,UI.Username
-                        				,E.Identification
-                        				,J.Description
-                        				,E.Access_LevelID
-                        	FROM		User_Info		UI (NOLOCK)
-                        	INNER JOIN	Employee		E  (NOLOCK) ON UI.User_InfoID = E.User_InfoID
-                        	LEFT JOIN	Employee_Job	EJ (NOLOCK) ON EJ.EmployeeID = E.EmployeeID
-                        	LEFT JOIN	Jobs			J  (NOLOCK) ON J.JobID = EJ.JobID
-                        	WHERE	Username = '{username}'
-                        	  AND	E.Deleted = 0;
-                        
-                        END;";
+                    $@" SELECT		 E.EmployeeID
+	                    			,E.FirstName
+	                    			,E.MiddleName
+	                    			,E.LastName
+	                    			,UI.Username
+	                    			,E.Identification
+	                    			,J.Description
+	                    			,E.Access_LevelID
+	                    FROM		User_Info		UI (NOLOCK)
+	                    INNER JOIN	Employee		E  (NOLOCK) ON UI.User_InfoID = E.User_InfoID
+	                    LEFT JOIN	Employee_Job	EJ (NOLOCK) ON EJ.EmployeeID  = E.EmployeeID
+	                    LEFT JOIN	Jobs			J  (NOLOCK) ON J.JobID		  = EJ.JobID
+	                    WHERE		UI.Username = @username
+	                      AND		CAST(DECRYPTBYPASSPHRASE('key', UI.Password) AS VARCHAR) = @password;";
 
                     #endregion SQL
 
-                    return await db.QueryFirstOrDefaultAsync<UserData>(query, commandTimeout: 30);
+                    return await db.QueryFirstOrDefaultAsync<UserData>(query, new { @username = username, @password = password }, commandTimeout: 30);
                 }
             }
             catch (Exception)

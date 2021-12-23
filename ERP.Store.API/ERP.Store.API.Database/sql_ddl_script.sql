@@ -276,9 +276,10 @@ CREATE TABLE Logs
 	,Json			VARCHAR(MAX)
 	,ProcedureName	VARCHAR(100)
 	,Process		VARCHAR(100)
+	,Token			VARCHAR(MAX)
 	,ID				INT
-	,Deleted		BIT			NOT NULL
-	,InsertDate		DATETIME	NOT NULL
+	,Deleted		BIT				NOT NULL
+	,InsertDate		DATETIME		NOT NULL
 
 	CONSTRAINT PK_LogID PRIMARY KEY(LogID)
 );

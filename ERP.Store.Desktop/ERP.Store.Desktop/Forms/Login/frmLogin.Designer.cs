@@ -1,5 +1,5 @@
 ﻿
-namespace ERP.Store.Desktop
+namespace ERP.Store.Desktop.Forms.Login
 {
     partial class frmLogin
     {
@@ -49,6 +49,7 @@ namespace ERP.Store.Desktop
             this.textBoxPassword.Name = "textBoxPassword";
             this.textBoxPassword.Size = new System.Drawing.Size(240, 23);
             this.textBoxPassword.TabIndex = 1;
+            this.textBoxPassword.UseSystemPasswordChar = true;
             // 
             // btnLogin
             // 

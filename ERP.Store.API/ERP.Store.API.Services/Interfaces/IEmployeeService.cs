@@ -9,5 +9,9 @@ namespace ERP.Store.API.Services.Interfaces
         Task<EmployeeViewModel> GetEmployeeAsync(string identification);
 
         Task RegisterEmployeeAsync(EmployeeInputModel input);
+
+        Task UpdateEmployeeAsync(EmployeeInputModel input);
+
+        Task<bool> DeleteEmployeeAsync(string identification);
     }
 }

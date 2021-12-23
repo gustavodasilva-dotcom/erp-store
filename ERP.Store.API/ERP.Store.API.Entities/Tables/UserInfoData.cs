@@ -8,7 +8,7 @@ namespace ERP.Store.API.Entities.Tables
 
         public string Username { get; set; }
 
-        public byte[] Password { get; set; }
+        public string Password { get; set; }
 
         public int Deleted { get; set; }
 

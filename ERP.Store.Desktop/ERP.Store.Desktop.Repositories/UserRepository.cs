@@ -45,7 +45,7 @@ namespace ERP.Store.Desktop.Repositories
                 if ((int)response.StatusCode == 404)
                     throw new Exception(response.Content);
 
-                if ((int)response.StatusCode == 500)
+                if ((int)response.StatusCode == 500 || response.StatusCode == 0)
                     throw new Exception("An error ocurred while connectiong to the server.");
 
                 return JsonConvert.DeserializeObject<UserResponse>(response.Content);

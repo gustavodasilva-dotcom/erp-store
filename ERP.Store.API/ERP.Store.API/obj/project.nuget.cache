@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "UmI1l+nK7JQiftkiEp49+WI8+VD3YsgY8wTJjIlXaMT13Dorm0+2Nol881n1x1D7tTatpXDuKDioOekgG0r21g==",
+  "dgSpecHash": "S4hHuQza4EUHE+j3FvxQeKhAERZVfb049YlSXg6g7IA56kYHhtIwsK8Nz9dOWdvUkeBeg9WGMFiGlTUQBpNLyw==",
   "success": true,
   "projectFilePath": "C:\\Users\\gusta\\source\\repos\\ERP.Store\\API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API\\ERP.Store.API.csproj",
   "expectedPackageFiles": [
@@ -39,6 +39,7 @@
     "C:\\Users\\gusta\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\gusta\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
     "C:\\Users\\gusta\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
+    "C:\\Users\\gusta\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\gusta\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.7.0\\runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
