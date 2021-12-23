@@ -25,7 +25,15 @@ namespace ERP.Store.API.Repositories
                 {
                     #region SQL
 
-                    var query = @"SELECT * FROM User_Info (NOLOCK) WHERE User_InfoID = @userInfoID AND Deleted = 0;";
+                    var query =
+                    @" SELECT	 User_InfoID
+                        		,Username
+                        		,CAST(DECRYPTBYPASSPHRASE('key', Password) AS VARCHAR) AS Password
+                        		,Deleted
+                        		,InsertDate
+                        FROM	User_Info (NOLOCK)
+                        WHERE	User_InfoID = @userInfoID
+                          AND	Deleted     = 0;";
 
                     #endregion SQL
 

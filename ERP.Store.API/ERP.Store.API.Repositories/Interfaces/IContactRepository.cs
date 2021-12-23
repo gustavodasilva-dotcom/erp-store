@@ -11,5 +11,7 @@ namespace ERP.Store.API.Repositories.Interfaces
         Task<int> InsertContactAsync(Contact contact);
 
         Task UpdateContactAsync(Contact contact);
+
+        Task DeleteContactAsync(int contactID);
     }
 }

@@ -80,5 +80,27 @@ namespace ERP.Store.API.Repositories
             }
             catch (Exception) { throw; }
         }
+
+        public async Task DeleteImageAsync(int imageID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  UPDATE	Image
+				        SET
+				        	Deleted = 1
+				        WHERE	ImageID = @imageID;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new { @imageID = imageID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

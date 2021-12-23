@@ -52,6 +52,7 @@ namespace ERP.Store.Desktop.Forms.Employees
             this.buttonUploadImage = new System.Windows.Forms.Button();
             this.pictureBoxImage = new System.Windows.Forms.PictureBox();
             this.buttonSend = new System.Windows.Forms.Button();
+            this.buttonDelete = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).BeginInit();
             this.SuspendLayout();
             // 
@@ -108,6 +109,7 @@ namespace ERP.Store.Desktop.Forms.Employees
             this.textBoxPassword.PlaceholderText = "Password";
             this.textBoxPassword.Size = new System.Drawing.Size(216, 23);
             this.textBoxPassword.TabIndex = 5;
+            this.textBoxPassword.UseSystemPasswordChar = true;
             // 
             // textBoxZip
             // 
@@ -246,6 +248,7 @@ namespace ERP.Store.Desktop.Forms.Employees
             // 
             // pictureBoxImage
             // 
+            this.pictureBoxImage.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBoxImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxImage.Location = new System.Drawing.Point(163, 387);
             this.pictureBoxImage.Name = "pictureBoxImage";
@@ -264,11 +267,23 @@ namespace ERP.Store.Desktop.Forms.Employees
             this.buttonSend.UseVisualStyleBackColor = true;
             this.buttonSend.Click += new System.EventHandler(this.buttonRegister_Click);
             // 
+            // buttonDelete
+            // 
+            this.buttonDelete.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonDelete.Location = new System.Drawing.Point(569, 445);
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(184, 28);
+            this.buttonDelete.TabIndex = 23;
+            this.buttonDelete.Text = "Delete";
+            this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            // 
             // frmEmployeeDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 503);
+            this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.buttonSend);
             this.Controls.Add(this.pictureBoxImage);
             this.Controls.Add(this.buttonUploadImage);
@@ -325,5 +340,6 @@ namespace ERP.Store.Desktop.Forms.Employees
         private System.Windows.Forms.Button buttonUploadImage;
         private System.Windows.Forms.PictureBox pictureBoxImage;
         private System.Windows.Forms.Button buttonSend;
+        private System.Windows.Forms.Button buttonDelete;
     }
 }

@@ -94,5 +94,27 @@ namespace ERP.Store.API.Repositories
             }
             catch (Exception) { throw; }
         }
+
+        public async Task DeleteAddress(int addressID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  UPDATE	Address
+                        SET
+                        	Deleted = 1
+                        WHERE	AddressID = @addressID;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new { @addressID = addressID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

@@ -59,7 +59,7 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(userInput, e.Message, "AuthenticateAsync() : UsersController");
 
-                return StatusCode(500, $"The following error ocurred: {e.Message}");
+                return StatusCode(500, $"The following error occurred: {e.Message}");
             }
         }
     }

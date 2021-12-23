@@ -11,5 +11,7 @@ namespace ERP.Store.API.Repositories.Interfaces
         Task<int> InsertImageAsync(string base64);
 
         Task UpdateImageAsync(Image image);
+
+        Task DeleteImageAsync(int imageID);
     }
 }

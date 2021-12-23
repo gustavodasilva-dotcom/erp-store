@@ -2,10 +2,10 @@
 using Dapper;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using ERP.Store.API.Entities.Tables;
 using ERP.Store.API.Entities.Entities;
 using Microsoft.Extensions.Configuration;
 using ERP.Store.API.Repositories.Interfaces;
-using ERP.Store.API.Entities.Tables;
 
 namespace ERP.Store.API.Repositories
 {
@@ -137,6 +137,28 @@ namespace ERP.Store.API.Repositories
                         @Salary = employee.ExtraInfo.Salary,
                         
                     }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task DeleteEmployeeAsync(int employeeID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  UPDATE	Employee
+                        SET
+                        	Deleted = 1
+                        WHERE	EmployeeID = @employeeID;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new { @employeeID = employeeID }, commandTimeout: 30);
                 }
             }
             catch (Exception) { throw; }

@@ -90,5 +90,27 @@ namespace ERP.Store.API.Repositories
             }
             catch (Exception) { throw; }
         }
+
+        public async Task DeleteContactAsync(int contactID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  UPDATE	Contact
+                        SET
+                        	Deleted = 1
+                        WHERE	ContactID = @contactID;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new { @contactID = contactID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

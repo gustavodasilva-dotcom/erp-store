@@ -11,5 +11,7 @@ namespace ERP.Store.API.Repositories.Interfaces
         Task InsertEmployeeAsync(Employee employee);
 
         Task UpdateEmployeeAsync(Employee employee);
+
+        Task DeleteEmployeeAsync(int employeeID);
     }
 }

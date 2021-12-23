@@ -11,8 +11,14 @@ namespace ERP.Store.Desktop.Services
             try
             {
                 using var memoryStream = new MemoryStream();
+
+                #pragma warning disable CA1416 // Validar a compatibilidade da plataforma
                 
-                image.Save(memoryStream, image.RawFormat);
+                var bmp = new Bitmap(image);
+
+                bmp.Save(memoryStream, image.RawFormat);
+
+                #pragma warning restore CA1416 // Validar a compatibilidade da plataforma
 
                 byte[] imageBytes = memoryStream.ToArray();
 

@@ -11,5 +11,7 @@ namespace ERP.Store.API.Repositories.Interfaces
         Task<int> InsertAddressAsync(Address address);
 
         Task UpdateAddressAsync(Address address);
+
+        Task DeleteAddress(int addressID);
     }
 }

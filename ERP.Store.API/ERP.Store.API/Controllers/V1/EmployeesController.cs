@@ -43,7 +43,7 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(identification, e.Message, "GetEmployeeAsync() : EmployeesController");
 
-                return StatusCode(500, $"The following error ocurred: {e.Message}");
+                return StatusCode(500, $"The following error occurred: {e.Message}");
             }
         }
 
@@ -71,7 +71,7 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(model, e.Message, "RegisterEmployeeAsync() : EmployeesController");
 
-                return StatusCode(500, $"The following error ocurred: {e.Message}");
+                return StatusCode(500, $"The following error occurred: {e.Message}");
             }
         }
 
@@ -99,7 +99,38 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(model, e.Message, "UpdateEmployeeAsync() : EmployeesController");
 
-                return StatusCode(500, $"The following error ocurred: {e.Message}");
+                return StatusCode(500, $"The following error occurred: {e.Message}");
+            }
+        }
+
+        [HttpDelete("{identification}")]
+        [Authorize(Roles = "1")]
+        public async Task<ActionResult> DeleteEmployeeAsync([FromRoute] string identification)
+        {
+            try
+            {
+                if (await _employeeService.DeleteEmployeeAsync(identification))
+                {
+                    await _logService.LogAsync(identification, "Employee deleted successfully.", "DeleteEmployeeAsync() : EmployeesController");
+
+                    return Ok("Employee deleted successfully.");
+                }
+                else
+                {
+                    throw new Exception("An error occurred while trying to delete the employee.");
+                }
+            }
+            catch (NotFoundException e)
+            {
+                await _logService.LogAsync(identification, e.Message, "DeleteEmployeeAsync() : EmployeesController");
+
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                await _logService.LogAsync(identification, e.Message, "DeleteEmployeeAsync() : EmployeesController");
+
+                return StatusCode(500, $"The following error occurred: {e.Message}");
             }
         }
     }
