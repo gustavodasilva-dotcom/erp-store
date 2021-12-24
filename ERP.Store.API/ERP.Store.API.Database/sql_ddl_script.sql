@@ -183,6 +183,24 @@ CREATE TABLE Employee_Image
 	REFERENCES Image(ImageID)
 );
 
+DROP TABLE IF EXISTS Client_Image
+CREATE TABLE Client_Image
+(
+	 Client_ImageID		INT			NOT NULL	IDENTITY(10000000, 1)
+	,ClientID			INT			NOT NULL
+	,ImageID			INT			NOT NULL
+	,Deleted			BIT			NOT NULL
+	,InsertDate			DATETIME	NOT NULL
+
+	CONSTRAINT PK_Client_ImagemID PRIMARY KEY(Client_ImageID)
+
+	CONSTRAINT FK_Client_Imagem_ClientID FOREIGN KEY(ClientID)
+	REFERENCES Client(ClientID),
+
+	CONSTRAINT FK_Client_ImagemID FOREIGN KEY(ImageID)
+	REFERENCES Image(ImageID)
+);
+
 DROP TABLE IF EXISTS Supplier
 CREATE TABLE Supplier
 (
