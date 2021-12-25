@@ -12,6 +12,8 @@ namespace ERP.Store.Desktop.Forms.Find
 
         public SearchType SearchType { get; set; }
 
+        private readonly ClientService _clientService;
+
         private readonly EmployeeService _employeeService;
 
         public frmFind(UserResponse user, SearchType searchType)
@@ -19,6 +21,8 @@ namespace ERP.Store.Desktop.Forms.Find
             User = user;
 
             SearchType = searchType;
+
+            _clientService = new ClientService();
 
             _employeeService = new EmployeeService();
 
@@ -40,6 +44,20 @@ namespace ERP.Store.Desktop.Forms.Find
                         var frmEmployeeDetails = new Employees.frmEmployeeDetails(User, employee, OperationType.Update);
 
                         frmEmployeeDetails.Show();
+                    }
+                }
+                else
+                {
+                    if (SearchType == SearchType.Client)
+                    {
+                        var client = _clientService.Get(inputData, User);
+
+                        if (client != null)
+                        {
+                            var frmClientDetails = new Clients.frmClientDetails(User, client, OperationType.Update);
+
+                            frmClientDetails.Show();
+                        }
                     }
                 }
             }
