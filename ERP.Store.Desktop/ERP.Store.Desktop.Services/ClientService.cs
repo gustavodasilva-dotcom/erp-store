@@ -40,5 +40,14 @@ namespace ERP.Store.Desktop.Services
             }
             catch (Exception) { throw; }
         }
+
+        public int Delete(string identification, UserResponse user)
+        {
+            try
+            {
+                return _clientRepository.Delete(identification, user);
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

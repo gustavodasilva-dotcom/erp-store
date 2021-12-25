@@ -1,11 +1,11 @@
 ﻿using Dapper;
-using ERP.Store.API.Entities.Entities;
-using ERP.Store.API.Entities.Tables;
-using ERP.Store.API.Repositories.Interfaces;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using ERP.Store.API.Entities.Tables;
+using ERP.Store.API.Entities.Entities;
+using ERP.Store.API.Repositories.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace ERP.Store.API.Repositories
 {
@@ -94,6 +94,28 @@ namespace ERP.Store.API.Repositories
                         @LastName = client.LastName,
                         @Identification = client.Identification
                     }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task DeleteClientAsync(int clientID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  UPDATE	Client
+                        SET
+                        	Deleted = 1
+                        WHERE	ClientID = @clientID;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new { @clientID = clientID }, commandTimeout: 30);
                 }
             }
             catch (Exception) { throw; }

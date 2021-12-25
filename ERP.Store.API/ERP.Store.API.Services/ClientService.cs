@@ -207,5 +207,35 @@ namespace ERP.Store.API.Services
             }
             catch (Exception) { throw; }
         }
+
+        public async Task<bool> DeleteClientAsync(string identification)
+        {
+            try
+            {
+                var clientData = await _clientRepository.GetClientAsync(identification);
+
+                if (clientData == null)
+                    throw new NotFoundException($"There's no client registered with the {identification} identification number.");
+
+                await _addressRepository.DeleteAddress(clientData.AddressID);
+
+                await _contactRepository.DeleteContactAsync(clientData.ContactID);
+
+                var clientImage = await _imageRepository.GetClientsImage(clientData.ClientID);
+
+                if (clientImage != null)
+                    await _imageRepository.DeleteImageAsync(clientImage.ImageID);
+
+                await _clientRepository.DeleteClientAsync(clientData.ClientID);
+
+                clientData = await _clientRepository.GetClientAsync(identification);
+
+                if (clientData == null)
+                    return true;
+
+                return false;
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

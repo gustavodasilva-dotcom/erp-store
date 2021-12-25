@@ -235,7 +235,27 @@ namespace ERP.Store.Desktop.Forms.Clients
         {
             try
             {
+                var message = string.Empty;
 
+                var statusCode = _clientService.Delete(textBoxIdentification.Text, User);
+
+                switch (statusCode)
+                {
+                    case 200:
+                        message = "Client deleted succefully.";
+                        break;
+                    case 401:
+                        message = $"This user doens't have authorization to complete this request.";
+                        break;
+                    case 404:
+                        message = $"There's no employee registered with the identification number {textBoxIdentification.Text}.";
+                        break;
+                    default:
+                        message = "An error occurred while processing the request.";
+                        break;
+                }
+
+                MessageBox.Show(message);
             }
             catch (Exception ex)
             {

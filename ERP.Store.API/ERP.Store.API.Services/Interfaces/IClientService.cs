@@ -11,5 +11,7 @@ namespace ERP.Store.API.Services.Interfaces
         Task RegisterClientAsync(ClientInputModel input);
 
         Task UpdateClientAsync(ClientInputModel input);
+
+        Task<bool> DeleteClientAsync(string identification);
     }
 }

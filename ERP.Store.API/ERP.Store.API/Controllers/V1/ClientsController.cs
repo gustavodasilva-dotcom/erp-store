@@ -77,7 +77,7 @@ namespace ERP.Store.API.Controllers.V1
 
         [HttpPut]
         [Authorize(Roles = "1,2")]
-        public async Task<ActionResult<ClientViewModel>> UpdateEmployeeAsync([FromBody] ClientInputModel model)
+        public async Task<ActionResult<ClientViewModel>> UpdateClientAsync([FromBody] ClientInputModel model)
         {
             try
             {
@@ -85,19 +85,50 @@ namespace ERP.Store.API.Controllers.V1
 
                 var client = await _clientService.GetClientAsync(model.Identification);
 
-                await _logService.LogAsync(model, "Client updated successfully.", "UpdateEmployeeAsync() : ClientsController", client.ID);
+                await _logService.LogAsync(model, "Client updated successfully.", "UpdateClientAsync() : ClientsController", client.ID);
 
                 return Ok(client);
             }
             catch (NotFoundException e)
             {
-                await _logService.LogAsync(model, e.Message, "UpdateEmployeeAsync() : ClientsController");
+                await _logService.LogAsync(model, e.Message, "UpdateClientAsync() : ClientsController");
 
                 return NotFound(e.Message);
             }
             catch (Exception e)
             {
-                await _logService.LogAsync(model, e.Message, "UpdateEmployeeAsync() : ClientsController");
+                await _logService.LogAsync(model, e.Message, "UpdateClientAsync() : ClientsController");
+
+                return StatusCode(500, $"The following error occurred: {e.Message}");
+            }
+        }
+
+        [HttpDelete("{identification}")]
+        [Authorize(Roles = "1,2")]
+        public async Task<ActionResult> DeleteClientAsync([FromRoute] string identification)
+        {
+            try
+            {
+                if (await _clientService.DeleteClientAsync(identification))
+                {
+                    await _logService.LogAsync(identification, "Employee client successfully.", "DeleteClientAsync() : ClientsController");
+
+                    return Ok("Client deleted successfully.");
+                }
+                else
+                {
+                    throw new Exception("An error occurred while trying to delete the client.");
+                }
+            }
+            catch (NotFoundException e)
+            {
+                await _logService.LogAsync(identification, e.Message, "DeleteClientAsync() : ClientsController");
+
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                await _logService.LogAsync(identification, e.Message, "DeleteClientAsync() : ClientsController");
 
                 return StatusCode(500, $"The following error occurred: {e.Message}");
             }

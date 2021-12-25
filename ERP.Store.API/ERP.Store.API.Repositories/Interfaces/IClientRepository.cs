@@ -11,5 +11,7 @@ namespace ERP.Store.API.Repositories.Interfaces
         Task InsertClientAsync(Client client);
 
         Task UpdateClientAsync(Client client);
+
+        Task DeleteClientAsync(int clientID);
     }
 }

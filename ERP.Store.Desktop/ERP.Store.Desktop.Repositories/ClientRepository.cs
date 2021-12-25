@@ -218,5 +218,29 @@ namespace ERP.Store.Desktop.Repositories
             }
             catch (Exception) { throw; }
         }
+
+        public int Delete(string identification, UserResponse user)
+        {
+            try
+            {
+                var client = new RestClient(_endpoint + identification)
+                {
+                    Timeout = -1
+                };
+
+                var request = new RestRequest(Method.DELETE);
+
+                request.AddHeader("Authorization", $"Bearer {user.Token.Token}");
+
+                request.AddHeader("Content-Type", "application/json");
+
+                request.AddParameter("application/json", ParameterType.RequestBody);
+
+                IRestResponse response = client.Execute(request);
+
+                return (int)response.StatusCode;
+            }
+            catch (Exception) { throw; }
+        }
     }
 }
