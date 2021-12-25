@@ -9,5 +9,7 @@ namespace ERP.Store.API.Repositories.Interfaces
         Task<ClientData> GetClientAsync(string identification);
 
         Task InsertClientAsync(Client client);
+
+        Task UpdateClientAsync(Client client);
     }
 }

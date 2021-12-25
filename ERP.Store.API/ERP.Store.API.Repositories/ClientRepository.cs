@@ -1,11 +1,11 @@
 ﻿using Dapper;
+using ERP.Store.API.Entities.Entities;
+using ERP.Store.API.Entities.Tables;
+using ERP.Store.API.Repositories.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-using ERP.Store.API.Entities.Tables;
-using ERP.Store.API.Entities.Entities;
-using ERP.Store.API.Repositories.Interfaces;
-using Microsoft.Extensions.Configuration;
 
 namespace ERP.Store.API.Repositories
 {
@@ -68,6 +68,31 @@ namespace ERP.Store.API.Repositories
                         @AddressID = client.Address.ID,
                         @ContactID = client.Contact.ID,
                         @ImageID = client.Image.ID,
+                    }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task UpdateClientAsync(Client client)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"EXEC uspUpdateClient @ClientID, @FirstName, @MiddleName, @LastName, @Identification;";
+
+                    #endregion SQL
+
+                    await db.ExecuteAsync(query, new
+                    {
+                        @ClientID = client.ID,
+                        @FirstName = client.FirstName,
+                        @MiddleName = client.MiddleName,
+                        @LastName = client.LastName,
+                        @Identification = client.Identification
                     }, commandTimeout: 30);
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using ERP.Store.API.CustomExceptions;
 using ERP.Store.API.Services.Interfaces;
 using ERP.Store.API.Services.CustomExceptions;
@@ -25,6 +26,7 @@ namespace ERP.Store.API.Controllers.V1
         }
 
         [HttpGet("{identification}")]
+        [Authorize(Roles = "1,2")]
         public async Task<ActionResult<ClientViewModel>> GetClientAsync([FromRoute] string identification)
         {
             try
@@ -46,6 +48,7 @@ namespace ERP.Store.API.Controllers.V1
         }
 
         [HttpPost]
+        [Authorize(Roles = "1,2")]
         public async Task<ActionResult> RegisterClientAsync([FromBody] ClientInputModel model)
         {
             try
@@ -67,6 +70,34 @@ namespace ERP.Store.API.Controllers.V1
             catch (Exception e)
             {
                 await _logService.LogAsync(model, e.Message, "RegisterClientAsync() : ClientsController");
+
+                return StatusCode(500, $"The following error occurred: {e.Message}");
+            }
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "1,2")]
+        public async Task<ActionResult<ClientViewModel>> UpdateEmployeeAsync([FromBody] ClientInputModel model)
+        {
+            try
+            {
+                await _clientService.UpdateClientAsync(model);
+
+                var client = await _clientService.GetClientAsync(model.Identification);
+
+                await _logService.LogAsync(model, "Client updated successfully.", "UpdateEmployeeAsync() : ClientsController", client.ID);
+
+                return Ok(client);
+            }
+            catch (NotFoundException e)
+            {
+                await _logService.LogAsync(model, e.Message, "UpdateEmployeeAsync() : ClientsController");
+
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                await _logService.LogAsync(model, e.Message, "UpdateEmployeeAsync() : ClientsController");
 
                 return StatusCode(500, $"The following error occurred: {e.Message}");
             }

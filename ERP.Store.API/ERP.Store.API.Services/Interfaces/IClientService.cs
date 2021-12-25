@@ -9,5 +9,7 @@ namespace ERP.Store.API.Services.Interfaces
         Task<ClientViewModel> GetClientAsync(string identification);
 
         Task RegisterClientAsync(ClientInputModel input);
+
+        Task UpdateClientAsync(ClientInputModel input);
     }
 }

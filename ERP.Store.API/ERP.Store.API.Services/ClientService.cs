@@ -4,6 +4,7 @@ using ERP.Store.API.CustomExceptions;
 using ERP.Store.API.Entities.Entities;
 using ERP.Store.API.Services.Interfaces;
 using ERP.Store.API.Repositories.Interfaces;
+using ERP.Store.API.Services.CustomExceptions;
 using ERP.Store.API.Entities.Models.ViewModel;
 using ERP.Store.API.Entities.Models.InputModel;
 
@@ -89,6 +90,9 @@ namespace ERP.Store.API.Services
         {
             try
             {
+                if (await _clientRepository.GetClientAsync(input.Identification) != null)
+                    throw new ConflictException($"There's alredy an employee registered with the identification number {input.Identification}.");
+
                 int imageID = 0;
 
                 var client = new Client
@@ -139,6 +143,67 @@ namespace ERP.Store.API.Services
                 client.Image.ID = imageID;
 
                 await _clientRepository.InsertClientAsync(client);
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task UpdateClientAsync(ClientInputModel input)
+        {
+            try
+            {
+                var clientInput = new Client
+                {
+                    FirstName = input.FirstName,
+                    MiddleName = input.MiddleName,
+                    LastName = input.LastName,
+                    Identification = input.Identification,
+                    Address = new Address
+                    {
+                        Zip = input.Address.Zip,
+                        Street = input.Address.Street,
+                        Number = input.Address.Number,
+                        Comment = input.Address.Comment,
+                        Neighborhood = input.Address.Neighborhood,
+                        City = input.Address.City,
+                        State = input.Address.State,
+                        Country = input.Address.Country
+                    },
+                    Contact = new Contact
+                    {
+                        Email = input.Contact.Email,
+                        Cellphone = input.Contact.Cellphone,
+                        Phone = input.Contact.Phone
+                    },
+                    Image = new Image
+                    {
+                        IsImage = input.Image.IsImage,
+                        Base64 = input.Image.Base64
+                    }
+                };
+
+                var clientData = await _clientRepository.GetClientAsync(input.Identification);
+
+                if (clientData == null)
+                    throw new ConflictException($"There's alredy an employee registered with the identification number {input.Identification}.");
+
+                clientInput.ID = clientData.ClientID;
+                clientInput.Address.ID = clientData.AddressID;
+                clientInput.Contact.ID = clientData.ContactID;
+
+                await _addressRepository.UpdateAddressAsync(clientInput.Address);
+
+                await _contactRepository.UpdateContactAsync(clientInput.Contact);
+
+                var clientImage = await _imageRepository.GetClientsImage(clientInput.ID);
+
+                if (clientImage != null)
+                {
+                    clientInput.Image.ID = clientImage.ImageID;
+
+                    await _imageRepository.UpdateImageAsync(clientInput.Image);
+                }
+
+                await _clientRepository.UpdateClientAsync(clientInput);
             }
             catch (Exception) { throw; }
         }
