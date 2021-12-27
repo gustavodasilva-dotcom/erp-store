@@ -31,7 +31,7 @@ namespace ERP.Store.API.Controllers.V1
         {
             try
             {
-                return (await _employeeService.GetEmployeeAsync(identification));
+                return await _employeeService.GetEmployeeAsync(identification);
             }
             catch (NotFoundException e)
             {
