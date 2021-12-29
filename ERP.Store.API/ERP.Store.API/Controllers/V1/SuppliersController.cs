@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ERP.Store.API.CustomExceptions;
+using ERP.Store.API.Entities.Entities;
 using ERP.Store.API.Services.Interfaces;
 using ERP.Store.API.Services.CustomExceptions;
 using ERP.Store.API.Entities.Models.ViewModel;
@@ -18,11 +20,15 @@ namespace ERP.Store.API.Controllers.V1
 
         private readonly ISupplierService _supplierService;
 
-        public SuppliersController(ILogService logService, ISupplierService supplierService)
+        private readonly IValidationService _validationService;
+
+        public SuppliersController(ILogService logService, ISupplierService supplierService, IValidationService validationService)
         {
             _logService = logService;
 
             _supplierService = supplierService;
+
+            _validationService = validationService;
         }
 
         [HttpGet("{identification}")]
@@ -37,13 +43,17 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(identification, e.Message, "GetSupplierAsync() : SuppliersController");
 
-                return NotFound(e.Message);
+                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
+
+                return NotFound(returnModel);
             }
             catch (Exception e)
             {
                 await _logService.LogAsync(identification, e.Message, "GetSupplierAsync() : SuppliersController");
 
-                return StatusCode(500, $"The following error occurred: {e.Message}");
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
+
+                return StatusCode(500, returnModel);
             }
         }
 
@@ -53,6 +63,17 @@ namespace ERP.Store.API.Controllers.V1
         {
             try
             {
+                var validations = await _validationService.Validate(model, EntityType.Suppliers);
+
+                if (validations.Any())
+                {
+                    var returnModel = await _validationService.InitializingReturn(validations, BadRequest().StatusCode);
+
+                    await _logService.LogAsync(returnModel, "Request has errors.", "RegisterSupplierAsync() : SuppliersController");
+
+                    return BadRequest(returnModel);
+                }
+
                 await _supplierService.RegisterSupplierAsync(model);
 
                 var supplier = await _supplierService.GetSupplierAsync(model.Identification);
@@ -65,13 +86,17 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(model, e.Message, "RegisterSupplierAsync() : SuppliersController");
 
-                return Conflict(e.Message);
+                var returnModel = await _validationService.InitializingReturn(e.Message, Conflict().StatusCode);
+
+                return Conflict(returnModel);
             }
             catch (Exception e)
             {
                 await _logService.LogAsync(model, e.Message, "RegisterSupplierAsync() : SuppliersController");
 
-                return StatusCode(500, $"The following error occurred: {e.Message}");
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
+
+                return StatusCode(500, returnModel);
             }
         }
 
@@ -81,6 +106,17 @@ namespace ERP.Store.API.Controllers.V1
         {
             try
             {
+                var validations = await _validationService.Validate(model, EntityType.Suppliers);
+
+                if (validations.Any())
+                {
+                    var returnModel = await _validationService.InitializingReturn(validations, BadRequest().StatusCode);
+
+                    await _logService.LogAsync(returnModel, "Request has errors.", "UpdateSupplierAsync() : SuppliersController");
+
+                    return BadRequest(returnModel);
+                }
+
                 await _supplierService.UpdateSupplierAsync(model);
 
                 var supplier = await _supplierService.GetSupplierAsync(model.Identification);
@@ -93,13 +129,17 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(model, e.Message, "UpdateSupplierAsync() : SuppliersController");
 
-                return NotFound(e.Message);
+                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
+
+                return NotFound(returnModel);
             }
             catch (Exception e)
             {
                 await _logService.LogAsync(model, e.Message, "UpdateSupplierAsync() : SuppliersController");
 
-                return StatusCode(500, $"The following error occurred: {e.Message}");
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
+
+                return StatusCode(500, returnModel);
             }
         }
 
@@ -124,13 +164,17 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(identification, e.Message, "DeleteSupplierAsync() : SuppliersController");
 
-                return NotFound(e.Message);
+                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
+
+                return NotFound(returnModel);
             }
             catch (Exception e)
             {
                 await _logService.LogAsync(identification, e.Message, "DeleteSupplierAsync() : SuppliersController");
 
-                return StatusCode(500, $"The following error occurred: {e.Message}");
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
+
+                return StatusCode(500, returnModel);
             }
         }
     }

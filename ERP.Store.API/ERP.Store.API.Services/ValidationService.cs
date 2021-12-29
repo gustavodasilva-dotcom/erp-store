@@ -81,6 +81,20 @@ namespace ERP.Store.API.Services
                     {
                         errors = await ValidateEmployee(model);
                     }
+                    else
+                    {
+                        if (type == EntityType.Users)
+                        {
+                            errors = ValidateUser(model);
+                        }
+                        else
+                        {
+                            if (type == EntityType.Suppliers)
+                            {
+                                errors = ValidateSupplier(model);
+                            }
+                        }
+                    }
                 }
 
                 return errors;
@@ -137,6 +151,8 @@ namespace ERP.Store.API.Services
 
                 var extraInfoValidation = await ValidateExtraInfo(model.ExtraInfo);
 
+                var userInfoValidation = ValidateUserInfo(model.UserInfo);
+
                 var imageValidation = ValidateImage(model.Image);
 
                 foreach (var validation in addressValidation)
@@ -154,7 +170,55 @@ namespace ERP.Store.API.Services
                     errors.Add(validation);
                 }
 
+                foreach (var validation in userInfoValidation)
+                {
+                    errors.Add(validation);
+                }
+
                 foreach (var validation in imageValidation)
+                {
+                    errors.Add(validation);
+                }
+
+                return errors;
+            }
+            catch (Exception) { throw; }
+        }
+
+        private List<string> ValidateUser(dynamic model)
+        {
+            try
+            {
+                var errors = new List<string>();
+
+                var userInfoValidation = ValidateUserInfo(model.UserInfo);
+
+                foreach (var validation in userInfoValidation)
+                {
+                    errors.Add(validation);
+                }
+
+                return errors;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public List<string> ValidateSupplier(dynamic model)
+        {
+            try
+            {
+                var errors = new List<string>();
+
+                var addressValidation = ValidateAddress(model.Address);
+
+                var contactValidation = ValidateContact(model.Contact);
+
+                foreach (var validation in addressValidation)
+                {
+                    errors.Add(validation);
+                }
+
+                foreach (var validation in contactValidation)
                 {
                     errors.Add(validation);
                 }
@@ -223,6 +287,20 @@ namespace ERP.Store.API.Services
 
                 if (!await _validationRepository.IsAccessLevel(extraInfo.AccessLevelID))
                     messages.Add($"{extraInfo.AccessLevelID} does not correspond to an actual access level.");
+
+                return messages;
+            }
+            catch (Exception) { throw; }
+        }
+
+        private static List<string> ValidateUserInfo(UserInfoInputModel userInfo)
+        {
+            try
+            {
+                var messages = new List<string>();
+
+                if (string.IsNullOrEmpty(userInfo.Username)) messages.Add("The username cannot be null or empty.");
+                if (string.IsNullOrEmpty(userInfo.Password)) messages.Add("The password cannot be null or empty.");
 
                 return messages;
             }
