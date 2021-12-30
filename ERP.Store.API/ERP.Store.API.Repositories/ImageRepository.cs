@@ -72,6 +72,33 @@ namespace ERP.Store.API.Repositories
             catch (Exception) { throw; }
         }
 
+        public async Task<ImageData> GetItemsImage(int itemID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  SELECT		 I.ImageID
+                        			,I.Base64
+                        			,I.Deleted
+                        			,I.InsertDate
+                        FROM		Item_Image	II	(NOLOCK)
+                        INNER JOIN	Image		I	(NOLOCK) ON II.ImageID = I.ImageID
+                        WHERE		II.ItemID	= @itemID
+                          AND		II.Deleted	= 0
+                          AND		I.Deleted	= 0;";
+
+                    #endregion SQL
+
+                    return await db.QueryFirstOrDefaultAsync<ImageData>(query, new { @itemID = itemID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task<int> InsertImageAsync(string base64)
         {
             try

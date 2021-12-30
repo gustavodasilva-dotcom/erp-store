@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Collections.Generic;
-using ERP.Store.API.Entities.Entities;
+using ERP.Store.API.Entities.Entities.Enums;
 using ERP.Store.API.Entities.Models.ViewModel;
 
 namespace ERP.Store.API.Services.Interfaces

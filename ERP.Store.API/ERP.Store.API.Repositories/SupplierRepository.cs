@@ -40,6 +40,28 @@ namespace ERP.Store.API.Repositories
             catch (Exception) { throw; }
         }
 
+        public async Task<SupplierTable> GetSupplierByIDAsync(int itemID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  SELECT	*
+                        FROM	Supplier
+                        WHERE	ItemID = @itemID
+                          AND   Deleted = 0;";
+
+                    #endregion
+
+                    return await db.QueryFirstOrDefaultAsync<SupplierTable>(query, new { @itemID = itemID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task InsertSupplierAsync(Supplier supplier)
         {
             try

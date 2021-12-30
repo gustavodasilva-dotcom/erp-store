@@ -54,6 +54,9 @@ namespace ERP.Store.API
             services.AddScoped<ISupplierService, SupplierService>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();
 
+            services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<InventoryRepository, InventoryRepository>();
+
             services.AddControllers();
 
             var key = Encoding.ASCII.GetBytes(Configuration["Jwt:Key"]);

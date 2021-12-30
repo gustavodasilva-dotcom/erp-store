@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ERP.Store.API.CustomExceptions;
-using ERP.Store.API.Entities.Entities;
 using ERP.Store.API.Services.Interfaces;
+using ERP.Store.API.Entities.Entities.Enums;
 using ERP.Store.API.Entities.Models.InputModel;
 
 namespace ERP.Store.API.Controllers.V1

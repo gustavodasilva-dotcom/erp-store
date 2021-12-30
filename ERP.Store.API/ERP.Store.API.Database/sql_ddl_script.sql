@@ -235,18 +235,38 @@ CREATE TABLE Orders
 	REFERENCES Client(ClientID)
 );
 
+DROP TABLE IF EXISTS Category
+CREATE TABLE Category
+(
+	 CategoryID		INT				NOT NULL	IDENTITY(10000000, 1)
+	,Description	VARCHAR(200)	NOT NULL
+	,Deleted		BIT				NOT NULL
+	,InsertDate		DATETIME		NOT NULL
+
+	CONSTRAINT PK_CategoryID PRIMARY KEY(CategoryID)
+);
+
+INSERT INTO Category VALUES
+('', 0, GETDATE());
+
 DROP TABLE IF EXISTS Items
 CREATE TABLE Items
 (
-	 ItemID			INT			NOT NULL	IDENTITY(10000000, 1)
-	,SupplierID		INT			NOT NULL
-	,Deleted		BIT			NOT NULL
-	,InsertDate		DATETIME	NOT NULL
+	 ItemID			INT				NOT NULL	IDENTITY(10000000, 1)
+	,Name			VARCHAR(200)	NOT NULL
+	,Price			MONEY			NOT NULL
+	,CategoryID		INT				NOT NULL
+	,SupplierID		INT				NOT NULL
+	,Deleted		BIT				NOT NULL
+	,InsertDate		DATETIME		NOT NULL
 
 	CONSTRAINT PK_ItemID PRIMARY KEY(ItemID)
 
+	CONSTRAINT FK_Items_CategoryID FOREIGN KEY(CategoryID)
+	REFERENCES Category(CategoryID),
+
 	CONSTRAINT FK_Items_SupplierID FOREIGN KEY(SupplierID)
-	REFERENCES Supplier(SupplierID)
+	REFERENCES Supplier(SupplierID),
 );
 
 DROP TABLE IF EXISTS Order_Item
@@ -265,6 +285,24 @@ CREATE TABLE Order_Item
 
 	CONSTRAINT FK_Order_Items_ItemID FOREIGN KEY(ItemID)
 	REFERENCES Items(ItemID)
+);
+
+DROP TABLE IF EXISTS Item_Image
+CREATE TABLE Item_Image
+(
+	 Item_ImageID	INT			NOT NULL	IDENTITY(10000000, 1)
+	,ItemID			INT			NOT NULL
+	,ImageID		INT			NOT NULL
+	,Deleted		BIT			NOT NULL
+	,InsertDate		DATETIME	NOT NULL
+
+	CONSTRAINT PK_Item_ImageID PRIMARY KEY(Item_ImageID)
+
+	CONSTRAINT FK_Item_Image_ItemID FOREIGN KEY(ItemID)
+	REFERENCES Items(ItemID),
+
+	CONSTRAINT FK_Item_Image_ImageID FOREIGN KEY(ImageID)
+	REFERENCES Image(ImageID)
 );
 
 DROP TABLE IF EXISTS Items_Inventory

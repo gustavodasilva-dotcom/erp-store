@@ -1,4 +1,4 @@
-﻿namespace ERP.Store.API.Entities.Entities
+﻿namespace ERP.Store.API.Entities.Entities.Enums
 {
     public enum EntityType
     {
