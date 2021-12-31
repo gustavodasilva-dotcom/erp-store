@@ -1,6 +1,6 @@
 ﻿namespace ERP.Store.API.Entities.Models.ViewModel.ItemViewModels
 {
-    public class SupplierViewModel
+    public class SupplierDataViewModel
     {
         public string Identification { get; set; }
 

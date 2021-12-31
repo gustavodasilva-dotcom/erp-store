@@ -1,14 +1,14 @@
 ﻿namespace ERP.Store.API.Entities.Models.InputModel.ItemInputModels
 {
-    public class ItemInputModel
+    public class ItemDataInputModel
     {
         public string Name { get; set; }
 
         public double Price { get; set; }
 
-        public CategoryInputModel Category { get; set; }
+        public CategoryDataInputModel Category { get; set; }
 
-        public SupplierInputModel Supplier  { get; set; }
+        public SupplierDataInputModel Supplier  { get; set; }
 
         public ImageInputModel Image { get; set; }
     }

@@ -62,6 +62,24 @@ namespace ERP.Store.API.Repositories
             catch (Exception) { throw; }
         }
 
+        public async Task InsertInventoryAsync(Item item)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"EXEC uspRegisterInventory @itemID, @supplierID;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new { @itemID = item.ID, @supplierID = item.Supplier.ID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task<int> GetCategoryIDAsync(string description)
         {
             try

@@ -6,6 +6,7 @@ using ERP.Store.API.CustomExceptions;
 using ERP.Store.API.Services.Interfaces;
 using ERP.Store.API.Services.CustomExceptions;
 using ERP.Store.API.Entities.Models.ViewModel.ItemViewModels;
+using ERP.Store.API.Entities.Models.InputModel.ItemInputModels;
 
 namespace ERP.Store.API.Controllers.V1
 {
@@ -30,7 +31,7 @@ namespace ERP.Store.API.Controllers.V1
 
         [HttpGet("{itemID:int}")]
         [Authorize(Roles = "1,2")]
-        public async Task<ActionResult<ItemViewModel>> GetItemAsync([FromRoute] int itemID)
+        public async Task<ActionResult<ItemDataViewModel>> GetItemAsync([FromRoute] int itemID)
         {
             try
             {
@@ -40,7 +41,7 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(itemID.ToString(), e.Message, "GetItemAsync() : InventoriesController");
 
-                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
+                var returnModel = await _validationService.InitializingReturn(e.Message, BadRequest().StatusCode);
 
                 return NotFound(returnModel);
             }
@@ -48,13 +49,47 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(itemID.ToString(), e.Message, "GetItemAsync() : InventoriesController");
 
-                var returnModel = await _validationService.InitializingReturn(e.Message, BadRequest().StatusCode);
+                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
 
                 return NotFound(returnModel);
             }
             catch (Exception e)
             {
                 await _logService.LogAsync(itemID.ToString(), e.Message, "GetItemAsync() : InventoriesController");
+
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
+
+                return StatusCode(500, returnModel);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "1")]
+        public async Task<ActionResult<ItemDataViewModel>> RegisterItemAsync([FromBody] ItemDataInputModel model)
+        {
+            try
+            {
+                return await _inventoryService.GetItemAsync(await _inventoryService.RegisterItemAsync(model));
+            }
+            catch (BadRequestException e)
+            {
+                await _logService.LogAsync(model, e.Message, "RegisterItemAsync() : InventoriesController");
+
+                var returnModel = await _validationService.InitializingReturn(e.Message, BadRequest().StatusCode);
+
+                return NotFound(returnModel);
+            }
+            catch (NotFoundException e)
+            {
+                await _logService.LogAsync(model, e.Message, "GetItemAsync() : InventoriesController");
+
+                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
+
+                return NotFound(returnModel);
+            }
+            catch (Exception e)
+            {
+                await _logService.LogAsync(model, e.Message, "RegisterItemAsync() : InventoriesController");
 
                 var returnModel = await _validationService.InitializingReturn(e.Message, 500);
 

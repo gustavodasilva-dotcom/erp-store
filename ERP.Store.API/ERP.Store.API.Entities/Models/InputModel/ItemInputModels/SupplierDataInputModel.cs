@@ -1,6 +1,6 @@
 ﻿namespace ERP.Store.API.Entities.Models.InputModel.ItemInputModels
 {
-    public class SupplierInputModel
+    public class SupplierDataInputModel
     {
         public string Identification { get; set; }
     }

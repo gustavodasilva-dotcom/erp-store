@@ -1,6 +1,6 @@
 ﻿namespace ERP.Store.API.Entities.Models.ViewModel.ItemViewModels
 {
-    public class CategoryViewModel
+    public class CategoryDataViewModel
     {
         public int CategoryID { get; set; }
 

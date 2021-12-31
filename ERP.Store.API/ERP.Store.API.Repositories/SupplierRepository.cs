@@ -40,7 +40,7 @@ namespace ERP.Store.API.Repositories
             catch (Exception) { throw; }
         }
 
-        public async Task<SupplierTable> GetSupplierByIDAsync(int itemID)
+        public async Task<SupplierTable> GetSupplierByIDAsync(int supplierID)
         {
             try
             {
@@ -51,12 +51,12 @@ namespace ERP.Store.API.Repositories
                     var query =
                     @"  SELECT	*
                         FROM	Supplier
-                        WHERE	ItemID = @itemID
+                        WHERE	SupplierID = @supplierID
                           AND   Deleted = 0;";
 
                     #endregion
 
-                    return await db.QueryFirstOrDefaultAsync<SupplierTable>(query, new { @itemID = itemID }, commandTimeout: 30);
+                    return await db.QueryFirstOrDefaultAsync<SupplierTable>(query, new { @supplierID = supplierID }, commandTimeout: 30);
                 }
             }
             catch (Exception) { throw; }

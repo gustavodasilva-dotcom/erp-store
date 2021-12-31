@@ -261,15 +261,18 @@ namespace ERP.Store.API.Services
                 var messages = new List<string>();
 
                 if (string.IsNullOrEmpty(contact.Email)) messages.Add("The email cannot be null or empty.");
-                if (string.IsNullOrEmpty(contact.Cellphone)) messages.Add("The cellphone cannot be null or empty.");
                 if (string.IsNullOrEmpty(contact.Phone)) messages.Add("The phone cannot be null or empty.");
 
                 if (contact.Email.Length > 50) messages.Add("The email's length cannot be greater than 50 characters.");
-                if (contact.Cellphone.Length < 11 || contact.Cellphone.Length > 20) messages.Add("The cell phone's length cannot be fewer than 11 and greater than 20 characters.");
                 if (contact.Phone.Length < 10 || contact.Cellphone.Length > 20) messages.Add("The phone's length cannot be fewer than 10 and greater than 20 characters.");
 
-                if (IsNumber(contact.Cellphone)) messages.Add("The cell phone's number needs to be numeric.");
                 if (IsNumber(contact.Phone)) messages.Add("The phone's number needs to be numeric.");
+
+                if (!string.IsNullOrEmpty(contact.Cellphone))
+                {
+                    if (contact.Cellphone.Length < 11 || contact.Cellphone.Length > 20) messages.Add("The cell phone's length cannot be fewer than 11 and greater than 20 characters.");
+                    if (IsNumber(contact.Cellphone)) messages.Add("The cell phone's number needs to be numeric.");
+                }
 
                 return messages;
             }

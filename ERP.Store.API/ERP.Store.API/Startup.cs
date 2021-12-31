@@ -55,7 +55,7 @@ namespace ERP.Store.API
             services.AddScoped<ISupplierRepository, SupplierRepository>();
 
             services.AddScoped<IInventoryService, InventoryService>();
-            services.AddScoped<InventoryRepository, InventoryRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
 
             services.AddControllers();
 

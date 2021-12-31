@@ -28,7 +28,7 @@ namespace ERP.Store.API.Services
             _inventoryRepository = inventoryRepository;
         }
 
-        public async Task<ItemViewModel> GetItemAsync(int itemID)
+        public async Task<ItemDataViewModel> GetItemAsync(int itemID)
         {
             try
             {
@@ -43,32 +43,32 @@ namespace ERP.Store.API.Services
 
                 var image = await _imageRepository.GetItemsImage(itemID);
 
-                return new ItemViewModel
+                return new ItemDataViewModel
                 {
                     ItemID = item.ItemID,
                     Name = item.Name,
                     Price = item.Price,
-                    Supplier = new Entities.Models.ViewModel.ItemViewModels.SupplierViewModel
+                    Supplier = new Entities.Models.ViewModel.ItemViewModels.SupplierDataViewModel
                     {
                         Name = string.IsNullOrEmpty(supplier.Name) ? "" : supplier.Name,
                         Identification = string.IsNullOrEmpty(supplier.Identification) ? "" : supplier.Identification
                     },
-                    Category = new CategoryViewModel
+                    Category = new CategoryDataViewModel
                     {
                         CategoryID = category == null ? 0 : category.CategoryID,
                         Description = category == null ? "" : category.Description
                     },
                     Image = new ImageViewModel
                     {
-                        IsImage = string.IsNullOrEmpty(image.Base64) ? false : true,
-                        Base64 = string.IsNullOrEmpty(image.Base64) ? "" : image.Base64
+                        IsImage = image == null ? false : true,
+                        Base64 = image == null ? "" : image.Base64
                     }
                 };
             }
             catch (Exception) { throw; }
         }
 
-        public async Task<int> RegisterItemAsync(ItemInputModel input)
+        public async Task<int> RegisterItemAsync(ItemDataInputModel input)
         {
             try
             {
@@ -97,13 +97,21 @@ namespace ERP.Store.API.Services
                 if (item.Category.ID == 0)
                     throw new BadRequestException("The category informed is invalid.");
 
-                if (await _supplierRepository.GetSupplierAsync(item.Supplier.Identification) == null)
+                var supplier = await _supplierRepository.GetSupplierAsync(item.Supplier.Identification);
+
+                if (supplier == null)
                     throw new NotFoundException($"The identification {item.Supplier.Identification} does not correspond to a supplier.");
+
+                item.Supplier.ID = supplier.SupplierID;
 
                 if (input.Image.IsImage)
                     item.Image.ID = await _imageRepository.InsertImageAsync(item.Image.Base64);
 
-                return await _inventoryRepository.InsertItemAsync(item);
+                item.ID = await _inventoryRepository.InsertItemAsync(item);
+
+                await _inventoryRepository.InsertInventoryAsync(item);
+
+                return item.ID;
             }
             catch (Exception) { throw; }
         }

@@ -247,7 +247,7 @@ CREATE TABLE Category
 );
 
 INSERT INTO Category VALUES
-('', 0, GETDATE());
+('Caps and hats', 0, GETDATE());
 
 DROP TABLE IF EXISTS Items
 CREATE TABLE Items

@@ -6,8 +6,8 @@ namespace ERP.Store.API.Services.Interfaces
 {
     public interface IInventoryService
     {
-        Task<ItemViewModel> GetItemAsync(int itemID);
+        Task<ItemDataViewModel> GetItemAsync(int itemID);
 
-        Task<int> RegisterItemAsync(ItemInputModel input);
+        Task<int> RegisterItemAsync(ItemDataInputModel input);
     }
 }
