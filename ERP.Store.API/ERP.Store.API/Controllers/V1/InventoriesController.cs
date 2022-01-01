@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ERP.Store.API.CustomExceptions;
 using ERP.Store.API.Services.Interfaces;
+using ERP.Store.API.Entities.Entities.Enums;
 using ERP.Store.API.Services.CustomExceptions;
 using ERP.Store.API.Entities.Models.ViewModel.ItemViewModels;
 using ERP.Store.API.Entities.Models.InputModel.ItemInputModels;
@@ -69,6 +71,17 @@ namespace ERP.Store.API.Controllers.V1
         {
             try
             {
+                var validations = await _validationService.Validate(model, EntityType.Items);
+
+                if (validations.Any())
+                {
+                    var returnModel = await _validationService.InitializingReturn(validations, BadRequest().StatusCode);
+
+                    await _logService.LogAsync(returnModel, "Request has errors.", "RegisterItemAsync() : InventoriesController");
+
+                    return BadRequest(returnModel);
+                }
+
                 return await _inventoryService.GetItemAsync(await _inventoryService.RegisterItemAsync(model));
             }
             catch (BadRequestException e)

@@ -8,10 +8,10 @@
 
         public double Price { get; set; }
 
-        public SupplierDataViewModel Supplier { get; set; }
-
         public CategoryDataViewModel Category { get; set; }
-        
+
+        public InventoryViewModel Inventory { get; set; }
+
         public ImageViewModel Image { get; set; }
     }
 }

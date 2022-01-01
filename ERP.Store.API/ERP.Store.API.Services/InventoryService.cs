@@ -41,22 +41,28 @@ namespace ERP.Store.API.Services
 
                 var category = await _inventoryRepository.GetCategoryByIDAsync(item.CategoryID);
 
-                var image = await _imageRepository.GetItemsImage(itemID);
+                var inventory = await _inventoryRepository.GetInventoryAsync(item.ItemID);
+
+                var image = await _imageRepository.GetItemsImage(item.ItemID);
 
                 return new ItemDataViewModel
                 {
                     ItemID = item.ItemID,
                     Name = item.Name,
                     Price = item.Price,
-                    Supplier = new Entities.Models.ViewModel.ItemViewModels.SupplierDataViewModel
-                    {
-                        Name = string.IsNullOrEmpty(supplier.Name) ? "" : supplier.Name,
-                        Identification = string.IsNullOrEmpty(supplier.Identification) ? "" : supplier.Identification
-                    },
                     Category = new CategoryDataViewModel
                     {
                         CategoryID = category == null ? 0 : category.CategoryID,
                         Description = category == null ? "" : category.Description
+                    },
+                    Inventory = new InventoryViewModel
+                    {
+                        Quantity = inventory.Quantity,
+                        Supplier = new SupplierDataViewModel
+                        {
+                            Name = string.IsNullOrEmpty(supplier.Name) ? "" : supplier.Name,
+                            Identification = string.IsNullOrEmpty(supplier.Identification) ? "" : supplier.Identification
+                        }
                     },
                     Image = new ImageViewModel
                     {

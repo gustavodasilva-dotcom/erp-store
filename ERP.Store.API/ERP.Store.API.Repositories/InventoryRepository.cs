@@ -36,6 +36,24 @@ namespace ERP.Store.API.Repositories
             catch (Exception) { throw; }
         }
 
+        public async Task<Items_InventoryData> GetInventoryAsync(int itemID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"SELECT * FROM Items_Inventory (NOLOCK) WHERE ItemID = @itemID AND Deleted = 0;";
+
+                    #endregion
+
+                    return await db.QueryFirstOrDefaultAsync<Items_InventoryData>(query, new { @itemID = itemID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task<int> InsertItemAsync(Item item)
         {
             try

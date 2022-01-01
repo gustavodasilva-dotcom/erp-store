@@ -8,6 +8,8 @@ namespace ERP.Store.API.Repositories.Interfaces
     {
         Task<ItemData> GetItemAsync(int itemID);
 
+        Task<Items_InventoryData> GetInventoryAsync(int itemID);
+
         Task<int> InsertItemAsync(Item item);
 
         Task InsertInventoryAsync(Item item);

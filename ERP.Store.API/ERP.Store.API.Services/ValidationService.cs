@@ -8,6 +8,7 @@ using ERP.Store.API.Entities.Entities.Enums;
 using ERP.Store.API.Repositories.Interfaces;
 using ERP.Store.API.Entities.Models.ViewModel;
 using ERP.Store.API.Entities.Models.InputModel;
+using ERP.Store.API.Entities.Models.InputModel.ItemInputModels;
 
 namespace ERP.Store.API.Services
 {
@@ -92,6 +93,13 @@ namespace ERP.Store.API.Services
                             if (type == EntityType.Suppliers)
                             {
                                 errors = ValidateSupplier(model);
+                            }
+                            else
+                            {
+                                if (type == EntityType.Items)
+                                {
+                                    errors = ValidateItems(model);
+                                }
                             }
                         }
                     }
@@ -228,6 +236,31 @@ namespace ERP.Store.API.Services
             catch (Exception) { throw; }
         }
 
+        public List<string> ValidateItems(dynamic model)
+        {
+            try
+            {
+                var errors = new List<string>();
+
+                var itemValidation = ValidateItem(model);
+
+                var imageValidation = ValidateImage(model.Image);
+
+                foreach (var validation in itemValidation)
+                {
+                    errors.Add(validation);
+                }
+
+                foreach (var validation in imageValidation)
+                {
+                    errors.Add(validation);
+                }
+
+                return errors;
+            }
+            catch (Exception) { throw; }
+        }
+
         private static List<string> ValidateAddress(AddressInputModel address)
         {
             try
@@ -326,6 +359,21 @@ namespace ERP.Store.API.Services
             catch (Exception) { throw; }
         }
 
+        private static List<string> ValidateItem(ItemDataInputModel item)
+        {
+            try
+            {
+                var messages = new List<string>();
+
+                if (string.IsNullOrEmpty(item.Name)) messages.Add("The item's name cannot be null or empty.");
+                if (string.IsNullOrEmpty(item.Category.Description)) messages.Add("The item's category cannot be null or empty.");
+                if (string.IsNullOrEmpty(item.Supplier.Identification)) messages.Add("The supplier's identification cannot be null or empty.");
+
+                return messages;
+            }
+            catch (Exception) { throw; }
+        }
+
         private static bool IsNumber(object number)
         {
             try
@@ -343,10 +391,7 @@ namespace ERP.Store.API.Services
 
                 return Convert.TryFromBase64String(base64, buffer, out int bytesParsed);
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            catch (Exception) { throw; }
         }
     }
 }

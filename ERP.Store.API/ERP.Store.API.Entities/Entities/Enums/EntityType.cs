@@ -10,6 +10,8 @@
 
         Orders,
 
+        Items,
+
         Suppliers,
 
         Users
