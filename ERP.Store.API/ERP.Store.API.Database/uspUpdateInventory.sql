@@ -1,36 +1,31 @@
 USE ERP_Order;
 GO
 
-CREATE PROCEDURE [dbo].[uspRegisterInventory]
+CREATE PROCEDURE [dbo].[uspUpdateInventory]
 	 @ItemID		INT
 	,@SupplierID	INT
 	,@Quantity		INT
 AS
 /**********************************************************************************
-Create date: 2021-12-31
+Create date: 2022-01-02
 
-Description: This procedure registers new inventories for items in the database.
+Description: This procedure updates inventories for items in the database.
 **********************************************************************************/
 	BEGIN
 	
 		SET NOCOUNT ON;
 
 /**********************************************************************************
-1 - INSERTING ITEMS_INVENTORY:
+1 - UPDATING ITEMS_INVENTORY:
 **********************************************************************************/
 		BEGIN TRANSACTION;
 
 			BEGIN TRY
 
-				INSERT INTO Items_Inventory
-				VALUES
-				(
-					 @Quantity
-					,@ItemID
-					,@SupplierID
-					,0
-					,GETDATE()
-				);
+				UPDATE	Items_Inventory
+				SET
+						Quantity = @Quantity
+				WHERE	ItemID = @ItemID;
 
 			END TRY
 
@@ -38,13 +33,13 @@ Description: This procedure registers new inventories for items in the database.
 
 				IF @@TRANCOUNT > 0
 					ROLLBACK TRANSACTION;
-
+			
 			END CATCH;
 
 		IF @@TRANCOUNT > 0
 			COMMIT TRANSACTION;
 /**********************************************************************************
-1 - INSERTING ITEMS_INVENTORY:
+1 - UPDATING ITEMS_INVENTORY.
 **********************************************************************************/
 
 	END;

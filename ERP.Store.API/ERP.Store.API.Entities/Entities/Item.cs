@@ -8,7 +8,7 @@
 
         public Category Category { get; set; }
 
-        public Supplier Supplier { get; set; }
+        public Inventory Inventory { get; set; }
 
         public Image Image { get; set; }
     }

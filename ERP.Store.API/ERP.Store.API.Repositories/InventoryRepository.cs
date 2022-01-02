@@ -71,7 +71,7 @@ namespace ERP.Store.API.Repositories
                         @Name = item.Name,
                         @Price = item.Price,
                         @CategoryID = item.Category.ID,
-                        @SupplierID = item.Supplier.ID,
+                        @SupplierID = item.Inventory.Supplier.ID,
                         @ImageID = item.Image.ID
                     },
                     commandTimeout: 30);
@@ -88,17 +88,23 @@ namespace ERP.Store.API.Repositories
                 {
                     #region SQL
 
-                    var query = @"EXEC uspRegisterInventory @itemID, @supplierID;";
+                    var query = @"EXEC uspRegisterInventory @itemID, @supplierID, @quantity;";
 
                     #endregion
 
-                    await db.ExecuteAsync(query, new { @itemID = item.ID, @supplierID = item.Supplier.ID }, commandTimeout: 30);
+                    await db.ExecuteAsync(query, new
+                    {
+                        @itemID = item.ID,
+                        @supplierID = item.Inventory.Supplier.ID,
+                        @quantity = item.Inventory.Quantity
+                    },
+                    commandTimeout: 30);
                 }
             }
             catch (Exception) { throw; }
         }
 
-        public async Task<int> GetCategoryIDAsync(string description)
+        public async Task UpdateItemAsync(Item item)
         {
             try
             {
@@ -106,17 +112,49 @@ namespace ERP.Store.API.Repositories
                 {
                     #region SQL
 
-                    var query = @"SELECT CategoryID FROM Category (NOLOCK) WHERE Description = @description;";
+                    var query = @"EXEC uspUpdateItem @itemID, @name, @price, @categoryID, @supplierID;";
 
                     #endregion
 
-                    return await db.QueryFirstOrDefaultAsync<int>(query, new { @description = description.Trim() }, commandTimeout: 30);
+                    await db.ExecuteAsync(query, new
+                    {
+                        @itemID = item.ID,
+                        @name = item.Name,
+                        @price = item.Price,
+                        @categoryID = item.Category.ID,
+                        @supplierID = item.Inventory.Supplier.ID
+                    },
+                    commandTimeout: 30);
                 }
             }
             catch (Exception) { throw; }
         }
 
-        public async Task<CategoryData> GetCategoryByIDAsync(int categoryID)
+        public async Task UpdateInventoryAsync(Item item)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"EXEC uspUpdateInventory @itemID, @supplierID, @quantity;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new
+                    {
+                        @itemID = item.ID,
+                        @supplierID = item.Inventory.Supplier.ID,
+                        @quantity = item.Inventory.Quantity
+                    },
+                    commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task<CategoryData> GetCategoryAsync(int categoryID)
         {
             try
             {

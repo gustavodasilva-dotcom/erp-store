@@ -1,6 +1,6 @@
-﻿namespace ERP.Store.API.Entities.Models.ViewModel.ItemViewModels
+﻿namespace ERP.Store.API.Entities.Models.ViewModel
 {
-    public class ItemDataViewModel
+    public class ItemViewModel
     {
         public int ItemID { get; set; }
 
@@ -8,7 +8,7 @@
 
         public double Price { get; set; }
 
-        public CategoryDataViewModel Category { get; set; }
+        public CategoryViewModel Category { get; set; }
 
         public InventoryViewModel Inventory { get; set; }
 

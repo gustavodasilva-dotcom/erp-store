@@ -72,7 +72,7 @@ namespace ERP.Store.API.Repositories
             catch (Exception) { throw; }
         }
 
-        public async Task<ImageData> GetItemsImage(int itemID)
+        public async Task<ImageData> GetItemsImageAsync(int itemID)
         {
             try
             {

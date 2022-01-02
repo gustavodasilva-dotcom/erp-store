@@ -14,8 +14,10 @@ namespace ERP.Store.API.Repositories.Interfaces
 
         Task InsertInventoryAsync(Item item);
 
-        Task<int> GetCategoryIDAsync(string description);
+        Task UpdateItemAsync(Item item);
 
-        Task<CategoryData> GetCategoryByIDAsync(int categoryID);
+        Task UpdateInventoryAsync(Item item);
+
+        Task<CategoryData> GetCategoryAsync(int categoryID);
     }
 }

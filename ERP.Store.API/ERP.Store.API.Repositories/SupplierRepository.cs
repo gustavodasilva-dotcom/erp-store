@@ -40,7 +40,7 @@ namespace ERP.Store.API.Repositories
             catch (Exception) { throw; }
         }
 
-        public async Task<SupplierTable> GetSupplierByIDAsync(int supplierID)
+        public async Task<SupplierTable> GetSupplierAsync(int supplierID)
         {
             try
             {

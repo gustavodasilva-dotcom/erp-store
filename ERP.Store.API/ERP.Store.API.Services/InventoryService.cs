@@ -6,8 +6,7 @@ using ERP.Store.API.Services.Interfaces;
 using ERP.Store.API.Repositories.Interfaces;
 using ERP.Store.API.Services.CustomExceptions;
 using ERP.Store.API.Entities.Models.ViewModel;
-using ERP.Store.API.Entities.Models.ViewModel.ItemViewModels;
-using ERP.Store.API.Entities.Models.InputModel.ItemInputModels;
+using ERP.Store.API.Entities.Models.InputModel;
 
 namespace ERP.Store.API.Services
 {
@@ -28,7 +27,7 @@ namespace ERP.Store.API.Services
             _inventoryRepository = inventoryRepository;
         }
 
-        public async Task<ItemDataViewModel> GetItemAsync(int itemID)
+        public async Task<ItemViewModel> GetItemAsync(int itemID)
         {
             try
             {
@@ -37,20 +36,20 @@ namespace ERP.Store.API.Services
                 if (item == null)
                     throw new NotFoundException($"There is not item registered with the id {itemID}.");
 
-                var supplier = await _supplierRepository.GetSupplierByIDAsync(item.SupplierID);
+                var supplier = await _supplierRepository.GetSupplierAsync(item.SupplierID);
 
-                var category = await _inventoryRepository.GetCategoryByIDAsync(item.CategoryID);
+                var category = await _inventoryRepository.GetCategoryAsync(item.CategoryID);
 
                 var inventory = await _inventoryRepository.GetInventoryAsync(item.ItemID);
 
-                var image = await _imageRepository.GetItemsImage(item.ItemID);
+                var image = await _imageRepository.GetItemsImageAsync(item.ItemID);
 
-                return new ItemDataViewModel
+                return new ItemViewModel
                 {
                     ItemID = item.ItemID,
                     Name = item.Name,
                     Price = item.Price,
-                    Category = new CategoryDataViewModel
+                    Category = new CategoryViewModel
                     {
                         CategoryID = category == null ? 0 : category.CategoryID,
                         Description = category == null ? "" : category.Description
@@ -58,10 +57,13 @@ namespace ERP.Store.API.Services
                     Inventory = new InventoryViewModel
                     {
                         Quantity = inventory.Quantity,
-                        Supplier = new SupplierDataViewModel
+                        Supplier = new SupplierViewModel
                         {
+                            ID = supplier.SupplierID,
                             Name = string.IsNullOrEmpty(supplier.Name) ? "" : supplier.Name,
-                            Identification = string.IsNullOrEmpty(supplier.Identification) ? "" : supplier.Identification
+                            Identification = string.IsNullOrEmpty(supplier.Identification) ? "" : supplier.Identification,
+                            Address = null,
+                            Contact = null
                         }
                     },
                     Image = new ImageViewModel
@@ -74,7 +76,7 @@ namespace ERP.Store.API.Services
             catch (Exception) { throw; }
         }
 
-        public async Task<int> RegisterItemAsync(ItemDataInputModel input)
+        public async Task<int> RegisterItemAsync(ItemInputModel input)
         {
             try
             {
@@ -84,11 +86,15 @@ namespace ERP.Store.API.Services
                     Price = input.Price,
                     Category = new Category
                     {
-                        Description = input.Category.Description
+                        ID = input.Category.ID
                     },
-                    Supplier = new Supplier
+                    Inventory = new Inventory
                     {
-                        Identification = input.Supplier.Identification
+                        Quantity = input.Inventory.Quantity,
+                        Supplier = new Supplier
+                        {
+                            Identification = input.Inventory.Supplier.Identification
+                        }
                     },
                     Image = new Image
                     {
@@ -98,17 +104,19 @@ namespace ERP.Store.API.Services
                     }
                 };
 
-                item.Category.ID = await _inventoryRepository.GetCategoryIDAsync(item.Category.Description);
+                var category = await _inventoryRepository.GetCategoryAsync(item.Category.ID);
 
-                if (item.Category.ID == 0)
+                if (category == null)
                     throw new BadRequestException("The category informed is invalid.");
+                else
+                    item.Category.ID = category.CategoryID;
 
-                var supplier = await _supplierRepository.GetSupplierAsync(item.Supplier.Identification);
+                var supplier = await _supplierRepository.GetSupplierAsync(item.Inventory.Supplier.Identification);
 
                 if (supplier == null)
-                    throw new NotFoundException($"The identification {item.Supplier.Identification} does not correspond to a supplier.");
+                    throw new NotFoundException($"The identification {item.Inventory.Supplier.Identification} does not correspond to a supplier.");
 
-                item.Supplier.ID = supplier.SupplierID;
+                item.Inventory.Supplier.ID = supplier.SupplierID;
 
                 if (input.Image.IsImage)
                     item.Image.ID = await _imageRepository.InsertImageAsync(item.Image.Base64);
@@ -118,6 +126,68 @@ namespace ERP.Store.API.Services
                 await _inventoryRepository.InsertInventoryAsync(item);
 
                 return item.ID;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task<int> UpdateItemInventoryAsync(ItemInputModel input)
+        {
+            try
+            {
+                var item = await _inventoryRepository.GetItemAsync(input.ItemID);
+
+                if (item == null)
+                    throw new NotFoundException($"There is not item registered with the id {input.ItemID}.");
+
+                var itemInput = new Item
+                {
+                    ID = input.ItemID,
+                    Name = input.Name,
+                    Price = input.Price,
+                    Category = new Category
+                    {
+                        ID = input.Category.ID
+                    },
+                    Inventory = new Inventory
+                    {
+                        Quantity = input.Inventory.Quantity,
+                        Supplier = new Supplier
+                        {
+                            Identification = input.Inventory.Supplier.Identification
+                        }
+                    },
+                    Image = new Image
+                    {
+                        ID = 0,
+                        IsImage = string.IsNullOrEmpty(input.Image.Base64) ? false : true,
+                        Base64 = string.IsNullOrEmpty(input.Image.Base64) ? "" : input.Image.Base64
+                    }
+                };
+
+                var category = await _inventoryRepository.GetCategoryAsync(itemInput.Category.ID);
+
+                if (category == null)
+                    throw new BadRequestException("The category informed is invalid.");
+                else
+                    itemInput.Category.ID = category.CategoryID;
+
+                var supplier = await _supplierRepository.GetSupplierAsync(itemInput.Inventory.Supplier.Identification);
+
+                if (supplier == null)
+                    throw new NotFoundException($"The identification {itemInput.Inventory.Supplier.Identification} does not correspond to a supplier.");
+
+                itemInput.Inventory.Supplier.ID = supplier.SupplierID;
+
+                var image = await _imageRepository.GetItemsImageAsync(itemInput.ID);
+
+                if (image != null)
+                    await _imageRepository.UpdateImageAsync(itemInput.Image);
+
+                await _inventoryRepository.UpdateItemAsync(itemInput);
+
+                await _inventoryRepository.UpdateInventoryAsync(itemInput);
+
+                return itemInput.ID;
             }
             catch (Exception) { throw; }
         }

@@ -8,7 +8,7 @@ namespace ERP.Store.API.Repositories.Interfaces
     {
         Task<SupplierTable> GetSupplierAsync(string identification);
 
-        Task<SupplierTable> GetSupplierByIDAsync(int itemID);
+        Task<SupplierTable> GetSupplierAsync(int itemID);
 
         Task InsertSupplierAsync(Supplier supplier);
 

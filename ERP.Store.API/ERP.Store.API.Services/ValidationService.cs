@@ -8,7 +8,6 @@ using ERP.Store.API.Entities.Entities.Enums;
 using ERP.Store.API.Repositories.Interfaces;
 using ERP.Store.API.Entities.Models.ViewModel;
 using ERP.Store.API.Entities.Models.InputModel;
-using ERP.Store.API.Entities.Models.InputModel.ItemInputModels;
 
 namespace ERP.Store.API.Services
 {
@@ -246,6 +245,8 @@ namespace ERP.Store.API.Services
 
                 var imageValidation = ValidateImage(model.Image);
 
+                var supplierValidation = ValidateSupplier(model.Inventory.Supplier);
+
                 foreach (var validation in itemValidation)
                 {
                     errors.Add(validation);
@@ -256,10 +257,33 @@ namespace ERP.Store.API.Services
                     errors.Add(validation);
                 }
 
+                foreach (var validation in supplierValidation)
+                {
+                    errors.Add(validation);
+                }
+
                 return errors;
             }
             catch (Exception) { throw; }
         }
+
+        private static List<string> ValidateSupplier(SupplierInputModel supplier)
+        {
+            try
+            {
+                var messages = new List<string>();
+
+                if (string.IsNullOrEmpty(supplier.Identification)) messages.Add("The supplier's identification cannot be null or empty.");
+
+                if (supplier.Address != null && supplier.Contact != null)
+                    if (string.IsNullOrEmpty(supplier.Name)) messages.Add("The supplier's name cannot be null or empty.");
+
+                if (IsNumber(supplier.Identification)) messages.Add("The supplier's identification has to be numeric.");
+
+                return messages;
+            }
+            catch (Exception) { throw; }
+        } 
 
         private static List<string> ValidateAddress(AddressInputModel address)
         {
@@ -359,15 +383,13 @@ namespace ERP.Store.API.Services
             catch (Exception) { throw; }
         }
 
-        private static List<string> ValidateItem(ItemDataInputModel item)
+        private static List<string> ValidateItem(ItemInputModel item)
         {
             try
             {
                 var messages = new List<string>();
 
                 if (string.IsNullOrEmpty(item.Name)) messages.Add("The item's name cannot be null or empty.");
-                if (string.IsNullOrEmpty(item.Category.Description)) messages.Add("The item's category cannot be null or empty.");
-                if (string.IsNullOrEmpty(item.Supplier.Identification)) messages.Add("The supplier's identification cannot be null or empty.");
 
                 return messages;
             }
