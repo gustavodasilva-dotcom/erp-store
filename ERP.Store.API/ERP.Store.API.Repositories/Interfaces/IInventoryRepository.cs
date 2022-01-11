@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Collections.Generic;
 using ERP.Store.API.Entities.Tables;
 using ERP.Store.API.Entities.Entities;
 
@@ -17,6 +18,8 @@ namespace ERP.Store.API.Repositories.Interfaces
         Task UpdateItemAsync(Item item);
 
         Task UpdateInventoryAsync(Item item);
+
+        Task<IEnumerable<Order_ItemTable>> GetOrderItemsAsync(int orderID);
 
         Task<CategoryData> GetCategoryAsync(int categoryID);
     }

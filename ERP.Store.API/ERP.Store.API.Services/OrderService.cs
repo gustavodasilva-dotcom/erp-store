@@ -6,25 +6,74 @@ using ERP.Store.API.CustomExceptions;
 using ERP.Store.API.Entities.Entities;
 using ERP.Store.API.Services.Interfaces;
 using ERP.Store.API.Repositories.Interfaces;
+using ERP.Store.API.Entities.Models.ViewModel;
 using ERP.Store.API.Entities.Models.InputModel;
 
 namespace ERP.Store.API.Services
 {
     public class OrderService : IOrderService
     {
+        private readonly IClientService _clientService;
+
+        private readonly IPaymentService _paymentService;
+
         private readonly IOrderRepository _orderRepository;
 
-        private readonly IClientRepository _clientRepository;
+        private readonly IInventoryService _inventoryService;
 
-        private readonly IInventoryRepository _inventoryRepository;
-
-        public OrderService(IOrderRepository orderRepository, IClientRepository clientRepository, IInventoryRepository inventoryRepository)
+        public OrderService(IClientService clientService, IPaymentService paymentService, IOrderRepository orderRepository, IInventoryService inventoryService)
         {
+            _clientService = clientService;
+
+            _paymentService = paymentService;
+
             _orderRepository = orderRepository;
 
-            _clientRepository = clientRepository;
+            _inventoryService = inventoryService;
+        }
 
-            _inventoryRepository = inventoryRepository;
+        public async Task<dynamic> GetOrderAsync(int orderID)
+        {
+            try
+            {
+                var order = await _orderRepository.GetOrderAsync(orderID);
+
+                if (order == null || order.Deleted.Equals(1))
+                    throw new NotFoundException($"There's no order registered with the id {orderID}.");
+
+                var client = await _clientService.GetClientAsync(order.ClientID);
+
+                // Implement a rule when the client is null.
+
+                var orderPayment = await _paymentService.GetOrderPaymentAsync(orderID);
+
+                dynamic paymentInfo;
+
+                if (!orderPayment.PaymentID.Equals(1))
+                    paymentInfo = await _paymentService.GetOrderPaymentInfoAsync(orderPayment);
+
+                var orderItems = await _inventoryService.GetOrderItemsAsync(orderID);
+
+                var items = new List<ItemViewModel>();
+
+                foreach (var orderItem in orderItems)
+                {
+                    var item = await _inventoryService.GetItemAsync(orderItem.ItemID);
+
+                    if (item != null)
+                    {
+                        items.Add(item);
+                    }
+                }
+
+                return new
+                {
+                    order.OrderID,
+                    Client = client,
+                    Items = items
+                };
+            }
+            catch (Exception) { throw; }
         }
 
         public async Task RegisterOrderAsync(OrderInputModel input)
@@ -82,21 +131,21 @@ namespace ERP.Store.API.Services
                     };
                 }
 
-                var client = await _clientRepository.GetClientAsync(orderInput.ClientIdentification);
+                var client = await _clientService.GetClientAsync(orderInput.ClientIdentification);
 
                 if (client == null)
                     throw new NotFoundException($"There's no user registered with the {orderInput.ClientIdentification} identification number.");
 
-                orderInput.ClientID = client.ClientID;
+                orderInput.ClientID = client.ID;
 
-                var messages = await ValidateItemsAsync(itemsInput);
+                var messages = await _inventoryService.ValidateItemsAsync(itemsInput);
 
                 if (messages.Any())
                     throw new NotFoundException(messages.FirstOrDefault());
 
-                await ValidatePaymentMethodAsync(orderInput.Payment);
+                await _paymentService.ValidatePaymentMethodAsync(orderInput.Payment);
 
-                orderInput.Value = await GetOrderValueAsync(itemsInput);
+                orderInput.Value = await _paymentService.GetOrderValueAsync(itemsInput);
 
                 orderInput.ID = await _orderRepository.InsertOrderAsync(orderInput);
 
@@ -105,105 +154,10 @@ namespace ERP.Store.API.Services
 
                 await _orderRepository.InsertOrderItemsAsync(orderInput);
 
-                orderInput.Payment.ID = await _orderRepository.InsertOrderPaymentAsync(orderInput);
+                orderInput.Payment.ID = await _paymentService.InsertOrderPaymentAsync(orderInput);
 
                 if (orderInput.Payment.IsCard || orderInput.Payment.IsCheck || orderInput.Payment.IsBankTransfer)
-                    await _orderRepository.InsertPaymentInfoAsync(orderInput.Payment);
-            }
-            catch (Exception) { throw; }
-        }
-
-        private async Task<IEnumerable<string>> ValidateItemsAsync(List<Item> items)
-        {
-            try
-            {
-                #region ValidateItemsAsync
-
-                var messages = new List<string>();
-
-                foreach (var item in items)
-                {
-                    if (await _inventoryRepository.GetItemAsync(item.ID) == null)
-                        messages.Add($"The id {item.ID} does not correspond to an actual item.");
-                }
-
-                #endregion
-
-                return messages;
-            }
-            catch (Exception) { throw; }
-        }
-
-        private async Task<double> GetOrderValueAsync(List<Item> items)
-        {
-            try
-            {
-                #region GetOrderValueAsync
-
-                double value = 0;
-
-                foreach (var item in items)
-                {
-                    var getOrder = await _inventoryRepository.GetItemAsync(item.ID);
-
-                    if (getOrder != null)
-                        value += getOrder.Price * item.Inventory.Quantity;
-                }
-
-                #endregion
-
-                return value;
-            }
-            catch (Exception) { throw; }
-        }
-
-        private async Task<Payment> ValidatePaymentMethodAsync(Payment payment)
-        {
-            try
-            {
-                #region ValidatePaymentMethod
-
-                // Default (invalid payment method)
-                payment.ID = 0;
-
-                // Cash
-                if (!payment.IsCheck && !payment.IsCard && !payment.IsBankTransfer)
-                    payment.ID = 1;
-
-                // Check
-                if (payment.IsCheck)
-                    payment.ID = 2;
-
-                if (payment.IsCard)
-                {
-                    if (payment.Card.IsCredit)
-                        // Credit card
-                        payment.ID = 4;
-                    else
-                        // Debit card
-                        payment.ID = 3;
-                }
-
-                if (payment.IsBankTransfer)
-                {
-                    if (payment.BankInfo.IsMobileTransfer)
-                        // Mobile payments
-                        payment.ID = 5;
-                    else
-                        // Electronic bank transfers
-                        payment.ID = 6;
-                }
-
-                var paymentInfo = await _orderRepository.GetPaymentInfoAsync(payment.ID);
-
-                if (paymentInfo == null)
-                    throw new Exception("The payment method informed is invalid.");
-
-                payment.RequiresConfirmation = paymentInfo.RequiresConfirmation == 1 ? true : false;
-
-                #endregion
-
-                return payment;
+                    await _paymentService.InsertPaymentInfoAsync(orderInput.Payment);
             }
             catch (Exception) { throw; }
         }

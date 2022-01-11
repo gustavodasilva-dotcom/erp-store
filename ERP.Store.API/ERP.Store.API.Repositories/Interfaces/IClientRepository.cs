@@ -8,6 +8,8 @@ namespace ERP.Store.API.Repositories.Interfaces
     {
         Task<ClientData> GetClientAsync(string identification);
 
+        Task<ClientData> GetClientAsync(int clientID);
+
         Task InsertClientAsync(Client client);
 
         Task UpdateClientAsync(Client client);

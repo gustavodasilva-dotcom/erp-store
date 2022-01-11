@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using ERP.Store.API.Entities.Tables;
 using ERP.Store.API.CustomExceptions;
 using ERP.Store.API.Entities.Entities;
 using ERP.Store.API.Services.Interfaces;
@@ -188,6 +190,32 @@ namespace ERP.Store.API.Services
                 await _inventoryRepository.UpdateInventoryAsync(itemInput);
 
                 return itemInput.ID;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task<IEnumerable<string>> ValidateItemsAsync(List<Item> items)
+        {
+            try
+            {
+                var messages = new List<string>();
+
+                foreach (var item in items)
+                {
+                    if (await _inventoryRepository.GetItemAsync(item.ID) == null)
+                        messages.Add($"The id {item.ID} does not correspond to an actual item.");
+                }
+
+                return messages;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task<IEnumerable<Order_ItemTable>> GetOrderItemsAsync(int orderID)
+        {
+            try
+            {
+                return await _inventoryRepository.GetOrderItemsAsync(orderID);
             }
             catch (Exception) { throw; }
         }

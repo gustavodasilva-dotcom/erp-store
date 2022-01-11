@@ -2,6 +2,7 @@
 using System;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using ERP.Store.API.Entities.Tables;
 using ERP.Store.API.Entities.Entities;
@@ -49,6 +50,24 @@ namespace ERP.Store.API.Repositories
                     #endregion
 
                     return await db.QueryFirstOrDefaultAsync<Items_InventoryData>(query, new { @itemID = itemID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task<IEnumerable<Order_ItemTable>> GetOrderItemsAsync(int orderID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"SELECT * FROM Order_Item (NOLOCK) WHERE OrderID = @orderID;";
+
+                    #endregion
+
+                    return await db.QueryAsync<Order_ItemTable>(query, new { @orderID = orderID }, commandTimeout: 30);
                 }
             }
             catch (Exception) { throw; }

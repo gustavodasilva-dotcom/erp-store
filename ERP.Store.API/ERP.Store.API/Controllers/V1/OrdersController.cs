@@ -27,6 +27,32 @@ namespace ERP.Store.API.Controllers.V1
             _validationService = validationService;
         }
 
+        [HttpGet("{orderID:int}")]
+        //[Authorize(Roles = "1")]
+        public async Task<ActionResult<dynamic>> GetOrderAsync([FromRoute] int orderID)
+        {
+            try
+            {
+                return Ok(await _orderService.GetOrderAsync(orderID));
+            }
+            catch (NotFoundException e)
+            {
+                await _logService.LogAsync(orderID, e.Message, "GetOrderAsync() : OrdersController");
+
+                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
+
+                return NotFound(returnModel);
+            }
+            catch (Exception e)
+            {
+                await _logService.LogAsync(orderID, e.Message, "GetOrderAsync() : OrdersController");
+
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
+
+                return StatusCode(500, returnModel);
+            }
+        }
+
         [HttpPost]
         //[Authorize(Roles = "1")]
         public async Task<ActionResult> RegisterOrderAsync([FromBody] OrderInputModel model)

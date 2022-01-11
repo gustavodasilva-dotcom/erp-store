@@ -5,6 +5,8 @@ namespace ERP.Store.API.Services.Interfaces
 {
     public interface IOrderService
     {
+        Task<dynamic> GetOrderAsync(int orderID);
+
         Task RegisterOrderAsync(OrderInputModel input);
     }
 }

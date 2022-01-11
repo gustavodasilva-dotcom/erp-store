@@ -6,14 +6,10 @@ namespace ERP.Store.API.Repositories.Interfaces
 {
     public interface IOrderRepository
     {
+        Task<OrdersTable> GetOrderAsync(int orderID);
+
         Task<int> InsertOrderAsync(Order order);
 
         Task InsertOrderItemsAsync(Order order);
-
-        Task<int> InsertOrderPaymentAsync(Order order);
-
-        Task InsertPaymentInfoAsync(Payment payment);
-
-        Task<PaymentsTable> GetPaymentInfoAsync(int paymentID);
     }
 }

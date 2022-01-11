@@ -60,6 +60,9 @@ namespace ERP.Store.API
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderRepository, OrderRepository>();
 
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+
             services.AddControllers();
 
             var key = Encoding.ASCII.GetBytes(Configuration["Jwt:Key"]);
