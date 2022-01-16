@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Windows.Forms;
 using ERP.Store.Desktop.Entities.Entities;
-using ERP.Store.Desktop.Entities.JSON.Response;
 
 namespace ERP.Store.Desktop.Forms.Home
 {
     public partial class frmHome : Form
     {
-        private UserResponse User { get; set; }
+        private dynamic User { get; set; }
 
-        public frmHome(UserResponse user)
+        public frmHome(dynamic user)
         {
             User = user;
 

@@ -28,7 +28,7 @@ namespace ERP.Store.API.Controllers.V1
         }
 
         [HttpGet("{orderID:int}")]
-        //[Authorize(Roles = "1")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<dynamic>> GetOrderAsync([FromRoute] int orderID)
         {
             try
@@ -54,7 +54,7 @@ namespace ERP.Store.API.Controllers.V1
         }
 
         [HttpPost]
-        //[Authorize(Roles = "1")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult> RegisterOrderAsync([FromBody] OrderInputModel model)
         {
             try

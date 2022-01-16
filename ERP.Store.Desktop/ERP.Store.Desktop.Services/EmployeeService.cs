@@ -14,7 +14,7 @@ namespace ERP.Store.Desktop.Services
             _employeeRepository = new EmployeeRepository();
         }
 
-        public int Post(EmployeeRequest employee, UserResponse user)
+        public int Post(EmployeeRequest employee, dynamic user)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace ERP.Store.Desktop.Services
             catch (Exception) { throw; }
         }
 
-        public int Put(EmployeeRequest employee, UserResponse user)
+        public int Put(EmployeeRequest employee, dynamic user)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace ERP.Store.Desktop.Services
             catch (Exception) { throw; }
         }
 
-        public EmployeeResponse Get(string identification, UserResponse user)
+        public EmployeeResponse Get(string identification, dynamic user)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace ERP.Store.Desktop.Services
             catch (Exception) { throw; }
         }
 
-        public int Delete(string identification, UserResponse user)
+        public int Delete(string identification, dynamic user)
         {
             try
             {

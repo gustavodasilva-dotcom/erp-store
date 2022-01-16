@@ -11,7 +11,7 @@ namespace ERP.Store.Desktop.Forms.Clients
 {
     public partial class frmClientDetails : Form
     {
-        private UserResponse User { get; set; }
+        private dynamic User { get; set; }
         
         public OperationType OperationType { get; set; }
 
@@ -19,7 +19,7 @@ namespace ERP.Store.Desktop.Forms.Clients
 
         private readonly ClientService _clientService;
 
-        public frmClientDetails(UserResponse user, OperationType operationType)
+        public frmClientDetails(dynamic user, OperationType operationType)
         {
             User = user;
 
@@ -35,7 +35,7 @@ namespace ERP.Store.Desktop.Forms.Clients
                 buttonDelete.Visible = false;
         }
 
-        public frmClientDetails(UserResponse user, ClientResponse client, OperationType operationType)
+        public frmClientDetails(dynamic user, ClientResponse client, OperationType operationType)
         {
             User = user;
 

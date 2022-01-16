@@ -16,7 +16,7 @@ namespace ERP.Store.Desktop.Repositories
             _endpoint = ConfigurationManager.ConnectionStrings["ClientEndpoint"].ConnectionString;
         }
 
-        public int Post(ClientRequest clientRequest, UserResponse user)
+        public int Post(ClientRequest clientRequest, dynamic user)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace ERP.Store.Desktop.Repositories
 
                 var request = new RestRequest(Method.POST);
 
-                request.AddHeader("Authorization", $"Bearer {user.Token.Token}");
+                request.AddHeader("Authorization", $"Bearer {user.token.token}");
 
                 request.AddHeader("Content-Type", "application/json");
 
@@ -94,7 +94,7 @@ namespace ERP.Store.Desktop.Repositories
             catch (Exception) { throw; }
         }
 
-        public int Put(ClientRequest clientRequest, UserResponse user)
+        public int Put(ClientRequest clientRequest, dynamic user)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace ERP.Store.Desktop.Repositories
 
                 var request = new RestRequest(Method.PUT);
 
-                request.AddHeader("Authorization", $"Bearer {user.Token.Token}");
+                request.AddHeader("Authorization", $"Bearer {user.token.token}");
 
                 request.AddHeader("Content-Type", "application/json");
 
@@ -172,7 +172,7 @@ namespace ERP.Store.Desktop.Repositories
             catch (Exception) { throw; }
         }
 
-        public ClientResponse Get(string identification, UserResponse user)
+        public ClientResponse Get(string identification, dynamic user)
         {
             try
             {
@@ -183,7 +183,7 @@ namespace ERP.Store.Desktop.Repositories
 
                 var request = new RestRequest(Method.GET);
 
-                request.AddHeader("Authorization", $"Bearer {user.Token.Token}");
+                request.AddHeader("Authorization", $"Bearer {user.token.token}");
 
                 request.AddHeader("Content-Type", "application/json");
 
@@ -219,7 +219,7 @@ namespace ERP.Store.Desktop.Repositories
             catch (Exception) { throw; }
         }
 
-        public int Delete(string identification, UserResponse user)
+        public int Delete(string identification, dynamic user)
         {
             try
             {
@@ -230,7 +230,7 @@ namespace ERP.Store.Desktop.Repositories
 
                 var request = new RestRequest(Method.DELETE);
 
-                request.AddHeader("Authorization", $"Bearer {user.Token.Token}");
+                request.AddHeader("Authorization", $"Bearer {user.token.token}");
 
                 request.AddHeader("Content-Type", "application/json");
 

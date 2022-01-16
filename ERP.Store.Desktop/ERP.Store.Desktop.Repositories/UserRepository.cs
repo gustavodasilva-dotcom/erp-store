@@ -3,7 +3,6 @@ using RestSharp;
 using Newtonsoft.Json;
 using System.Configuration;
 using ERP.Store.Desktop.Entities.JSON.Request;
-using ERP.Store.Desktop.Entities.JSON.Response;
 
 namespace ERP.Store.Desktop.Repositories
 {
@@ -16,7 +15,7 @@ namespace ERP.Store.Desktop.Repositories
             _endpoint = ConfigurationManager.ConnectionStrings["UserEndpoint"].ConnectionString;
         }
 
-        public UserResponse Get(UserRequest user)
+        public dynamic Get(UserRequest user)
         {
             try
             {
@@ -43,17 +42,14 @@ namespace ERP.Store.Desktop.Repositories
                 IRestResponse response = client.Execute(request);
 
                 if ((int)response.StatusCode == 404)
-                    throw new Exception(response.Content);
+                    throw new Exception("No user found. Please, check your input data.");
 
                 if ((int)response.StatusCode == 500 || response.StatusCode == 0)
                     throw new Exception("An error ocurred while connectiong to the server.");
 
-                return JsonConvert.DeserializeObject<UserResponse>(response.Content);
+                return JsonConvert.DeserializeObject<dynamic>(response.Content);
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            catch (Exception) { throw; }
         }
     }
 }

@@ -2,13 +2,12 @@
 using System.Windows.Forms;
 using ERP.Store.Desktop.Services;
 using ERP.Store.Desktop.Entities.Entities;
-using ERP.Store.Desktop.Entities.JSON.Response;
 
 namespace ERP.Store.Desktop.Forms.Find
 {
     public partial class frmFind : Form
     {
-        public UserResponse User { get; set; }
+        public dynamic User { get; set; }
 
         public SearchType SearchType { get; set; }
 
@@ -16,7 +15,7 @@ namespace ERP.Store.Desktop.Forms.Find
 
         private readonly EmployeeService _employeeService;
 
-        public frmFind(UserResponse user, SearchType searchType)
+        public frmFind(dynamic user, SearchType searchType)
         {
             User = user;
 

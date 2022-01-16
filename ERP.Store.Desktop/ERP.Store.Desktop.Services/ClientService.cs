@@ -14,7 +14,7 @@ namespace ERP.Store.Desktop.Services
             _clientRepository = new ClientRepository();
         }
 
-        public int Post(ClientRequest client, UserResponse user)
+        public int Post(ClientRequest client, dynamic user)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace ERP.Store.Desktop.Services
             catch (Exception) { throw; }
         }
 
-        public int Put(ClientRequest client, UserResponse user)
+        public int Put(ClientRequest client, dynamic user)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace ERP.Store.Desktop.Services
             catch (Exception) { throw; }
         }
 
-        public ClientResponse Get(string identification, UserResponse user)
+        public ClientResponse Get(string identification, dynamic user)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace ERP.Store.Desktop.Services
             catch (Exception) { throw; }
         }
 
-        public int Delete(string identification, UserResponse user)
+        public int Delete(string identification, dynamic user)
         {
             try
             {

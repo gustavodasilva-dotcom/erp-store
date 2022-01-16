@@ -42,6 +42,7 @@ namespace ERP.Store.API.Services
                     throw new NotFoundException($"There's no order registered with the id {orderID}.");
 
                 var client = await _clientService.GetClientAsync(order.ClientID);
+                client.Image = null;
 
                 // Implement a rule when the client is null.
 
@@ -62,6 +63,7 @@ namespace ERP.Store.API.Services
 
                     if (item != null)
                     {
+                        item.Image = null;
                         items.Add(item);
                     }
                 }

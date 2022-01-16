@@ -198,7 +198,7 @@ namespace ERP.Store.API.Services
             {
                 var errors = new List<string>();
 
-                var userInfoValidation = ValidateUserInfo(model.UserInfo);
+                var userInfoValidation = ValidateUserInfo(model);
 
                 foreach (var validation in userInfoValidation)
                 {
@@ -353,14 +353,28 @@ namespace ERP.Store.API.Services
             catch (Exception) { throw; }
         }
 
-        private static List<string> ValidateUserInfo(UserInfoInputModel userInfo)
+        private static List<string> ValidateUserInfo(UserInputModel user)
         {
             try
             {
                 var messages = new List<string>();
 
-                if (string.IsNullOrEmpty(userInfo.Username)) messages.Add("The username cannot be null or empty.");
-                if (string.IsNullOrEmpty(userInfo.Password)) messages.Add("The password cannot be null or empty.");
+                if (string.IsNullOrEmpty(user.Username)) messages.Add("The username cannot be null or empty.");
+                if (string.IsNullOrEmpty(user.Password)) messages.Add("The password cannot be null or empty.");
+
+                return messages;
+            }
+            catch (Exception) { throw; }
+        }
+
+        private static List<string> ValidateUserInfo(UserInfoInputModel user)
+        {
+            try
+            {
+                var messages = new List<string>();
+
+                if (string.IsNullOrEmpty(user.Username)) messages.Add("The username cannot be null or empty.");
+                if (string.IsNullOrEmpty(user.Password)) messages.Add("The password cannot be null or empty.");
 
                 return messages;
             }
