@@ -36,6 +36,9 @@ namespace ERP.Store.API
 
             services.AddScoped<IImageRepository, ImageRepository>();
 
+            services.AddScoped<IValidationService, ValidationService>();
+            services.AddScoped<IValidationRepository, ValidationRepository>();
+
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
@@ -47,6 +50,18 @@ namespace ERP.Store.API
 
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IClientRepository, ClientRepository>();
+
+            services.AddScoped<ISupplierService, SupplierService>();
+            services.AddScoped<ISupplierRepository, SupplierRepository>();
+
+            services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
+
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
 
             services.AddControllers();
 
@@ -74,7 +89,7 @@ namespace ERP.Store.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ERP.Store.API", Version = "v1" });
             });
 
-            #endregion Services
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

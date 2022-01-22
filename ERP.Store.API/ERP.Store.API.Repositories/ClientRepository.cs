@@ -40,6 +40,28 @@ namespace ERP.Store.API.Repositories
             catch (Exception) { throw; }
         }
 
+        public async Task<ClientData> GetClientAsync(int clientID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  SELECT	*
+                        FROM	Client (NOLOCK)
+                        WHERE	ClientID = @clientID
+                          AND	Deleted  = 0;";
+
+                    #endregion SQL
+
+                    return await db.QueryFirstOrDefaultAsync<ClientData>(query, new { @clientID = clientID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task InsertClientAsync(Client client)
         {
             try

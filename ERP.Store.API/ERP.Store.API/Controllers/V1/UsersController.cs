@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ERP.Store.API.CustomExceptions;
 using ERP.Store.API.Services.Interfaces;
+using ERP.Store.API.Entities.Entities.Enums;
 using ERP.Store.API.Entities.Models.InputModel;
 
 namespace ERP.Store.API.Controllers.V1
@@ -17,13 +19,17 @@ namespace ERP.Store.API.Controllers.V1
 
         private readonly ITokenService _tokenService;
 
-        public UsersController(ILogService logService, IUserService userService, ITokenService tokenService)
+        private readonly IValidationService _validationService;
+
+        public UsersController(ILogService logService, IUserService userService, ITokenService tokenService, IValidationService validationService)
         {
             _logService = logService;
 
             _userService = userService;
 
             _tokenService = tokenService;
+
+            _validationService = validationService;
         }
 
         [HttpPost]
@@ -31,6 +37,17 @@ namespace ERP.Store.API.Controllers.V1
         {
             try
             {
+                var validations = await _validationService.Validate(userInput, EntityType.Users);
+
+                if (validations.Any())
+                {
+                    var returnModel = await _validationService.InitializingReturn(validations, BadRequest().StatusCode);
+
+                    await _logService.LogAsync(returnModel, "Request has errors.", "AuthenticateAsync() : UsersController");
+
+                    return BadRequest(returnModel);
+                }
+
                 var user = await _userService.LoginAsync(userInput);
 
                 var token = _tokenService.GenerateToken(user);
@@ -53,13 +70,17 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(userInput, e.Message, "AuthenticateAsync() : UsersController");
 
-                return NotFound(e.Message);
+                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
+
+                return NotFound(returnModel);
             }
             catch (Exception e)
             {
                 await _logService.LogAsync(userInput, e.Message, "AuthenticateAsync() : UsersController");
 
-                return StatusCode(500, $"The following error occurred: {e.Message}");
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
+
+                return StatusCode(500, returnModel);
             }
         }
     }

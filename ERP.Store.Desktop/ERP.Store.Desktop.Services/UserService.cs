@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using ERP.Store.Desktop.Repositories;
 using ERP.Store.Desktop.Entities.JSON.Request;
-using ERP.Store.Desktop.Entities.JSON.Response;
 
 namespace ERP.Store.Desktop.Services
 {
@@ -35,16 +34,13 @@ namespace ERP.Store.Desktop.Services
             }
         }
 
-        public UserResponse Login(UserRequest request)
+        public dynamic Login(UserRequest request)
         {
             try
             {
                 return _userRepository.Get(request);
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            catch (Exception) { throw; }
         }
     }
 }

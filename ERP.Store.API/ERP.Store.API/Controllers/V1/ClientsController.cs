@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ERP.Store.API.CustomExceptions;
 using ERP.Store.API.Services.Interfaces;
+using ERP.Store.API.Entities.Entities.Enums;
 using ERP.Store.API.Services.CustomExceptions;
 using ERP.Store.API.Entities.Models.ViewModel;
 using ERP.Store.API.Entities.Models.InputModel;
@@ -18,11 +20,15 @@ namespace ERP.Store.API.Controllers.V1
 
         private readonly IClientService _clientService;
 
-        public ClientsController(ILogService logService, IClientService clientService)
+        private readonly IValidationService _validationService;
+
+        public ClientsController(ILogService logService, IClientService clientService, IValidationService validationService)
         {
             _logService = logService;
 
             _clientService = clientService;
+
+            _validationService = validationService;
         }
 
         [HttpGet("{identification}")]
@@ -31,19 +37,23 @@ namespace ERP.Store.API.Controllers.V1
         {
             try
             {
-                return (await _clientService.GetClientAsync(identification));
+                return await _clientService.GetClientAsync(identification);
             }
             catch (NotFoundException e)
             {
                 await _logService.LogAsync(identification, e.Message, "GetClientAsync() : ClientsController");
 
-                return NotFound(e.Message);
+                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
+
+                return NotFound(returnModel);
             }
             catch (Exception e)
             {
                 await _logService.LogAsync(identification, e.Message, "GetClientAsync() : ClientsController");
 
-                return StatusCode(500, $"The following error occurred: {e.Message}");
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
+
+                return StatusCode(500, returnModel);
             }
         }
 
@@ -53,6 +63,17 @@ namespace ERP.Store.API.Controllers.V1
         {
             try
             {
+                var validations = await _validationService.Validate(model, EntityType.Clients);
+
+                if (validations.Any())
+                {
+                    var returnModel = await _validationService.InitializingReturn(validations, BadRequest().StatusCode);
+
+                    await _logService.LogAsync(returnModel, "Request has errors.", "RegisterClientAsync() : ClientsController");
+
+                    return BadRequest(returnModel);
+                }
+
                 await _clientService.RegisterClientAsync(model);
 
                 var client = await _clientService.GetClientAsync(model.Identification);
@@ -65,13 +86,17 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(model, e.Message, "RegisterClientAsync() : ClientsController");
 
-                return Conflict(e.Message);
+                var returnModel = await _validationService.InitializingReturn(e.Message, Conflict().StatusCode);
+
+                return Conflict(returnModel);
             }
             catch (Exception e)
             {
                 await _logService.LogAsync(model, e.Message, "RegisterClientAsync() : ClientsController");
 
-                return StatusCode(500, $"The following error occurred: {e.Message}");
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
+
+                return StatusCode(500, returnModel);
             }
         }
 
@@ -81,6 +106,17 @@ namespace ERP.Store.API.Controllers.V1
         {
             try
             {
+                var validations = await _validationService.Validate(model, EntityType.Clients);
+
+                if (validations.Any())
+                {
+                    var returnModel = await _validationService.InitializingReturn(validations, BadRequest().StatusCode);
+
+                    await _logService.LogAsync(returnModel, "Request has errors.", "UpdateClientAsync() : ClientsController");
+
+                    return BadRequest(returnModel);
+                }
+
                 await _clientService.UpdateClientAsync(model);
 
                 var client = await _clientService.GetClientAsync(model.Identification);
@@ -93,13 +129,17 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(model, e.Message, "UpdateClientAsync() : ClientsController");
 
-                return NotFound(e.Message);
+                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
+
+                return NotFound(returnModel);
             }
             catch (Exception e)
             {
                 await _logService.LogAsync(model, e.Message, "UpdateClientAsync() : ClientsController");
 
-                return StatusCode(500, $"The following error occurred: {e.Message}");
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
+
+                return StatusCode(500, returnModel);
             }
         }
 
@@ -124,13 +164,17 @@ namespace ERP.Store.API.Controllers.V1
             {
                 await _logService.LogAsync(identification, e.Message, "DeleteClientAsync() : ClientsController");
 
-                return NotFound(e.Message);
+                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
+
+                return NotFound(returnModel);
             }
             catch (Exception e)
             {
                 await _logService.LogAsync(identification, e.Message, "DeleteClientAsync() : ClientsController");
+                
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
 
-                return StatusCode(500, $"The following error occurred: {e.Message}");
+                return StatusCode(500, returnModel);
             }
         }
     }

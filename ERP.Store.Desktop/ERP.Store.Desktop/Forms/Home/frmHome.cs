@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Windows.Forms;
 using ERP.Store.Desktop.Entities.Entities;
-using ERP.Store.Desktop.Entities.JSON.Response;
 
 namespace ERP.Store.Desktop.Forms.Home
 {
     public partial class frmHome : Form
     {
-        private UserResponse User { get; set; }
+        private dynamic User { get; set; }
 
-        public frmHome(UserResponse user)
+        public frmHome(dynamic user)
         {
             User = user;
 
@@ -65,6 +64,34 @@ namespace ERP.Store.Desktop.Forms.Home
                 var findClient = new Find.frmFind(User, SearchType.Client);
 
                 findClient.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The following error occured: {ex.Message} Please, contact the system administrator.");
+            }
+        }
+
+        private void getItemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var getItem = new Find.frmFind(User, SearchType.Inventory);
+
+                getItem.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The following error occured: {ex.Message} Please, contact the system administrator.");
+            }
+        }
+
+        private void registerNewItemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var inventoryDetails = new Inventories.frmInventoryDetails(User, OperationType.Create);
+
+                inventoryDetails.Show();
             }
             catch (Exception ex)
             {

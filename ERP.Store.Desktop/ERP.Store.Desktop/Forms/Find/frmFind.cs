@@ -2,13 +2,12 @@
 using System.Windows.Forms;
 using ERP.Store.Desktop.Services;
 using ERP.Store.Desktop.Entities.Entities;
-using ERP.Store.Desktop.Entities.JSON.Response;
 
 namespace ERP.Store.Desktop.Forms.Find
 {
     public partial class frmFind : Form
     {
-        public UserResponse User { get; set; }
+        public dynamic User { get; set; }
 
         public SearchType SearchType { get; set; }
 
@@ -16,7 +15,9 @@ namespace ERP.Store.Desktop.Forms.Find
 
         private readonly EmployeeService _employeeService;
 
-        public frmFind(UserResponse user, SearchType searchType)
+        private readonly InventoryService _inventoryService;
+
+        public frmFind(dynamic user, SearchType searchType)
         {
             User = user;
 
@@ -25,6 +26,8 @@ namespace ERP.Store.Desktop.Forms.Find
             _clientService = new ClientService();
 
             _employeeService = new EmployeeService();
+
+            _inventoryService = new InventoryService();
 
             InitializeComponent();
         }
@@ -57,6 +60,20 @@ namespace ERP.Store.Desktop.Forms.Find
                             var frmClientDetails = new Clients.frmClientDetails(User, client, OperationType.Update);
 
                             frmClientDetails.Show();
+                        }
+                    }
+                    else
+                    {
+                        if (SearchType == SearchType.Inventory)
+                        {
+                            var inventory = _inventoryService.Get(inputData, User);
+
+                            if (inventory != null)
+                            {
+                                var frmInventoryDetails = new Inventories.frmInventoryDetails(User, inventory, OperationType.Update);
+
+                                frmInventoryDetails.Show();
+                            }
                         }
                     }
                 }

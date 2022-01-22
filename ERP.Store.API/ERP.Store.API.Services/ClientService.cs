@@ -86,6 +86,61 @@ namespace ERP.Store.API.Services
             catch (Exception) { throw; }
         }
 
+        public async Task<ClientViewModel> GetClientAsync(int clientID)
+        {
+            try
+            {
+                var clientData = await _clientRepository.GetClientAsync(clientID);
+
+                if (clientData == null)
+                    throw new NotFoundException($"There's no client registered with the id {clientID}.");
+
+                var addressData = await _addressRepository.GetAddressAsync(clientData.AddressID);
+
+                if (addressData == null)
+                    throw new NotFoundException($"There's no address registered for the client.");
+
+                var contactData = await _contactRepository.GetContactAsync(clientData.ContactID);
+
+                if (contactData == null)
+                    throw new NotFoundException($"There's no contact data registered for the client.");
+
+                var imageData = await _imageRepository.GetClientsImage(clientData.ClientID);
+
+                return new ClientViewModel
+                {
+                    ID = clientData.ClientID,
+                    FirstName = clientData.FirstName,
+                    MiddleName = clientData.MiddleName,
+                    LastName = clientData.LastName,
+                    Identification = clientData.Identification,
+                    Address = new AddressViewModel
+                    {
+                        Zip = addressData.Zip,
+                        Street = addressData.Street,
+                        Number = addressData.Number,
+                        Comment = addressData.Comment,
+                        Neighborhood = addressData.Neighborhood,
+                        City = addressData.City,
+                        State = addressData.State,
+                        Country = addressData.Country
+                    },
+                    Contact = new ContactViewModel
+                    {
+                        Email = contactData.Email,
+                        Cellphone = contactData.Cellphone,
+                        Phone = contactData.Phone
+                    },
+                    Image = new ImageViewModel
+                    {
+                        IsImage = imageData == null ? false : true,
+                        Base64 = imageData == null ? string.Empty : imageData.Base64
+                    }
+                };
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task RegisterClientAsync(ClientInputModel input)
         {
             try

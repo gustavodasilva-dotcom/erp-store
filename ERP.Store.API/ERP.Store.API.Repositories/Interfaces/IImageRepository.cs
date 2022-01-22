@@ -10,6 +10,8 @@ namespace ERP.Store.API.Repositories.Interfaces
 
         Task<ImageData> GetClientsImage(int clientID);
 
+        Task<ImageData> GetItemsImageAsync(int itemID);
+
         Task<int> InsertImageAsync(string base64);
 
         Task UpdateImageAsync(Image image);

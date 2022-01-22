@@ -11,7 +11,7 @@ namespace ERP.Store.Desktop.Forms.Employees
 {
     public partial class frmEmployeeDetails : Form
     {
-        private UserResponse User { get; set; }
+        private dynamic User { get; set; }
 
         public EmployeeResponse Employee { get; set; }
 
@@ -21,7 +21,7 @@ namespace ERP.Store.Desktop.Forms.Employees
 
         private readonly EmployeeService _employeeService;
 
-        public frmEmployeeDetails(UserResponse user, OperationType operationType)
+        public frmEmployeeDetails(dynamic user, OperationType operationType)
         {
             User = user;
 
@@ -50,7 +50,7 @@ namespace ERP.Store.Desktop.Forms.Employees
                 buttonDelete.Visible = false;
         }
 
-        public frmEmployeeDetails(UserResponse user, EmployeeResponse employee, OperationType operationType)
+        public frmEmployeeDetails(dynamic user, EmployeeResponse employee, OperationType operationType)
         {
             User = user;
 

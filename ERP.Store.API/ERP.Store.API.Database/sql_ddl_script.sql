@@ -228,6 +228,7 @@ CREATE TABLE Orders
 	,ClientID		INT			NOT NULL
 	,Deleted		BIT			NOT NULL
 	,InsertDate		DATETIME	NOT NULL
+	,OrderCompleted	BIT			NOT NULL
 
 	CONSTRAINT PK_OrderID PRIMARY KEY(OrderID)
 
@@ -235,18 +236,139 @@ CREATE TABLE Orders
 	REFERENCES Client(ClientID)
 );
 
+DROP TABLE IF EXISTS Category
+CREATE TABLE Category
+(
+	 CategoryID		INT				NOT NULL	IDENTITY(10000000, 1)
+	,Description	VARCHAR(200)	NOT NULL
+	,Deleted		BIT				NOT NULL
+	,InsertDate		DATETIME		NOT NULL
+
+	CONSTRAINT PK_CategoryID PRIMARY KEY(CategoryID)
+);
+
+INSERT INTO Category VALUES
+('Caps and hats', 0, GETDATE());
+
+/*****************************************************************************
+Payment's table:
+*****************************************************************************/
+DROP TABLE IF EXISTS Payments
+CREATE TABLE Payments
+(
+	 PaymentID				INT				NOT NULL	IDENTITY(1, 1)
+	,Description			VARCHAR(200)	NOT NULL
+	,RequiresConfirmation	BIT				NOT NULL
+	,Deleted				BIT				NOT NULL
+	,InsertDate				DATETIME		NOT NULL
+
+	CONSTRAINT PK_PaymentID PRIMARY KEY(PaymentID)
+);
+
+INSERT INTO Payments VALUES
+ ('Cash', 0, 0, GETDATE())
+,('Checks', 0, 0, GETDATE())
+,('Debit card', 1, 0, GETDATE())
+,('Credit card', 1, 0, GETDATE())
+,('Mobile payments', 1, 0, GETDATE())
+,('Electronic bank transfers', 1, 0, GETDATE());
+
+DROP TABLE IF EXISTS PaymentStatus
+CREATE TABLE PaymentStatus
+(
+	 PaymentStatusID		INT				NOT NULL	IDENTITY(1, 1)
+	,Description			VARCHAR(200)	NOT NULL
+	,Deleted				BIT				NOT NULL
+	,InsertDate				DATETIME		NOT NULL
+
+	CONSTRAINT PK_PaymentStatusID PRIMARY KEY(PaymentStatusID)
+);
+
+INSERT INTO PaymentStatus VALUES
+ ('Completed', 0, GETDATE())
+,('Pending', 0, GETDATE())
+,('Cancelled', 0, GETDATE());
+
+DROP TABLE IF EXISTS Order_Payment
+CREATE TABLE Order_Payment
+(
+	 Order_PaymentID	INT			NOT NULL	IDENTITY(10000000, 1)
+	,Value				MONEY		NOT NULL
+	,OrderID			INT			NOT NULL
+	,PaymentID			INT			NOT NULL
+	,PaymentStatusID	INT			NOT NULL
+	,Deleted			BIT			NOT NULL
+	,InsertDate			DATETIME	NOT NULL
+
+	CONSTRAINT PK_Order_PaymentID PRIMARY KEY(Order_PaymentID)
+
+	CONSTRAINT FK_Order_Payment_OrderID FOREIGN KEY(OrderID)
+	REFERENCES Orders(OrderID),
+
+	CONSTRAINT FK_Order_Payment_PaymentID FOREIGN KEY(PaymentID)
+	REFERENCES Payments(PaymentID),
+
+	CONSTRAINT FK_Order_Payment_PaymentStatusID FOREIGN KEY(PaymentStatusID)
+	REFERENCES PaymentStatus(PaymentStatusID)
+);
+
+DROP TABLE IF EXISTS CardsInfo
+CREATE TABLE CardsInfo
+(
+	 CardsInfoID		INT				NOT NULL	IDENTITY(10000000, 1)
+	,NameOnCard			VARCHAR(200)	NOT NULL
+	,CardNumber			VARCHAR(50)		NOT NULL
+	,YearExpiryDate		INT				NOT NULL
+	,MonthExpiryDate	INT				NOT NULL
+	,SecurityCode		INT				NOT NULL
+	,Order_PaymentID	INT				NOT NULL
+	,Deleted			BIT				NOT NULL
+	,InsertDate			DATETIME		NOT NULL
+
+	CONSTRAINT PK_CardsInfoID PRIMARY KEY(CardsInfoID)
+
+	CONSTRAINT FK_CardsInfo_Order_PaymentID FOREIGN KEY(Order_PaymentID)
+	REFERENCES Order_Payment(Order_PaymentID)
+);
+
+DROP TABLE IF EXISTS BankInfo
+CREATE TABLE BankInfo
+(
+	 BankInfoID			INT				NOT NULL	IDENTITY(10000000, 1)
+	,Number				VARCHAR(50)		NOT NULL
+	,Agency				VARCHAR(50)		NOT NULL
+	,BankName			VARCHAR(100)	NOT NULL
+	,Order_PaymentID	INT				NOT NULL
+	,Deleted			BIT				NOT NULL
+	,InsertDate			DATETIME		NOT NULL
+
+	CONSTRAINT PK_BankInfoID PRIMARY KEY(BankInfoID)
+
+	CONSTRAINT FK_BankInfo_Order_PaymentID FOREIGN KEY(Order_PaymentID)
+	REFERENCES Order_Payment(Order_PaymentID)
+);
+/*****************************************************************************
+Payment's table.
+*****************************************************************************/
+
 DROP TABLE IF EXISTS Items
 CREATE TABLE Items
 (
-	 ItemID			INT			NOT NULL	IDENTITY(10000000, 1)
-	,SupplierID		INT			NOT NULL
-	,Deleted		BIT			NOT NULL
-	,InsertDate		DATETIME	NOT NULL
+	 ItemID			INT				NOT NULL	IDENTITY(10000000, 1)
+	,Name			VARCHAR(200)	NOT NULL
+	,Price			MONEY			NOT NULL
+	,CategoryID		INT				NOT NULL
+	,SupplierID		INT				NOT NULL
+	,Deleted		BIT				NOT NULL
+	,InsertDate		DATETIME		NOT NULL
 
 	CONSTRAINT PK_ItemID PRIMARY KEY(ItemID)
 
+	CONSTRAINT FK_Items_CategoryID FOREIGN KEY(CategoryID)
+	REFERENCES Category(CategoryID),
+
 	CONSTRAINT FK_Items_SupplierID FOREIGN KEY(SupplierID)
-	REFERENCES Supplier(SupplierID)
+	REFERENCES Supplier(SupplierID),
 );
 
 DROP TABLE IF EXISTS Order_Item
@@ -255,6 +377,7 @@ CREATE TABLE Order_Item
 	 Order_ItemID	INT			NOT NULL	IDENTITY(10000000, 1)
 	,OrderID		INT			NOT NULL
 	,ItemID			INT			NOT NULL
+	,Quantity		INT			NOT NULL
 	,Deleted		BIT			NOT NULL
 	,InsertDate		DATETIME	NOT NULL
 
@@ -265,6 +388,24 @@ CREATE TABLE Order_Item
 
 	CONSTRAINT FK_Order_Items_ItemID FOREIGN KEY(ItemID)
 	REFERENCES Items(ItemID)
+);
+
+DROP TABLE IF EXISTS Item_Image
+CREATE TABLE Item_Image
+(
+	 Item_ImageID	INT			NOT NULL	IDENTITY(10000000, 1)
+	,ItemID			INT			NOT NULL
+	,ImageID		INT			NOT NULL
+	,Deleted		BIT			NOT NULL
+	,InsertDate		DATETIME	NOT NULL
+
+	CONSTRAINT PK_Item_ImageID PRIMARY KEY(Item_ImageID)
+
+	CONSTRAINT FK_Item_Image_ItemID FOREIGN KEY(ItemID)
+	REFERENCES Items(ItemID),
+
+	CONSTRAINT FK_Item_Image_ImageID FOREIGN KEY(ImageID)
+	REFERENCES Image(ImageID)
 );
 
 DROP TABLE IF EXISTS Items_Inventory

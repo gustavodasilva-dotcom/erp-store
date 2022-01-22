@@ -8,6 +8,8 @@ namespace ERP.Store.API.Services.Interfaces
     {
         Task<ClientViewModel> GetClientAsync(string identification);
 
+        Task<ClientViewModel> GetClientAsync(int clientID);
+
         Task RegisterClientAsync(ClientInputModel input);
 
         Task UpdateClientAsync(ClientInputModel input);
