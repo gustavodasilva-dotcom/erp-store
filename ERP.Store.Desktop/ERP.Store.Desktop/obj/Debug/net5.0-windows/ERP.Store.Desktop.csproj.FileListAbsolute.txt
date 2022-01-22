@@ -44,3 +44,4 @@ C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.St
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.Forms.Employees.frmEmployeeDetails.resources
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.Forms.Find.frmFind.resources
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.Forms.Clients.frmClientDetails.resources
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.Forms.Inventories.frmInventoryDetails.resources

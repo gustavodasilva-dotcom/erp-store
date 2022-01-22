@@ -9,6 +9,8 @@ namespace ERP.Store.API.Services.Interfaces
 {
     public interface IInventoryService
     {
+        Task<IEnumerable<dynamic>> GetCategories();
+
         Task<ItemViewModel> GetItemAsync(int itemID);
 
         Task<int> RegisterItemAsync(ItemInputModel input);

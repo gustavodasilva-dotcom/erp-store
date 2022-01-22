@@ -70,5 +70,33 @@ namespace ERP.Store.Desktop.Forms.Home
                 MessageBox.Show($"The following error occured: {ex.Message} Please, contact the system administrator.");
             }
         }
+
+        private void getItemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var getItem = new Find.frmFind(User, SearchType.Inventory);
+
+                getItem.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The following error occured: {ex.Message} Please, contact the system administrator.");
+            }
+        }
+
+        private void registerNewItemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var inventoryDetails = new Inventories.frmInventoryDetails(User, OperationType.Create);
+
+                inventoryDetails.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The following error occured: {ex.Message} Please, contact the system administrator.");
+            }
+        }
     }
 }

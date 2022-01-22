@@ -190,5 +190,46 @@ namespace ERP.Store.API.Repositories
             }
             catch (Exception) { throw; }
         }
+
+        public async Task<IEnumerable<CategoryData>> GetCategoryAsync()
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"SELECT * FROM Category (NOLOCK);";
+
+                    #endregion
+
+                    return await db.QueryAsync<CategoryData>(query, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task<int> GetItemQuantityAsync(int itemID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  SELECT		Quantity
+                        FROM		Items			AS I  (NOLOCK)
+                        INNER JOIN	Items_Inventory AS IV (NOLOCK)
+                        	ON I.ItemID = IV.ItemID
+                        WHERE	I.ItemID = @itemID;";
+
+                    #endregion
+
+                    return await db.QueryFirstOrDefaultAsync<int>(query, new { @itemID = itemID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

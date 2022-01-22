@@ -31,6 +31,32 @@ namespace ERP.Store.API.Controllers.V1
             _validationService = validationService;
         }
 
+        [HttpGet]
+        [Authorize(Roles = "1,2")]
+        public async Task<ActionResult<dynamic>> GetCategories()
+        {
+            try
+            {
+                return Ok(await _inventoryService.GetCategories());
+            }
+            catch (NotFoundException e)
+            {
+                await _logService.LogAsync(string.Empty, e.Message, "GetItemAsync() : InventoriesController");
+
+                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
+
+                return NotFound(returnModel);
+            }
+            catch (Exception e)
+            {
+                await _logService.LogAsync(string.Empty, e.Message, "GetCategories() : InventoriesController");
+
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
+
+                return StatusCode(500, returnModel);
+            }
+        }
+
         [HttpGet("{itemID:int}")]
         [Authorize(Roles = "1,2")]
         public async Task<ActionResult<ItemViewModel>> GetItemAsync([FromRoute] int itemID)

@@ -22,5 +22,9 @@ namespace ERP.Store.API.Repositories.Interfaces
         Task<IEnumerable<Order_ItemTable>> GetOrderItemsAsync(int orderID);
 
         Task<CategoryData> GetCategoryAsync(int categoryID);
+
+        Task<IEnumerable<CategoryData>> GetCategoryAsync();
+
+        Task<int> GetItemQuantityAsync(int itemID);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using ERP.Store.API.Entities.Tables;
@@ -27,6 +28,24 @@ namespace ERP.Store.API.Services
             _supplierRepository = supplierRepository;
 
             _inventoryRepository = inventoryRepository;
+        }
+
+        public async Task<IEnumerable<dynamic>> GetCategories()
+        {
+            try
+            {
+                var categories = await _inventoryRepository.GetCategoryAsync();
+
+                if (categories == null)
+                    throw new NotFoundException("No categories were found.");
+
+                return categories.Select(c => new
+                {
+                    c.CategoryID,
+                    c.Description
+                }).ToList();
+            }
+            catch (Exception) { throw; }
         }
 
         public async Task<ItemViewModel> GetItemAsync(int itemID)
@@ -182,8 +201,7 @@ namespace ERP.Store.API.Services
 
                 var image = await _imageRepository.GetItemsImageAsync(itemInput.ID);
 
-                if (image != null)
-                    await _imageRepository.UpdateImageAsync(itemInput.Image);
+                if (image != null) await _imageRepository.UpdateImageAsync(itemInput.Image);
 
                 await _inventoryRepository.UpdateItemAsync(itemInput);
 
@@ -203,7 +221,13 @@ namespace ERP.Store.API.Services
                 foreach (var item in items)
                 {
                     if (await _inventoryRepository.GetItemAsync(item.ID) == null)
+                    {
                         messages.Add($"The id {item.ID} does not correspond to an actual item.");
+                    }
+                    else
+                    {
+                        if (!await IsAvailable(item)) messages.Add($"The item {item.ID} is not available.");
+                    }
                 }
 
                 return messages;
@@ -216,6 +240,15 @@ namespace ERP.Store.API.Services
             try
             {
                 return await _inventoryRepository.GetOrderItemsAsync(orderID);
+            }
+            catch (Exception) { throw; }
+        }
+
+        private async Task<bool> IsAvailable(Item item)
+        {
+            try
+            {
+                return await _inventoryRepository.GetItemQuantityAsync(item.ID) > 0 ? true : false;
             }
             catch (Exception) { throw; }
         }

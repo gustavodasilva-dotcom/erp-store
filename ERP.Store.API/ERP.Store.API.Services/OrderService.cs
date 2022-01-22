@@ -44,8 +44,6 @@ namespace ERP.Store.API.Services
                 var client = await _clientService.GetClientAsync(order.ClientID);
                 client.Image = null;
 
-                // Implement a rule when the client is null.
-
                 var orderPayment = await _paymentService.GetOrderPaymentAsync(orderID);
 
                 dynamic paymentInfo;
@@ -142,8 +140,7 @@ namespace ERP.Store.API.Services
 
                 var messages = await _inventoryService.ValidateItemsAsync(itemsInput);
 
-                if (messages.Any())
-                    throw new NotFoundException(messages.FirstOrDefault());
+                if (messages.Any()) throw new NotFoundException(messages.FirstOrDefault());
 
                 await _paymentService.ValidatePaymentMethodAsync(orderInput.Payment);
 
@@ -151,8 +148,7 @@ namespace ERP.Store.API.Services
 
                 orderInput.ID = await _orderRepository.InsertOrderAsync(orderInput);
 
-                if (orderInput.ID == 0)
-                    throw new Exception("An error occurred while trying to insert the order header.");
+                if (orderInput.ID == 0) throw new Exception("An error occurred while trying to insert the order header.");
 
                 await _orderRepository.InsertOrderItemsAsync(orderInput);
 
