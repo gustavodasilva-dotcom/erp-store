@@ -28,7 +28,7 @@ namespace ERP.Store.API.Controllers.V1
         }
 
         [HttpGet("{orderID:int}")]
-        [Authorize(Roles = "1")]
+        [Authorize(Roles = "1,2")]
         public async Task<ActionResult<dynamic>> GetOrderAsync([FromRoute] int orderID)
         {
             try
@@ -54,14 +54,12 @@ namespace ERP.Store.API.Controllers.V1
         }
 
         [HttpPost]
-        [Authorize(Roles = "1")]
-        public async Task<ActionResult> RegisterOrderAsync([FromBody] OrderInputModel model)
+        [Authorize(Roles = "1,2")]
+        public async Task<ActionResult<dynamic>> RegisterOrderAsync([FromBody] OrderInputModel model)
         {
             try
             {
-                await _orderService.RegisterOrderAsync(model);
-
-                return Ok();
+                return Created(string.Empty, await _orderService.GetOrderAsync(await _orderService.RegisterOrderAsync(model)));
             }
             catch (NotFoundException e)
             {

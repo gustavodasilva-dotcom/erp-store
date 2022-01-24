@@ -25,6 +25,8 @@ namespace ERP.Store.API.Repositories.Interfaces
 
         Task<IEnumerable<CategoryData>> GetCategoryAsync();
 
+        Task<IEnumerable<dynamic>> GetShortListOfItemsAsync();
+
         Task<int> GetItemQuantityAsync(int itemID);
     }
 }

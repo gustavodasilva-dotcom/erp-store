@@ -34,7 +34,7 @@ namespace ERP.Store.Desktop.Forms.Inventories
 
             #region InitializingObjects
 
-            var categories = _inventoryService.Get(User);
+            var categories = _inventoryService.Get(User, CategoryType.Categories);
 
             foreach (var category in categories)
                 comboBoxCategories.Items.Add(category.description);
@@ -69,7 +69,7 @@ namespace ERP.Store.Desktop.Forms.Inventories
                 textBoxSupplierName.Text = inventory.inventory.supplier.name;
                 textBoxIdentification.Text = inventory.inventory.supplier.identification;
 
-                var categories = _inventoryService.Get(User);
+                var categories = _inventoryService.Get(User, CategoryType.Categories);
 
                 foreach (var category in categories)
                 {
@@ -92,11 +92,13 @@ namespace ERP.Store.Desktop.Forms.Inventories
 
                 if (string.IsNullOrEmpty(validation))
                 {
+                    int itemID;
+
                     #region InitializingObjects
 
                     var categoryID = 0;
 
-                    var categories = _inventoryService.Get(User);
+                    var categories = _inventoryService.Get(User, CategoryType.Categories);
 
                     foreach (var category in categories) if (category.description.Equals(comboBoxCategories.SelectedItem)) categoryID = category.categoryID;
 
@@ -127,10 +129,27 @@ namespace ERP.Store.Desktop.Forms.Inventories
 
                     if (OperationType == OperationType.Create)
                     {
-                        var itemID = _inventoryService.Post(item, User);
+                        itemID = _inventoryService.Post(item, User);
 
                         if (itemID != 0)
                             MessageBox.Show($"Item registered successfully. New id: {itemID}.");
+                        else
+                            throw new Exception("It wasn't possible to finish the request.");
+                    }
+                    else
+                    {
+                        if (OperationType == OperationType.Update)
+                        {
+                            if (int.TryParse(textBoxItemID.Text, out itemID))
+                            {
+                                item.ItemID = itemID;
+
+                                if (_inventoryService.Put(item, User) == 200)
+                                    MessageBox.Show($"Item {itemID} updated successfully.");
+                                else
+                                    throw new Exception("It wasn't possible to finish the request.");
+                            }
+                        }
                     }
                 }
                 else

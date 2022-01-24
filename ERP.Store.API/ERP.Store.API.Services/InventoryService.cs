@@ -48,6 +48,26 @@ namespace ERP.Store.API.Services
             catch (Exception) { throw; }
         }
 
+        public async Task<IEnumerable<dynamic>> GetShortListOfItemsAsync()
+        {
+            try
+            {
+                var items = await _inventoryRepository.GetShortListOfItemsAsync();
+
+                if (items == null)
+                    throw new NotFoundException("No items were found.");
+
+                return items.Select(i => new
+                {
+                    i.ItemID,
+                    i.Name,
+                    i.Price,
+                    i.Quantity
+                }).ToList();
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task<ItemViewModel> GetItemAsync(int itemID)
         {
             try

@@ -31,13 +31,17 @@ namespace ERP.Store.API.Controllers.V1
             _validationService = validationService;
         }
 
-        [HttpGet]
+        [HttpGet("{category}")]
         [Authorize(Roles = "1,2")]
-        public async Task<ActionResult<dynamic>> GetCategories()
+        public async Task<ActionResult<dynamic>> GetCategories([FromRoute] string category)
         {
             try
             {
-                return Ok(await _inventoryService.GetCategories());
+                if (category.Equals("categories")) return Ok(await _inventoryService.GetCategories());
+
+                if (category.Equals("items")) return Ok(await _inventoryService.GetShortListOfItemsAsync());
+
+                return BadRequest();
             }
             catch (NotFoundException e)
             {
@@ -116,7 +120,7 @@ namespace ERP.Store.API.Controllers.V1
                     return BadRequest(returnModel);
                 }
 
-                return await _inventoryService.GetItemAsync(await _inventoryService.RegisterItemAsync(model));
+                return Created("Created", await _inventoryService.GetItemAsync(await _inventoryService.RegisterItemAsync(model)));
             }
             catch (BadRequestException e)
             {

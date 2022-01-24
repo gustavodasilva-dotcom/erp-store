@@ -76,7 +76,7 @@ namespace ERP.Store.API.Services
             catch (Exception) { throw; }
         }
 
-        public async Task RegisterOrderAsync(OrderInputModel input)
+        public async Task<int> RegisterOrderAsync(OrderInputModel input)
         {
             try
             {
@@ -156,6 +156,8 @@ namespace ERP.Store.API.Services
 
                 if (orderInput.Payment.IsCard || orderInput.Payment.IsCheck || orderInput.Payment.IsBankTransfer)
                     await _paymentService.InsertPaymentInfoAsync(orderInput.Payment);
+
+                return orderInput.ID;
             }
             catch (Exception) { throw; }
         }

@@ -209,6 +209,31 @@ namespace ERP.Store.API.Repositories
             catch (Exception) { throw; }
         }
 
+        public async Task<IEnumerable<dynamic>> GetShortListOfItemsAsync()
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  SELECT		*
+                        FROM		Items			I  (NOLOCK)
+                        INNER JOIN	Items_Inventory	II (NOLOCK)
+                        	ON I.ItemID = II.ItemID
+                        WHERE		I.Deleted  = 0
+                          AND		II.Deleted = 0
+                        ORDER BY    Name;";
+
+                    #endregion
+
+                    return await db.QueryAsync<dynamic>(query, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task<int> GetItemQuantityAsync(int itemID)
         {
             try

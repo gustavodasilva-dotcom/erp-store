@@ -80,7 +80,7 @@ namespace ERP.Store.API.Controllers.V1
 
                 await _logService.LogAsync(model, "Client registered successfully.", "RegisterClientAsync() : ClientsController", client.ID);
 
-                return Created("Created", client);
+                return Created(string.Empty, client);
             }
             catch (ConflictException e)
             {
