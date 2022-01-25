@@ -10,11 +10,15 @@ namespace ERP.Store.Desktop.Forms.Orders
     {
         private dynamic User { get; set; }
 
+        private List<Item> Items { get; set; }
+
         private OperationType OperationType { get; set; }
 
         private readonly ClientService _clientService;
 
         private readonly InventoryService _inventoryService;
+
+        private Inventories.frmItemDetails FrmItemDetails { get; set; }
 
         public frmOrderDetails(dynamic user, OperationType operationType)
         {
@@ -62,20 +66,41 @@ namespace ERP.Store.Desktop.Forms.Orders
                 {
                     var itemInput = textBoxFindItem.Text.ToLower().Trim();
 
+                    var itemDetails = new Inventories.frmItemDetails();
+
+                    FrmItemDetails = itemDetails;
+                    
                     foreach (var item in _inventoryService.Get(User, CategoryType.Items))
                     {
                         if (Convert.ToString(item.name).ToLower().Contains(itemInput))
-                        {
-                            var itemDetails = new Inventories.frmItemDetails();
-
-                            itemDetails.SetItem(Convert.ToString(item.name));
-                        }
+                            itemDetails.SetItem($"{Convert.ToString(item.itemID)} - {Convert.ToString(item.name)}");
                     }
 
-                    // TODO: Continue the implementation of this functionality.
-                    // After adding the items, a new window must open with the list of items, where the user can
-                    // adjust the quantity of items.
+                    itemDetails.Show();
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The following error occurred: {ex.Message}");
+            }
+        }
+
+        private void buttonReload_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Items == null) Items = new List<Item>();
+
+                var newItems = FrmItemDetails.Items;
+
+                foreach (var item in newItems) Items.Add(item);
+
+                listViewItems.View = View.List;
+                listViewItems.Clear();
+
+                foreach (var item in Items) listViewItems.Items.Add($"#{item.Quantity} - {item.ItemID}");
+
+                Refresh();
             }
             catch (Exception ex)
             {
@@ -107,7 +132,8 @@ namespace ERP.Store.Desktop.Forms.Orders
                 #region Validation
 
                 if (string.IsNullOrEmpty(textBoxClientIdentification.Text)) return "The client's identification cannot be null or empty.";
-                if (string.IsNullOrEmpty(textBoxItems.Text)) return "To finish an order, there must be, at least, one item.";
+                
+                if (listViewItems.Items.Count == 0) return "To finish an order, there must be, at least, one item.";
 
                 if (!long.TryParse(textBoxClientIdentification.Text, out long _)) return "The client's identification must be a numeric value.";
 

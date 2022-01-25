@@ -30,7 +30,6 @@ namespace ERP.Store.Desktop.Forms.Orders
         private void InitializeComponent()
         {
             this.textBoxClientIdentification = new System.Windows.Forms.TextBox();
-            this.textBoxItems = new System.Windows.Forms.TextBox();
             this.comboBoxPayments = new System.Windows.Forms.ComboBox();
             this.textBoxNameOnCard = new System.Windows.Forms.TextBox();
             this.textBoxCardNumber = new System.Windows.Forms.TextBox();
@@ -42,6 +41,8 @@ namespace ERP.Store.Desktop.Forms.Orders
             this.textBoxAgency = new System.Windows.Forms.TextBox();
             this.buttonSend = new System.Windows.Forms.Button();
             this.textBoxFindItem = new System.Windows.Forms.TextBox();
+            this.buttonReload = new System.Windows.Forms.Button();
+            this.listViewItems = new System.Windows.Forms.ListView();
             this.SuspendLayout();
             // 
             // textBoxClientIdentification
@@ -52,15 +53,6 @@ namespace ERP.Store.Desktop.Forms.Orders
             this.textBoxClientIdentification.PlaceholderText = "Client identification";
             this.textBoxClientIdentification.Size = new System.Drawing.Size(233, 23);
             this.textBoxClientIdentification.TabIndex = 0;
-            // 
-            // textBoxItems
-            // 
-            this.textBoxItems.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxItems.Location = new System.Drawing.Point(69, 165);
-            this.textBoxItems.Multiline = true;
-            this.textBoxItems.Name = "textBoxItems";
-            this.textBoxItems.Size = new System.Drawing.Size(233, 247);
-            this.textBoxItems.TabIndex = 2;
             // 
             // comboBoxPayments
             // 
@@ -164,11 +156,34 @@ namespace ERP.Store.Desktop.Forms.Orders
             this.textBoxFindItem.TabIndex = 13;
             this.textBoxFindItem.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxFindItem_KeyDown);
             // 
+            // buttonReload
+            // 
+            this.buttonReload.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonReload.Location = new System.Drawing.Point(308, 165);
+            this.buttonReload.Name = "buttonReload";
+            this.buttonReload.Size = new System.Drawing.Size(58, 23);
+            this.buttonReload.TabIndex = 14;
+            this.buttonReload.Text = "Reload";
+            this.buttonReload.UseVisualStyleBackColor = true;
+            this.buttonReload.Click += new System.EventHandler(this.buttonReload_Click);
+            // 
+            // listViewItems
+            // 
+            this.listViewItems.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.listViewItems.HideSelection = false;
+            this.listViewItems.Location = new System.Drawing.Point(69, 165);
+            this.listViewItems.Name = "listViewItems";
+            this.listViewItems.Size = new System.Drawing.Size(233, 247);
+            this.listViewItems.TabIndex = 15;
+            this.listViewItems.UseCompatibleStateImageBehavior = false;
+            // 
             // frmOrderDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.listViewItems);
+            this.Controls.Add(this.buttonReload);
             this.Controls.Add(this.textBoxFindItem);
             this.Controls.Add(this.buttonSend);
             this.Controls.Add(this.textBoxAgency);
@@ -180,7 +195,6 @@ namespace ERP.Store.Desktop.Forms.Orders
             this.Controls.Add(this.textBoxCardNumber);
             this.Controls.Add(this.textBoxNameOnCard);
             this.Controls.Add(this.comboBoxPayments);
-            this.Controls.Add(this.textBoxItems);
             this.Controls.Add(this.textBoxClientIdentification);
             this.Name = "frmOrderDetails";
             this.Text = "Order Details";
@@ -192,7 +206,6 @@ namespace ERP.Store.Desktop.Forms.Orders
         #endregion
 
         private System.Windows.Forms.TextBox textBoxClientIdentification;
-        private System.Windows.Forms.TextBox textBoxItems;
         private System.Windows.Forms.ComboBox comboBoxPayments;
         private System.Windows.Forms.TextBox textBoxNameOnCard;
         private System.Windows.Forms.TextBox textBoxCardNumber;
@@ -204,5 +217,7 @@ namespace ERP.Store.Desktop.Forms.Orders
         private System.Windows.Forms.TextBox textBoxAgency;
         private System.Windows.Forms.Button buttonSend;
         private System.Windows.Forms.TextBox textBoxFindItem;
+        private System.Windows.Forms.Button buttonReload;
+        private System.Windows.Forms.ListView listViewItems;
     }
 }
