@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using ERP.Store.Desktop.Services;
 using ERP.Store.Desktop.Entities.Entities;
+using ERP.Store.Desktop.Entities.JSON.Request;
 
 namespace ERP.Store.Desktop.Forms.Orders
 {
@@ -10,11 +11,11 @@ namespace ERP.Store.Desktop.Forms.Orders
     {
         private dynamic User { get; set; }
 
-        private List<Item> Items { get; set; }
+        private List<ItemEntity> Items { get; set; }
 
         private OperationType OperationType { get; set; }
 
-        private readonly ClientService _clientService;
+        private readonly OrderService _orderService;
 
         private readonly InventoryService _inventoryService;
 
@@ -28,7 +29,7 @@ namespace ERP.Store.Desktop.Forms.Orders
 
                 OperationType = operationType;
 
-                _clientService = new ClientService();
+                _orderService = new OrderService();
 
                 _inventoryService = new InventoryService();
 
@@ -50,7 +51,40 @@ namespace ERP.Store.Desktop.Forms.Orders
         {
             try
             {
+                var validation = ValidateInput();
 
+                if (string.IsNullOrEmpty(validation))
+                {
+                    #region InitializingObjets
+
+                    var orderRequest = new OrderRequest
+                    {
+                        ClientIdentification = textBoxClientIdentification.Text,
+                    };
+
+                    var items = SetItems();
+
+                    orderRequest.Items = new List<ItemOrderRequest>();
+                    orderRequest.Items = items;
+
+                    var payment = SetPayment();
+
+                    orderRequest.Payment = new PaymentRequest();
+                    orderRequest.Payment = payment;
+
+                    #endregion
+
+                    var orderID = _orderService.Post(orderRequest, User);
+
+                    if (orderID != 0)
+                        MessageBox.Show($"Order created successfully. Order id: {orderID}.");
+                    else
+                        MessageBox.Show("It was not possible to complete de request.");
+                }
+                else
+                {
+                    MessageBox.Show(validation);
+                }
             }
             catch (Exception ex)
             {
@@ -89,7 +123,7 @@ namespace ERP.Store.Desktop.Forms.Orders
         {
             try
             {
-                if (Items == null) Items = new List<Item>();
+                if (Items == null) Items = new List<ItemEntity>();
 
                 var newItems = FrmItemDetails.Items;
 
@@ -108,10 +142,121 @@ namespace ERP.Store.Desktop.Forms.Orders
             }
         }
 
+        private List<ItemOrderRequest> SetItems()
+        {
+            try
+            {
+                #region SetItems
+
+                var itemsRequest = new List<ItemOrderRequest>();
+
+                foreach (var item in Items)
+                {
+                    itemsRequest.Add(new ItemOrderRequest
+                    {
+                        ItemID = item.ItemID,
+                        Quantity = item.Quantity
+                    });
+                }
+
+                #endregion
+
+                return itemsRequest;
+            }
+            catch (Exception) { throw; }
+        }
+
+        private PaymentRequest SetPayment()
+        {
+            try
+            {
+                #region SetPayment
+
+                PaymentRequest payment = null;
+
+                if (comboBoxPayments.SelectedIndex == 0)
+                {
+                    payment = new PaymentRequest
+                    {
+                        IsCheck = true,
+                        IsCard = false,
+                        IsBankTransfer = false,
+                        Card = new CardRequest(),
+                        BankInfo = new BankInfoRequest()
+                    };
+                }
+
+                if (comboBoxPayments.SelectedIndex == 1)
+                {
+                    payment = new PaymentRequest
+                    {
+                        IsCheck = true,
+                        IsCard = false,
+                        IsBankTransfer = false,
+                        Card = new CardRequest(),
+                        BankInfo = new BankInfoRequest
+                        {
+                            IsMobileTransfer = comboBoxPayments.SelectedIndex == 4 ? true : false,
+                            IsEletronicBankTransfer = comboBoxPayments.SelectedIndex == 5 ? true : false,
+                            BankName = textBoxBankName.Text,
+                            Number = textBoxNumber.Text,
+                            Agency = textBoxAgency.Text
+                        }
+                    };
+                }
+
+                if (comboBoxPayments.SelectedIndex == 2 || comboBoxPayments.SelectedIndex == 3)
+                {
+                    payment = new PaymentRequest
+                    {
+                        IsCheck = false,
+                        IsCard = true,
+                        IsBankTransfer = false,
+                        Card = new CardRequest
+                        {
+                            IsCredit = comboBoxPayments.SelectedIndex == 3 ? true : false,
+                            NameOnCard = textBoxNameOnCard.Text,
+                            CardNumber = textBoxCardNumber.Text,
+                            YearExpiryDate = int.Parse(textBoxYY.Text),
+                            MonthExpiryDate = int.Parse(textBoxMM.Text),
+                            SecurityCode = int.Parse(textBoxCCV.Text)
+                        },
+                        BankInfo = new BankInfoRequest()
+                    };
+                }
+
+                if (comboBoxPayments.SelectedIndex == 4 || comboBoxPayments.SelectedIndex == 5)
+                {
+                    payment = new PaymentRequest
+                    {
+                        IsCheck = false,
+                        IsCard = false,
+                        IsBankTransfer = true,
+                        Card = new CardRequest(),
+                        BankInfo = new BankInfoRequest
+                        {
+                            IsMobileTransfer = comboBoxPayments.SelectedIndex == 4 ? true : false,
+                            IsEletronicBankTransfer = comboBoxPayments.SelectedIndex == 5 ? true : false,
+                            BankName = textBoxBankName.Text,
+                            Number = textBoxNumber.Text,
+                            Agency = textBoxAgency.Text
+                        }
+                    };
+                }
+
+                #endregion
+
+                return payment;
+            }
+            catch (Exception) { throw; }
+        }
+
         private static List<string> GetPayments()
         {
             try
             {
+                #region GetPayments
+
                 return new List<string>
                 {
                     "Cash",
@@ -121,6 +266,8 @@ namespace ERP.Store.Desktop.Forms.Orders
                     "Mobile transfer",
                     "Eletronic bank transfer"
                 };
+
+                #endregion
             }
             catch (Exception) { throw; }
         }

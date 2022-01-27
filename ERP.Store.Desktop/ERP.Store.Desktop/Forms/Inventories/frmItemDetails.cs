@@ -7,7 +7,7 @@ namespace ERP.Store.Desktop.Forms.Inventories
 {
     public partial class frmItemDetails : Form
     {
-        public List<Item> Items { get; set; }
+        public List<ItemEntity> Items { get; set; }
 
         private List<string> ItemsList { get; set; }
 
@@ -59,9 +59,9 @@ namespace ERP.Store.Desktop.Forms.Inventories
 
                 if (string.IsNullOrEmpty(validate))
                 {
-                    if (Items == null) Items = new List<Item>();
+                    if (Items == null) Items = new List<ItemEntity>();
 
-                    Items.Add(new Item
+                    Items.Add(new ItemEntity
                     {
                         ItemID = int.Parse(textBoxEnterItemID.Text),
                         Quantity = int.Parse(textBoxQuantity.Text)

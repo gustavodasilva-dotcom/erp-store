@@ -1,6 +1,6 @@
-﻿namespace ERP.Store.Desktop.Entities.Entities
+﻿namespace ERP.Store.Desktop.Entities.JSON.Request
 {
-    public class Item
+    public class ItemOrderRequest
     {
         public int ItemID { get; set; }
 
