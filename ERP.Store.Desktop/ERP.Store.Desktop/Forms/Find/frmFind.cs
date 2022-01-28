@@ -11,6 +11,8 @@ namespace ERP.Store.Desktop.Forms.Find
 
         public SearchType SearchType { get; set; }
 
+        private readonly OrderService _orderService;
+
         private readonly ClientService _clientService;
 
         private readonly EmployeeService _employeeService;
@@ -22,6 +24,8 @@ namespace ERP.Store.Desktop.Forms.Find
             User = user;
 
             SearchType = searchType;
+
+            _orderService = new OrderService();
 
             _clientService = new ClientService();
 
@@ -49,31 +53,41 @@ namespace ERP.Store.Desktop.Forms.Find
                         frmEmployeeDetails.Show();
                     }
                 }
-                else
+                else if (SearchType == SearchType.Client)
                 {
-                    if (SearchType == SearchType.Client)
+                    var client = _clientService.Get(inputData, User);
+
+                    if (client != null)
                     {
-                        var client = _clientService.Get(inputData, User);
+                        var frmClientDetails = new Clients.frmClientDetails(User, client, OperationType.Update);
 
-                        if (client != null)
-                        {
-                            var frmClientDetails = new Clients.frmClientDetails(User, client, OperationType.Update);
-
-                            frmClientDetails.Show();
-                        }
+                        frmClientDetails.Show();
                     }
-                    else
+                }
+                else if (SearchType == SearchType.Inventory)
+                {
+                    var inventory = _inventoryService.Get(inputData, User);
+
+                    if (inventory != null)
                     {
-                        if (SearchType == SearchType.Inventory)
+                        var frmInventoryDetails = new Inventories.frmInventoryDetails(User, inventory, OperationType.Update);
+
+                        frmInventoryDetails.Show();
+                    }
+                }
+                else if (SearchType == SearchType.Order)
+                {
+                    var isNumeric = int.TryParse(inputData, out int orderID);
+
+                    if (isNumeric)
+                    {
+                        var order = _orderService.Get(orderID, User);
+
+                        if (order != null)
                         {
-                            var inventory = _inventoryService.Get(inputData, User);
+                            var frmOrderDetails = new Orders.frmOrderDetails(User, order, OperationType.Update);
 
-                            if (inventory != null)
-                            {
-                                var frmInventoryDetails = new Inventories.frmInventoryDetails(User, inventory, OperationType.Update);
-
-                                frmInventoryDetails.Show();
-                            }
+                            frmOrderDetails.Show();
                         }
                     }
                 }

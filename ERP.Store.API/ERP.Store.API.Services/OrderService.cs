@@ -46,7 +46,7 @@ namespace ERP.Store.API.Services
 
                 var orderPayment = await _paymentService.GetOrderPaymentAsync(orderID);
 
-                dynamic paymentInfo;
+                dynamic paymentInfo = null;
 
                 if (!orderPayment.PaymentID.Equals(1))
                     paymentInfo = await _paymentService.GetOrderPaymentInfoAsync(orderPayment);
@@ -66,9 +66,42 @@ namespace ERP.Store.API.Services
                     }
                 }
 
+                dynamic cardPayment = null;
+
+                if (orderPayment.PaymentID.Equals(3) || orderPayment.PaymentID.Equals(4))
+                {
+                    cardPayment = new
+                    {
+                        paymentInfo.NameOnCard,
+                        paymentInfo.CardNumber,
+                        paymentInfo.YearExpiryDate,
+                        paymentInfo.MonthExpiryDate
+                    };
+                }
+
+                dynamic bankPayment = null;
+
+                if (orderPayment.PaymentID.Equals(5) || orderPayment.PaymentID.Equals(6))
+                {
+                    bankPayment = new
+                    {
+                        paymentInfo.Number,
+                        paymentInfo.Agency,
+                        paymentInfo.BankName
+                    };
+                }
+
+                var payment = await _paymentService.GetPaymentInfoAsync(orderPayment.PaymentID);
+
                 return new
                 {
                     order.OrderID,
+                    Payment = new
+                    {
+                        orderPayment.PaymentID,
+                        payment.Description,
+                        PaymentInfo = cardPayment == null ? bankPayment : cardPayment
+                    },
                     Client = client,
                     Items = items
                 };

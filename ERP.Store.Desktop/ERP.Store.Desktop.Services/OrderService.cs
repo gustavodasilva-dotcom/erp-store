@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using ERP.Store.Desktop.Repositories;
-using ERP.Store.Desktop.Entities.Entities;
 using ERP.Store.Desktop.Entities.JSON.Request;
 
 namespace ERP.Store.Desktop.Services
@@ -23,11 +22,26 @@ namespace ERP.Store.Desktop.Services
 
                 _apiRepository.Endpoint = ConfigurationManager.ConnectionStrings["OrderEndpoint"].ConnectionString;
 
-                var response = _apiRepository.Post(json, user, HttpMethodType.Post);
+                var response = _apiRepository.Post(json, user);
 
                 if (response == null) throw new Exception("It was not possible to complete de request.");
 
                 return response.orderID;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public dynamic Get(int orderID, dynamic user)
+        {
+            try
+            {
+                _apiRepository.Endpoint = ConfigurationManager.ConnectionStrings["OrderEndpoint"].ConnectionString + orderID;
+
+                var response = _apiRepository.Get(user);
+
+                if (response == null) throw new Exception("It was not possible to complete de request.");
+
+                return response;
             }
             catch (Exception) { throw; }
         }

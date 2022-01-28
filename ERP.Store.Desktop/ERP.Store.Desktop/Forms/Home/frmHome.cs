@@ -112,5 +112,19 @@ namespace ERP.Store.Desktop.Forms.Home
                 MessageBox.Show($"The following error occured: {ex.Message} Please, contact the system administrator.");
             }
         }
+
+        private void getOrderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var getOrder = new Find.frmFind(User, SearchType.Order);
+
+                getOrder.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The following error occured: {ex.Message} Please, contact the system administrator.");
+            }
+        }
     }
 }

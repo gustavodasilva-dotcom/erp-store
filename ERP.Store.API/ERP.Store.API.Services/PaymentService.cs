@@ -60,6 +60,15 @@ namespace ERP.Store.API.Services
             catch (Exception) { throw; }
         }
 
+        public async Task<PaymentsTable> GetPaymentInfoAsync(int paymentID)
+        {
+            try
+            {
+                return await _paymentRepository.GetPaymentInfoAsync(paymentID);
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task<double> GetOrderValueAsync(List<Item> items)
         {
             try

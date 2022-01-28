@@ -15,6 +15,8 @@ namespace ERP.Store.API.Services.Interfaces
 
         Task<Order_PaymentTable> GetOrderPaymentAsync(int orderID);
 
+        Task<PaymentsTable> GetPaymentInfoAsync(int paymentID);
+
         Task<dynamic> GetOrderPaymentInfoAsync(Order_PaymentTable orderPayment);
 
         Task<Payment> ValidatePaymentMethodAsync(Payment payment);

@@ -47,6 +47,58 @@ namespace ERP.Store.Desktop.Forms.Orders
             }
         }
 
+        public frmOrderDetails(dynamic user, dynamic order, OperationType operationType)
+        {
+            try
+            {
+                User = user;
+
+                OperationType = operationType;
+
+                _orderService = new OrderService();
+
+                _inventoryService = new InventoryService();
+
+                InitializeComponent();
+
+                if (operationType == OperationType.Update)
+                {
+                    #region InitializingObjects
+
+                    textBoxClientIdentification.Text = order.client.identification.ToString();
+
+                    listViewItems.View = View.List;
+
+                    foreach (var item in order.items)
+                        listViewItems.Items.Add($"#{item.inventory.quantity.ToString()} - {item.itemID.ToString()}");
+
+                    foreach (var payment in GetPayments())
+                        if (payment.Equals(order.payment.description.ToString())) comboBoxPayments.Text = payment;
+                    
+                    if (order.payment.paymentID == 3 || order.payment.paymentID == 4)
+                    {
+                        textBoxNameOnCard.Text = order.payment.paymentInfo.nameOnCard.ToString();
+                        textBoxNameOnCard.Text = order.payment.paymentInfo.cardNumber.ToString();
+                        textBoxYY.Text = order.payment.paymentInfo.yearExpiryDate.ToString();
+                        textBoxMM.Text = order.payment.paymentInfo.monthExpiryDate.ToString();
+                    }
+
+                    if (order.payment.paymentID == 5 || order.payment.paymentID == 6)
+                    {
+                        textBoxBankName.Text = order.payment.paymentInfo.bankName.ToString();
+                        textBoxNumber.Text = order.payment.paymentInfo.number.ToString();
+                        textBoxAgency.Text = order.payment.paymentInfo.agency.ToString();
+                    }
+
+                    #endregion
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"The following error occurred: {e.Message}");
+            }
+        }
+
         private void buttonSend_Click(object sender, EventArgs e)
         {
             try
@@ -178,7 +230,7 @@ namespace ERP.Store.Desktop.Forms.Orders
                 {
                     payment = new PaymentRequest
                     {
-                        IsCheck = true,
+                        IsCheck = false,
                         IsCard = false,
                         IsBankTransfer = false,
                         Card = new CardRequest(),
