@@ -6,8 +6,8 @@ using ERP.Store.API.CustomExceptions;
 using ERP.Store.API.Entities.Entities;
 using ERP.Store.API.Services.Interfaces;
 using ERP.Store.API.Repositories.Interfaces;
-using ERP.Store.API.Entities.Models.ViewModel;
 using ERP.Store.API.Entities.Models.InputModel;
+using ERP.Store.API.Services.CustomExceptions;
 
 namespace ERP.Store.API.Services
 {
@@ -38,7 +38,7 @@ namespace ERP.Store.API.Services
             {
                 var order = await _orderRepository.GetOrderAsync(orderID);
 
-                if (order == null || order.Deleted.Equals(1))
+                if (order == null)
                     throw new NotFoundException($"There's no order registered with the id {orderID}.");
 
                 var client = await _clientService.GetClientAsync(order.ClientID);
@@ -53,7 +53,7 @@ namespace ERP.Store.API.Services
 
                 var orderItems = await _inventoryService.GetOrderItemsAsync(orderID);
 
-                var items = new List<ItemViewModel>();
+                var items = new List<dynamic>();
 
                 foreach (var orderItem in orderItems)
                 {
@@ -61,8 +61,13 @@ namespace ERP.Store.API.Services
 
                     if (item != null)
                     {
-                        item.Image = null;
-                        items.Add(item);
+                        items.Add(new
+                        {
+                            orderItem.ItemID,
+                            orderItem.Quantity,
+                            item.Category,
+                            item.Inventory
+                        });
                     }
                 }
 
@@ -81,7 +86,7 @@ namespace ERP.Store.API.Services
 
                 dynamic bankPayment = null;
 
-                if (orderPayment.PaymentID.Equals(5) || orderPayment.PaymentID.Equals(6))
+                if (orderPayment.PaymentID.Equals(2) || orderPayment.PaymentID.Equals(5) || orderPayment.PaymentID.Equals(6))
                 {
                     bankPayment = new
                     {
@@ -103,8 +108,60 @@ namespace ERP.Store.API.Services
                         PaymentInfo = cardPayment == null ? bankPayment : cardPayment
                     },
                     Client = client,
-                    Items = items
+                    Items = items,
+                    IsCompleted = order.OrderCompleted == 0 ? false : true,
+                    IsCanceled = order.Deleted == 0 ? false : true
                 };
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task CompleteOrCancelOrderAsync(CompleteOrderInputModel inputModel)
+        {
+            try
+            {
+                var order = await _orderRepository.GetOrderAsync(inputModel.OrderID);
+
+                if (order == null || order.Deleted.Equals(1))
+                    throw new NotFoundException($"There's no order registered with the id {inputModel.OrderID}.");
+
+                if (inputModel.CompleteOrder && order.OrderCompleted.Equals(1))
+                    throw new BadRequestException($"The order {inputModel.OrderID} is already completed.");
+
+                if (inputModel.CancelOrder && order.Deleted.Equals(1))
+                    throw new BadRequestException($"The order {inputModel.OrderID} is already canceled.");
+
+                if (inputModel.CompleteOrder && inputModel.CancelOrder) throw new BadRequestException("The operation must to complete or delete an order.");
+
+                if (inputModel.CompleteOrder) await _orderRepository.CompleteOrderAsync(inputModel.OrderID, true);
+
+                if (inputModel.CancelOrder)
+                {
+                    await _orderRepository.CompleteOrderAsync(inputModel.OrderID, false);
+
+                    var orderItems = await _inventoryService.GetOrderItemsAsync(inputModel.OrderID);
+
+                    var items = new List<Item>();
+
+                    foreach (var orderItem in orderItems)
+                    {
+                        var item = await _inventoryService.GetItemAsync(orderItem.ItemID);
+
+                        if (item != null)
+                        {
+                            items.Add(new Item
+                            {
+                                ID = orderItem.ItemID,
+                                Inventory = new Inventory
+                                {
+                                    Quantity = orderItem.Quantity
+                                }
+                            });
+                        }
+                    }
+
+                    foreach (var item in items) await _inventoryService.UpdateInventoryAsync(item, false);
+                }
             }
             catch (Exception) { throw; }
         }
@@ -152,7 +209,7 @@ namespace ERP.Store.API.Services
                     };
                 }
 
-                if (orderInput.Payment.IsBankTransfer)
+                if (orderInput.Payment.IsBankTransfer || orderInput.Payment.IsCheck)
                 {
                     orderInput.Payment.BankInfo = new BankInfo
                     {
@@ -184,6 +241,8 @@ namespace ERP.Store.API.Services
                 if (orderInput.ID == 0) throw new Exception("An error occurred while trying to insert the order header.");
 
                 await _orderRepository.InsertOrderItemsAsync(orderInput);
+
+                foreach (var item in itemsInput) await _inventoryService.UpdateInventoryAsync(item, true);
 
                 orderInput.Payment.ID = await _paymentService.InsertOrderPaymentAsync(orderInput);
 

@@ -179,7 +179,7 @@ namespace ERP.Store.API.Controllers.V1
 
                 var returnModel = await _validationService.InitializingReturn(e.Message, BadRequest().StatusCode);
 
-                return NotFound(returnModel);
+                return BadRequest(returnModel);
             }
             catch (NotFoundException e)
             {

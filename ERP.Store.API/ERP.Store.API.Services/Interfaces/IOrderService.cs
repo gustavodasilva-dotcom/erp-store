@@ -7,6 +7,8 @@ namespace ERP.Store.API.Services.Interfaces
     {
         Task<dynamic> GetOrderAsync(int orderID);
 
+        Task CompleteOrCancelOrderAsync(CompleteOrderInputModel inputModel);
+
         Task<int> RegisterOrderAsync(OrderInputModel input);
     }
 }

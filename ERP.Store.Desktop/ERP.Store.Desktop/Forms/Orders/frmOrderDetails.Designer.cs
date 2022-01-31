@@ -43,12 +43,14 @@ namespace ERP.Store.Desktop.Forms.Orders
             this.textBoxFindItem = new System.Windows.Forms.TextBox();
             this.buttonReload = new System.Windows.Forms.Button();
             this.listViewItems = new System.Windows.Forms.ListView();
+            this.labelOrderIDText = new System.Windows.Forms.Label();
+            this.labelOrderID = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // textBoxClientIdentification
             // 
             this.textBoxClientIdentification.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxClientIdentification.Location = new System.Drawing.Point(69, 57);
+            this.textBoxClientIdentification.Location = new System.Drawing.Point(69, 72);
             this.textBoxClientIdentification.Name = "textBoxClientIdentification";
             this.textBoxClientIdentification.PlaceholderText = "Client identification";
             this.textBoxClientIdentification.Size = new System.Drawing.Size(233, 23);
@@ -149,7 +151,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // textBoxFindItem
             // 
             this.textBoxFindItem.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxFindItem.Location = new System.Drawing.Point(69, 119);
+            this.textBoxFindItem.Location = new System.Drawing.Point(69, 132);
             this.textBoxFindItem.Name = "textBoxFindItem";
             this.textBoxFindItem.PlaceholderText = "Enter an item name and press enter";
             this.textBoxFindItem.Size = new System.Drawing.Size(233, 23);
@@ -159,7 +161,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // buttonReload
             // 
             this.buttonReload.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonReload.Location = new System.Drawing.Point(308, 165);
+            this.buttonReload.Location = new System.Drawing.Point(308, 181);
             this.buttonReload.Name = "buttonReload";
             this.buttonReload.Size = new System.Drawing.Size(58, 23);
             this.buttonReload.TabIndex = 14;
@@ -171,17 +173,43 @@ namespace ERP.Store.Desktop.Forms.Orders
             // 
             this.listViewItems.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.listViewItems.HideSelection = false;
-            this.listViewItems.Location = new System.Drawing.Point(69, 165);
+            this.listViewItems.Location = new System.Drawing.Point(69, 181);
             this.listViewItems.Name = "listViewItems";
-            this.listViewItems.Size = new System.Drawing.Size(233, 247);
+            this.listViewItems.Size = new System.Drawing.Size(233, 231);
             this.listViewItems.TabIndex = 15;
             this.listViewItems.UseCompatibleStateImageBehavior = false;
+            // 
+            // labelOrderIDText
+            // 
+            this.labelOrderIDText.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelOrderIDText.AutoSize = true;
+            this.labelOrderIDText.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelOrderIDText.Location = new System.Drawing.Point(69, 33);
+            this.labelOrderIDText.Name = "labelOrderIDText";
+            this.labelOrderIDText.Size = new System.Drawing.Size(69, 20);
+            this.labelOrderIDText.TabIndex = 16;
+            this.labelOrderIDText.Text = "Order ID:";
+            this.labelOrderIDText.Visible = false;
+            // 
+            // labelOrderID
+            // 
+            this.labelOrderID.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelOrderID.AutoSize = true;
+            this.labelOrderID.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelOrderID.Location = new System.Drawing.Point(144, 33);
+            this.labelOrderID.Name = "labelOrderID";
+            this.labelOrderID.Size = new System.Drawing.Size(17, 20);
+            this.labelOrderID.TabIndex = 17;
+            this.labelOrderID.Text = "0";
+            this.labelOrderID.Visible = false;
             // 
             // frmOrderDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.labelOrderID);
+            this.Controls.Add(this.labelOrderIDText);
             this.Controls.Add(this.listViewItems);
             this.Controls.Add(this.buttonReload);
             this.Controls.Add(this.textBoxFindItem);
@@ -219,5 +247,7 @@ namespace ERP.Store.Desktop.Forms.Orders
         private System.Windows.Forms.TextBox textBoxFindItem;
         private System.Windows.Forms.Button buttonReload;
         private System.Windows.Forms.ListView listViewItems;
+        private System.Windows.Forms.Label labelOrderIDText;
+        private System.Windows.Forms.Label labelOrderID;
     }
 }

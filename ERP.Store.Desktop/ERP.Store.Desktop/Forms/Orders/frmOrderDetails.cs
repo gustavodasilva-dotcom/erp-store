@@ -25,6 +25,14 @@ namespace ERP.Store.Desktop.Forms.Orders
         {
             try
             {
+                InitializeComponent();
+
+                if (operationType == OperationType.Update || operationType == OperationType.Read)
+                {
+                    labelOrderID.Visible = true;
+                    labelOrderIDText.Visible = true;
+                }
+
                 User = user;
 
                 OperationType = operationType;
@@ -32,8 +40,6 @@ namespace ERP.Store.Desktop.Forms.Orders
                 _orderService = new OrderService();
 
                 _inventoryService = new InventoryService();
-
-                InitializeComponent();
 
                 #region InitializingObjects
 
@@ -51,6 +57,14 @@ namespace ERP.Store.Desktop.Forms.Orders
         {
             try
             {
+                InitializeComponent();
+
+                if (operationType == OperationType.Update || operationType == OperationType.Read)
+                {
+                    labelOrderID.Visible = true;
+                    labelOrderIDText.Visible = true;
+                }
+
                 User = user;
 
                 OperationType = operationType;
@@ -59,31 +73,29 @@ namespace ERP.Store.Desktop.Forms.Orders
 
                 _inventoryService = new InventoryService();
 
-                InitializeComponent();
-
-                if (operationType == OperationType.Update)
+                if (operationType == OperationType.Update || operationType == OperationType.Read)
                 {
                     #region InitializingObjects
+
+                    labelOrderID.Text = $"#{order.orderID.ToString()}";
 
                     textBoxClientIdentification.Text = order.client.identification.ToString();
 
                     listViewItems.View = View.List;
 
-                    foreach (var item in order.items)
-                        listViewItems.Items.Add($"#{item.inventory.quantity.ToString()} - {item.itemID.ToString()}");
+                    foreach (var item in order.items) listViewItems.Items.Add($"#{item.quantity.ToString()} - {item.itemID.ToString()}");
 
-                    foreach (var payment in GetPayments())
-                        if (payment.Equals(order.payment.description.ToString())) comboBoxPayments.Text = payment;
+                    foreach (var payment in GetPayments()) if (payment.Equals(order.payment.description.ToString())) comboBoxPayments.Text = payment;
                     
                     if (order.payment.paymentID == 3 || order.payment.paymentID == 4)
                     {
                         textBoxNameOnCard.Text = order.payment.paymentInfo.nameOnCard.ToString();
-                        textBoxNameOnCard.Text = order.payment.paymentInfo.cardNumber.ToString();
+                        textBoxCardNumber.Text = order.payment.paymentInfo.cardNumber.ToString();
                         textBoxYY.Text = order.payment.paymentInfo.yearExpiryDate.ToString();
                         textBoxMM.Text = order.payment.paymentInfo.monthExpiryDate.ToString();
                     }
 
-                    if (order.payment.paymentID == 5 || order.payment.paymentID == 6)
+                    if (order.payment.paymentID == 2 || order.payment.paymentID == 5 || order.payment.paymentID == 6)
                     {
                         textBoxBankName.Text = order.payment.paymentInfo.bankName.ToString();
                         textBoxNumber.Text = order.payment.paymentInfo.number.ToString();
@@ -177,16 +189,23 @@ namespace ERP.Store.Desktop.Forms.Orders
             {
                 if (Items == null) Items = new List<ItemEntity>();
 
-                var newItems = FrmItemDetails.Items;
+                if (FrmItemDetails != null)
+                {
+                    var newItems = FrmItemDetails.Items;
 
-                foreach (var item in newItems) Items.Add(item);
+                    foreach (var item in newItems) Items.Add(item);
 
-                listViewItems.View = View.List;
-                listViewItems.Clear();
+                    listViewItems.View = View.List;
+                    listViewItems.Clear();
 
-                foreach (var item in Items) listViewItems.Items.Add($"#{item.Quantity} - {item.ItemID}");
+                    foreach (var item in Items) listViewItems.Items.Add($"#{item.Quantity} - {item.ItemID}");
 
-                Refresh();
+                    Refresh();
+                }
+                else
+                {
+                    MessageBox.Show("Before refreshing, please, add, at least, an item.");
+                }
             }
             catch (Exception ex)
             {
@@ -312,7 +331,7 @@ namespace ERP.Store.Desktop.Forms.Orders
                 return new List<string>
                 {
                     "Cash",
-                    "Check",
+                    "Checks",
                     "Debit card",
                     "Credit card",
                     "Mobile transfer",
@@ -358,7 +377,6 @@ namespace ERP.Store.Desktop.Forms.Orders
                     if (string.IsNullOrEmpty(textBoxNumber.Text)) return "The bank number cannot be null or empty.";
                     if (string.IsNullOrEmpty(textBoxAgency.Text)) return "The bank agency cannot be null or empty.";
 
-                    if (!int.TryParse(textBoxNumber.Text, out int _)) return "The bank number must be numeric.";
                     if (!int.TryParse(textBoxAgency.Text, out int _)) return "The bank agency must be numeric.";
                 }
 

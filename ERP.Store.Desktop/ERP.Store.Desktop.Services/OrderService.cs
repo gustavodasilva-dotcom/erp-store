@@ -54,7 +54,7 @@ namespace ERP.Store.Desktop.Services
 
                 #region CreateJson
 
-                var json = @"{
+                return @"{
                 " + "\n" +
                                 $@"  ""clientIdentification"": ""{order.ClientIdentification}"",
                 " + "\n" +
@@ -103,8 +103,6 @@ namespace ERP.Store.Desktop.Services
                 @"}";
 
                 #endregion
-
-                return json;
             }
             catch (Exception) { throw; }
         }
@@ -128,11 +126,9 @@ namespace ERP.Store.Desktop.Services
                     @"},";
                 }
 
-                if (order.Items.Count > 1) json = jsonItems.Remove(jsonItems.Length - 1);
-
                 #endregion
 
-                return json;
+                return jsonItems.Remove(jsonItems.Length - 1);
             }
             catch (Exception) { throw; }
         }

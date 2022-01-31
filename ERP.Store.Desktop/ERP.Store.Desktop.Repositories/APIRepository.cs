@@ -1,7 +1,7 @@
 ﻿using RestSharp;
 using System;
+using System.Net;
 using Newtonsoft.Json;
-using ERP.Store.Desktop.Entities.Entities;
 
 namespace ERP.Store.Desktop.Repositories
 {
@@ -31,7 +31,7 @@ namespace ERP.Store.Desktop.Repositories
 
                 var response = client.Execute(request);
 
-                if ((int)response.StatusCode != 201 || (int)response.StatusCode != 200)
+                if (!response.StatusCode.Equals(HttpStatusCode.Created) && !response.StatusCode.Equals(HttpStatusCode.OK))
                 {
                     var responseContent = JsonConvert.DeserializeObject<dynamic>(response.Content);
 
@@ -62,7 +62,7 @@ namespace ERP.Store.Desktop.Repositories
 
                 IRestResponse response = client.Execute(request);
 
-                if ((int)response.StatusCode != 200)
+                if (!response.StatusCode.Equals(HttpStatusCode.OK))
                 {
                     var responseContent = JsonConvert.DeserializeObject<dynamic>(response.Content);
 

@@ -255,6 +255,24 @@ namespace ERP.Store.API.Services
             catch (Exception) { throw; }
         }
 
+        public async Task UpdateInventoryAsync(Item item, bool isTakeOutQuantity)
+        {
+            try
+            {
+                var inventory = await _inventoryRepository.GetInventoryAsync(item.ID);
+
+                if (inventory == null) throw new NotFoundException($"It wasn't found an inventory to the item {item.ID}.");
+
+                if (isTakeOutQuantity)
+                    item.Inventory.Quantity = inventory.Quantity - item.Inventory.Quantity;
+                else
+                    item.Inventory.Quantity = inventory.Quantity + item.Inventory.Quantity;
+
+                await _inventoryRepository.UpdateInventoryAsync(item);
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task<IEnumerable<Order_ItemTable>> GetOrderItemsAsync(int orderID)
         {
             try

@@ -8,6 +8,8 @@ namespace ERP.Store.API.Repositories.Interfaces
     {
         Task<OrdersTable> GetOrderAsync(int orderID);
 
+        Task CompleteOrderAsync(int orderID, bool completeOrder);
+
         Task<int> InsertOrderAsync(Order order);
 
         Task InsertOrderItemsAsync(Order order);

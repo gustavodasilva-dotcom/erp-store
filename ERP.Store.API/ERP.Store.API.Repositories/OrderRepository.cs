@@ -36,6 +36,25 @@ namespace ERP.Store.API.Repositories
             catch (Exception) { throw; }
         }
 
+        public async Task CompleteOrderAsync(int orderID, bool completeOrder)
+        {
+            using (var db = new SqlConnection(_connectionString))
+            {
+                #region SQL
+
+                var query = string.Empty;
+
+                if (completeOrder)
+                    query = @"UPDATE Orders SET OrderCompleted = 1 WHERE OrderID = @orderID;";
+                else
+                    query = @"UPDATE Orders SET Deleted = 1 WHERE OrderID = @orderID;";
+
+                #endregion
+
+                await db.ExecuteAsync(query, new { @orderID = orderID }, commandTimeout: 30);
+            }
+        }
+
         public async Task<int> InsertOrderAsync(Order order)
         {
             try

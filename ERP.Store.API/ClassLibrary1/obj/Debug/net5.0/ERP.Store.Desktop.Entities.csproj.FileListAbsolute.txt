@@ -9,4 +9,3 @@ C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ClassLibra
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ClassLibrary1\obj\Debug\net5.0\ERP.Store.Desktop.Entities.dll
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ClassLibrary1\obj\Debug\net5.0\ref\ERP.Store.Desktop.Entities.dll
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ClassLibrary1\obj\Debug\net5.0\ERP.Store.Desktop.Entities.pdb
-C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ClassLibrary1\obj\Debug\net5.0\ERP.Store.Desktop.Entities.csproj.AssemblyReference.cache

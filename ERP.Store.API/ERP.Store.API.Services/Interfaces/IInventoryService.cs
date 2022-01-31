@@ -19,6 +19,8 @@ namespace ERP.Store.API.Services.Interfaces
 
         Task<IEnumerable<string>> ValidateItemsAsync(List<Item> items);
 
+        Task UpdateInventoryAsync(Item item, bool isTakeOutQuantity);
+
         Task<IEnumerable<Order_ItemTable>> GetOrderItemsAsync(int orderID);
 
         Task<IEnumerable<dynamic>> GetShortListOfItemsAsync();

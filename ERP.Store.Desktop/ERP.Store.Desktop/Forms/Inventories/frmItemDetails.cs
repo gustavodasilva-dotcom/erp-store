@@ -34,15 +34,18 @@ namespace ERP.Store.Desktop.Forms.Inventories
         {
             try
             {
-                if (ItemsList.Count > 0)
+                if (ItemsList != null)
                 {
-                    foreach (var item in ItemsList) listViewItems.Items.Add(item);
+                    if (ItemsList.Count > 0)
+                    {
+                        foreach (var item in ItemsList) listViewItems.Items.Add(item);
 
-                    listViewItems.View = View.List;
-                }
-                else
-                {
-                    MessageBox.Show("The list of items cannot be empty.");
+                        listViewItems.View = View.List;
+                    }
+                    else
+                    {
+                        MessageBox.Show("The list of items cannot be empty.");
+                    }
                 }
             }
             catch (Exception ex)

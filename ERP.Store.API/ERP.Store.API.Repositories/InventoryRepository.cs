@@ -164,7 +164,7 @@ namespace ERP.Store.API.Repositories
                     await db.ExecuteAsync(query, new
                     {
                         @itemID = item.ID,
-                        @supplierID = item.Inventory.Supplier.ID,
+                        @supplierID = item.Inventory.Supplier == null ? 0 : item.Inventory.Supplier.ID,
                         @quantity = item.Inventory.Quantity
                     },
                     commandTimeout: 30);
