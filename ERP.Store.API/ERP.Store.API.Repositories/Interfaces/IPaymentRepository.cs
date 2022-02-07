@@ -17,5 +17,7 @@ namespace ERP.Store.API.Repositories.Interfaces
         Task<BankInfoTable> GetBankInfoAsync(int orderPaymentID);
 
         Task<Order_PaymentTable> GetOrderPaymentAsync(int orderID);
+
+        Task DeleteOrderPaymentAsync(int orderPaymentID);
     }
 }

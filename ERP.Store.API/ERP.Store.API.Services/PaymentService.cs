@@ -92,6 +92,15 @@ namespace ERP.Store.API.Services
             catch (Exception) { throw; }
         }
 
+        public async Task DeleteOrderPaymentAsync(int orderPaymentID)
+        {
+            try
+            {
+                await _paymentRepository.DeleteOrderPaymentAsync(orderPaymentID);
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task<Payment> ValidatePaymentMethodAsync(Payment payment)
         {
             try

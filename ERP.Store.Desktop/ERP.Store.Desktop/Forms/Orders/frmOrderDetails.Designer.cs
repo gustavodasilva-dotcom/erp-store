@@ -45,6 +45,13 @@ namespace ERP.Store.Desktop.Forms.Orders
             this.listViewItems = new System.Windows.Forms.ListView();
             this.labelOrderIDText = new System.Windows.Forms.Label();
             this.labelOrderID = new System.Windows.Forms.Label();
+            this.labelCName = new System.Windows.Forms.Label();
+            this.labelClientsName = new System.Windows.Forms.Label();
+            this.labelCanceled = new System.Windows.Forms.Label();
+            this.labelIsCanceled = new System.Windows.Forms.Label();
+            this.labelIsCompleted = new System.Windows.Forms.Label();
+            this.labelCompleted = new System.Windows.Forms.Label();
+            this.buttonEdit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxClientIdentification
@@ -151,7 +158,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // textBoxFindItem
             // 
             this.textBoxFindItem.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxFindItem.Location = new System.Drawing.Point(69, 132);
+            this.textBoxFindItem.Location = new System.Drawing.Point(69, 210);
             this.textBoxFindItem.Name = "textBoxFindItem";
             this.textBoxFindItem.PlaceholderText = "Enter an item name and press enter";
             this.textBoxFindItem.Size = new System.Drawing.Size(233, 23);
@@ -161,7 +168,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // buttonReload
             // 
             this.buttonReload.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonReload.Location = new System.Drawing.Point(308, 181);
+            this.buttonReload.Location = new System.Drawing.Point(308, 258);
             this.buttonReload.Name = "buttonReload";
             this.buttonReload.Size = new System.Drawing.Size(58, 23);
             this.buttonReload.TabIndex = 14;
@@ -173,9 +180,9 @@ namespace ERP.Store.Desktop.Forms.Orders
             // 
             this.listViewItems.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.listViewItems.HideSelection = false;
-            this.listViewItems.Location = new System.Drawing.Point(69, 181);
+            this.listViewItems.Location = new System.Drawing.Point(69, 258);
             this.listViewItems.Name = "listViewItems";
-            this.listViewItems.Size = new System.Drawing.Size(233, 231);
+            this.listViewItems.Size = new System.Drawing.Size(233, 154);
             this.listViewItems.TabIndex = 15;
             this.listViewItems.UseCompatibleStateImageBehavior = false;
             // 
@@ -203,11 +210,89 @@ namespace ERP.Store.Desktop.Forms.Orders
             this.labelOrderID.Text = "0";
             this.labelOrderID.Visible = false;
             // 
+            // labelCName
+            // 
+            this.labelCName.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelCName.AutoSize = true;
+            this.labelCName.Location = new System.Drawing.Point(69, 119);
+            this.labelCName.Name = "labelCName";
+            this.labelCName.Size = new System.Drawing.Size(82, 15);
+            this.labelCName.TabIndex = 18;
+            this.labelCName.Text = "Client\'s name:";
+            // 
+            // labelClientsName
+            // 
+            this.labelClientsName.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelClientsName.AutoSize = true;
+            this.labelClientsName.Location = new System.Drawing.Point(157, 119);
+            this.labelClientsName.Name = "labelClientsName";
+            this.labelClientsName.Size = new System.Drawing.Size(75, 15);
+            this.labelClientsName.TabIndex = 19;
+            this.labelClientsName.Text = "Not data yet.";
+            // 
+            // labelCanceled
+            // 
+            this.labelCanceled.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelCanceled.AutoSize = true;
+            this.labelCanceled.Location = new System.Drawing.Point(69, 138);
+            this.labelCanceled.Name = "labelCanceled";
+            this.labelCanceled.Size = new System.Drawing.Size(68, 15);
+            this.labelCanceled.TabIndex = 20;
+            this.labelCanceled.Text = "Is canceled:";
+            // 
+            // labelIsCanceled
+            // 
+            this.labelIsCanceled.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelIsCanceled.AutoSize = true;
+            this.labelIsCanceled.Location = new System.Drawing.Point(143, 138);
+            this.labelIsCanceled.Name = "labelIsCanceled";
+            this.labelIsCanceled.Size = new System.Drawing.Size(75, 15);
+            this.labelIsCanceled.TabIndex = 21;
+            this.labelIsCanceled.Text = "Not data yet.";
+            // 
+            // labelIsCompleted
+            // 
+            this.labelIsCompleted.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelIsCompleted.AutoSize = true;
+            this.labelIsCompleted.Location = new System.Drawing.Point(153, 157);
+            this.labelIsCompleted.Name = "labelIsCompleted";
+            this.labelIsCompleted.Size = new System.Drawing.Size(75, 15);
+            this.labelIsCompleted.TabIndex = 23;
+            this.labelIsCompleted.Text = "Not data yet.";
+            // 
+            // labelCompleted
+            // 
+            this.labelCompleted.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelCompleted.AutoSize = true;
+            this.labelCompleted.Location = new System.Drawing.Point(69, 157);
+            this.labelCompleted.Name = "labelCompleted";
+            this.labelCompleted.Size = new System.Drawing.Size(78, 15);
+            this.labelCompleted.TabIndex = 22;
+            this.labelCompleted.Text = "Is completed:";
+            // 
+            // buttonEdit
+            // 
+            this.buttonEdit.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonEdit.Location = new System.Drawing.Point(308, 287);
+            this.buttonEdit.Name = "buttonEdit";
+            this.buttonEdit.Size = new System.Drawing.Size(58, 23);
+            this.buttonEdit.TabIndex = 24;
+            this.buttonEdit.Text = "Edit";
+            this.buttonEdit.UseVisualStyleBackColor = true;
+            this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
+            // 
             // frmOrderDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonEdit);
+            this.Controls.Add(this.labelIsCompleted);
+            this.Controls.Add(this.labelCompleted);
+            this.Controls.Add(this.labelIsCanceled);
+            this.Controls.Add(this.labelCanceled);
+            this.Controls.Add(this.labelClientsName);
+            this.Controls.Add(this.labelCName);
             this.Controls.Add(this.labelOrderID);
             this.Controls.Add(this.labelOrderIDText);
             this.Controls.Add(this.listViewItems);
@@ -249,5 +334,12 @@ namespace ERP.Store.Desktop.Forms.Orders
         private System.Windows.Forms.ListView listViewItems;
         private System.Windows.Forms.Label labelOrderIDText;
         private System.Windows.Forms.Label labelOrderID;
+        private System.Windows.Forms.Label labelCName;
+        private System.Windows.Forms.Label labelClientsName;
+        private System.Windows.Forms.Label labelCanceled;
+        private System.Windows.Forms.Label labelIsCanceled;
+        private System.Windows.Forms.Label labelIsCompleted;
+        private System.Windows.Forms.Label labelCompleted;
+        private System.Windows.Forms.Button buttonEdit;
     }
 }

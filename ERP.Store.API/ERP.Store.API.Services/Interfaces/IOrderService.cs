@@ -10,5 +10,7 @@ namespace ERP.Store.API.Services.Interfaces
         Task CompleteOrCancelOrderAsync(CompleteOrderInputModel inputModel);
 
         Task<int> RegisterOrderAsync(OrderInputModel input);
+
+        Task UpdateOrderAsync(OrderInputModel model, int orderID);
     }
 }

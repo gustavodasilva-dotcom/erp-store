@@ -121,5 +121,16 @@ namespace ERP.Store.API.Controllers.V1
                 return StatusCode(500, returnModel);
             }
         }
+
+        [HttpPut("{orderID:int}")]
+        //[Authorize(Roles = "1,2")]
+        public async Task UpdateOrderAsync([FromBody] OrderInputModel model, [FromRoute] int orderID)
+        {
+            try
+            {
+                await _orderService.UpdateOrderAsync(model, orderID);
+            }
+            catch (Exception) { }
+        }
     }
 }

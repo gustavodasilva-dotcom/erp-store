@@ -255,6 +255,26 @@ namespace ERP.Store.API.Services
             catch (Exception) { throw; }
         }
 
+        public async Task<IEnumerable<string>> ValidateItemsAsync(Item item)
+        {
+            try
+            {
+                var messages = new List<string>();
+
+                if (await _inventoryRepository.GetItemAsync(item.ID) == null)
+                {
+                    messages.Add($"The id {item.ID} does not correspond to an actual item.");
+                }
+                else
+                {
+                    if (!await IsAvailable(item)) messages.Add($"The item {item.ID} is not available.");
+                }
+
+                return messages;
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task UpdateInventoryAsync(Item item, bool isTakeOutQuantity)
         {
             try

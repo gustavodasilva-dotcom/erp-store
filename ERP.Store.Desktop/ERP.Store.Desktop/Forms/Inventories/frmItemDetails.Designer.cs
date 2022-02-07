@@ -33,6 +33,7 @@ namespace ERP.Store.Desktop.Forms.Inventories
             this.buttonAdd = new System.Windows.Forms.Button();
             this.textBoxEnterItemID = new System.Windows.Forms.TextBox();
             this.textBoxQuantity = new System.Windows.Forms.TextBox();
+            this.buttonDelete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listViewItems
@@ -77,11 +78,23 @@ namespace ERP.Store.Desktop.Forms.Inventories
             this.textBoxQuantity.Size = new System.Drawing.Size(100, 23);
             this.textBoxQuantity.TabIndex = 3;
             // 
+            // buttonDelete
+            // 
+            this.buttonDelete.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonDelete.Location = new System.Drawing.Point(554, 187);
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(100, 23);
+            this.buttonDelete.TabIndex = 4;
+            this.buttonDelete.Text = "Delete";
+            this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            // 
             // frmItemDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(754, 288);
+            this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.textBoxQuantity);
             this.Controls.Add(this.textBoxEnterItemID);
             this.Controls.Add(this.buttonAdd);
@@ -100,5 +113,21 @@ namespace ERP.Store.Desktop.Forms.Inventories
         private System.Windows.Forms.Button buttonAdd;
         private System.Windows.Forms.TextBox textBoxEnterItemID;
         private System.Windows.Forms.TextBox textBoxQuantity;
+        private System.Windows.Forms.Button buttonDelete;
+
+        public void DesableDeleteButton()
+        {
+            buttonDelete.Enabled = false;
+        }
+
+        public void DesableAddButton()
+        {
+            buttonAdd.Enabled = false;
+        }
+
+        public void DesableTextBoxQuantity()
+        {
+            textBoxQuantity.Enabled = false;
+        }
     }
 }

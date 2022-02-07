@@ -36,23 +36,27 @@ namespace ERP.Store.API.Repositories
             catch (Exception) { throw; }
         }
 
-        public async Task CompleteOrderAsync(int orderID, bool completeOrder)
+        public async Task CompleteOrCancelOrderAsync(int orderID, bool completeOrder)
         {
-            using (var db = new SqlConnection(_connectionString))
+            try
             {
-                #region SQL
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
 
-                var query = string.Empty;
+                    var query = string.Empty;
 
-                if (completeOrder)
-                    query = @"UPDATE Orders SET OrderCompleted = 1 WHERE OrderID = @orderID;";
-                else
-                    query = @"UPDATE Orders SET Deleted = 1 WHERE OrderID = @orderID;";
+                    if (completeOrder)
+                        query = @"UPDATE Orders SET OrderCompleted = 1 WHERE OrderID = @orderID;";
+                    else
+                        query = @"UPDATE Orders SET Deleted = 1 WHERE OrderID = @orderID;";
 
-                #endregion
+                    #endregion
 
-                await db.ExecuteAsync(query, new { @orderID = orderID }, commandTimeout: 30);
+                    await db.ExecuteAsync(query, new { @orderID = orderID }, commandTimeout: 30);
+                }
             }
+            catch (Exception) { throw; }
         }
 
         public async Task<int> InsertOrderAsync(Order order)
@@ -116,6 +120,151 @@ namespace ERP.Store.API.Repositories
                         },
                         commandTimeout: 30);
                     };
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task InsertOrderItemsAsync(Item item, int orderID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+                    
+                    var query = @"EXEC uspInsertOrderItem @orderID, @itemID, @quantity;";
+                    
+                    #endregion
+                    
+                    await db.ExecuteAsync(query, new
+                    {
+                        @orderID = orderID,
+                        @itemID = item.ID,
+                        @quantity = item.Inventory.Quantity
+                    },
+                    commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task UpdateClientsOrderAsync(int clientID, int orderID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  BEGIN TRANSACTION;
+
+                        	BEGIN TRY
+                        
+                        		UPDATE Orders SET ClientID = @clientID WHERE OrderID = @orderID;
+                        
+                        	END TRY
+                        
+                        	BEGIN CATCH
+                        
+                        		IF @@TRANCOUNT > 0
+                        			ROLLBACK TRANSACTION;
+                        
+                        	END CATCH;
+                        
+                        IF @@TRANCOUNT > 0
+                            COMMIT TRANSACTION;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new
+                    {
+                        @clientID = clientID,
+                        @orderID = orderID
+                    },
+                    commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task UpdateOrderItemQuantityAsync(int orderID, int itemID, int quantity)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  BEGIN TRANSACTION;
+                        
+                        BEGIN TRY
+                        
+                        	UPDATE Order_Item SET Quantity = @quantity WHERE OrderID = @orderID AND ItemID = @itemID;
+                        
+                        END TRY
+                        
+                        BEGIN CATCH
+                        
+                        	IF @@TRANCOUNT > 0
+                        		ROLLBACK TRANSACTION;
+                        
+                        END CATCH;
+                        
+                        IF @@TRANCOUNT > 0
+                           COMMIT TRANSACTION;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new
+                    {
+                        @quantity = quantity,
+                        @orderID = orderID,
+                        @itemID = itemID
+                    },
+                    commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task UpdateOrderValueAsync(Order order)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query =
+                    @"  BEGIN TRANSACTION;
+
+                        	BEGIN TRY
+                        	
+                        		UPDATE Order_Payment SET Value = @value WHERE OrderID = @orderID;
+                        	
+                        	END TRY
+                        	
+                        	BEGIN CATCH
+                        	
+                        		IF @@TRANCOUNT > 0
+                        			ROLLBACK TRANSACTION;
+                        	
+                        	END CATCH;
+                        
+                        IF @@TRANCOUNT > 0
+                           COMMIT TRANSACTION;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new
+                    {
+                        @value = order.Value,
+                        @orderID = order.ID
+                    },
+                    commandTimeout: 30);
                 }
             }
             catch (Exception) { throw; }

@@ -8,6 +8,7 @@ using ERP.Store.API.Services.Interfaces;
 using ERP.Store.API.Repositories.Interfaces;
 using ERP.Store.API.Entities.Models.InputModel;
 using ERP.Store.API.Services.CustomExceptions;
+using ERP.Store.API.Entities.Tables;
 
 namespace ERP.Store.API.Services
 {
@@ -38,8 +39,7 @@ namespace ERP.Store.API.Services
             {
                 var order = await _orderRepository.GetOrderAsync(orderID);
 
-                if (order == null)
-                    throw new NotFoundException($"There's no order registered with the id {orderID}.");
+                if (order == null) throw new NotFoundException($"There's no order registered with the id {orderID}.");
 
                 var client = await _clientService.GetClientAsync(order.ClientID);
                 client.Image = null;
@@ -133,11 +133,11 @@ namespace ERP.Store.API.Services
 
                 if (inputModel.CompleteOrder && inputModel.CancelOrder) throw new BadRequestException("The operation must to complete or delete an order.");
 
-                if (inputModel.CompleteOrder) await _orderRepository.CompleteOrderAsync(inputModel.OrderID, true);
+                if (inputModel.CompleteOrder) await _orderRepository.CompleteOrCancelOrderAsync(inputModel.OrderID, true);
 
                 if (inputModel.CancelOrder)
                 {
-                    await _orderRepository.CompleteOrderAsync(inputModel.OrderID, false);
+                    await _orderRepository.CompleteOrCancelOrderAsync(inputModel.OrderID, false);
 
                     var orderItems = await _inventoryService.GetOrderItemsAsync(inputModel.OrderID);
 
@@ -170,6 +170,79 @@ namespace ERP.Store.API.Services
         {
             try
             {
+                var orderInput = InitializeObjects(input);
+
+                var client = await _clientService.GetClientAsync(orderInput.ClientIdentification);
+
+                if (client == null)
+                    throw new NotFoundException($"There's no user registered with the {orderInput.ClientIdentification} identification number.");
+
+                orderInput.ClientID = client.ID;
+
+                var messages = await _inventoryService.ValidateItemsAsync(orderInput.Items);
+
+                if (messages.Any()) throw new NotFoundException(messages.FirstOrDefault());
+
+                await _paymentService.ValidatePaymentMethodAsync(orderInput.Payment);
+
+                orderInput.Value = await _paymentService.GetOrderValueAsync(orderInput.Items);
+
+                orderInput.ID = await _orderRepository.InsertOrderAsync(orderInput);
+
+                if (orderInput.ID == 0) throw new Exception("An error occurred while trying to insert the order header.");
+
+                await _orderRepository.InsertOrderItemsAsync(orderInput);
+
+                foreach (var item in orderInput.Items) await _inventoryService.UpdateInventoryAsync(item, true);
+
+                orderInput.Payment.ID = await _paymentService.InsertOrderPaymentAsync(orderInput);
+
+                if (orderInput.Payment.IsCard || orderInput.Payment.IsCheck || orderInput.Payment.IsBankTransfer)
+                    await _paymentService.InsertPaymentInfoAsync(orderInput.Payment);
+
+                return orderInput.ID;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task UpdateOrderAsync(OrderInputModel model, int orderID)
+        {
+            try
+            {
+                var orderInput = InitializeObjects(model);
+
+                var order = await _orderRepository.GetOrderAsync(orderID);
+
+                if (order == null) throw new NotFoundException($"There's no order registered with the id {orderID}.");
+
+                orderInput.ID = orderID;
+
+                var clientOfTheOrder = await _clientService.GetClientAsync(order.ClientID);
+
+                var orderPayment = await _paymentService.GetOrderPaymentAsync(orderID);
+
+                if (order.OrderCompleted.Equals(1))
+                    throw new ConflictException($"It is not possible to update the order {orderID}, because it is completed.");
+
+                if (order.Deleted.Equals(1))
+                    throw new ConflictException($"It is not possible to update the order {orderID}, because it is canceled.");
+
+                if (!clientOfTheOrder.Identification.Equals(model.ClientIdentification))
+                    await UpdateOrderClientAsync(model, orderID);
+
+                await UpdateItemsAsync(orderInput, orderID);
+
+                await UpdatePaymentAsync(model, orderPayment, orderInput);
+            }
+            catch (Exception) { throw; }
+        }
+
+        private static Order InitializeObjects(OrderInputModel input)
+        {
+            try
+            {
+                #region InitializeObjects
+
                 var itemsInput = new List<Item>();
 
                 foreach (var item in input.Items)
@@ -221,35 +294,182 @@ namespace ERP.Store.API.Services
                     };
                 }
 
-                var client = await _clientService.GetClientAsync(orderInput.ClientIdentification);
+                return orderInput;
 
-                if (client == null)
-                    throw new NotFoundException($"There's no user registered with the {orderInput.ClientIdentification} identification number.");
+                #endregion
+            }
+            catch (Exception) { throw; }
+        }
 
-                orderInput.ClientID = client.ID;
+        private async Task UpdateOrderValueAsync(Order orderInput)
+        {
+            try
+            {
+                #region UpdateOrderValueAsync
 
-                var messages = await _inventoryService.ValidateItemsAsync(itemsInput);
+                var itemsOrder = await _inventoryService.GetOrderItemsAsync(orderInput.ID);
 
-                if (messages.Any()) throw new NotFoundException(messages.FirstOrDefault());
+                var itemsInput = new List<Item>();
 
-                await _paymentService.ValidatePaymentMethodAsync(orderInput.Payment);
+                foreach (var item in itemsOrder)
+                {
+                    itemsInput.Add(new Item
+                    {
+                        ID = item.ItemID,
+                        Inventory = new Inventory
+                        {
+                            Quantity = item.Quantity
+                        }
+                    });
+                }
 
                 orderInput.Value = await _paymentService.GetOrderValueAsync(itemsInput);
 
-                orderInput.ID = await _orderRepository.InsertOrderAsync(orderInput);
+                await _orderRepository.UpdateOrderValueAsync(orderInput);
 
-                if (orderInput.ID == 0) throw new Exception("An error occurred while trying to insert the order header.");
+                #endregion
+            }
+            catch (Exception) { throw; }
+        }
 
-                await _orderRepository.InsertOrderItemsAsync(orderInput);
+        private async Task UpdateOrderClientAsync(OrderInputModel model, int orderID)
+        {
+            try
+            {
+                #region UpdateOrderClientAsync
 
-                foreach (var item in itemsInput) await _inventoryService.UpdateInventoryAsync(item, true);
+                var clientToBeUpdated = await _clientService.GetClientAsync(model.ClientIdentification);
 
-                orderInput.Payment.ID = await _paymentService.InsertOrderPaymentAsync(orderInput);
+                if (clientToBeUpdated == null) throw new NotFoundException($"There's no client registered with the identification {model.ClientIdentification}.");
 
-                if (orderInput.Payment.IsCard || orderInput.Payment.IsCheck || orderInput.Payment.IsBankTransfer)
-                    await _paymentService.InsertPaymentInfoAsync(orderInput.Payment);
+                await _orderRepository.UpdateClientsOrderAsync(clientToBeUpdated.ID, orderID);
 
-                return orderInput.ID;
+                #endregion
+            }
+            catch (Exception) { throw; }
+        }
+
+        private async Task UpdateItemsAsync(Order orderInput, int orderID)
+        {
+            try
+            {
+                #region UpdateItemsAsync
+
+                var itemsOrder = await _inventoryService.GetOrderItemsAsync(orderID);
+
+                foreach (var itemUpdate in orderInput.Items)
+                {
+                    foreach (var item in itemsOrder)
+                    {
+                        if (itemUpdate.ID.Equals(item.ItemID))
+                        {
+                            if (!item.Quantity.Equals(itemUpdate.Inventory.Quantity))
+                                await _orderRepository.UpdateOrderItemQuantityAsync(orderID, item.ItemID, itemUpdate.Inventory.Quantity);
+                        }
+                    }
+                }
+
+                if (orderInput.Items.Count > itemsOrder.ToList().Count)
+                {
+                    foreach (var itemUpdate in orderInput.Items)
+                    {
+                        foreach (var item in itemsOrder)
+                        {
+                            if (!itemUpdate.ID.Equals(item.ItemID))
+                            {
+                                var messages = await _inventoryService.ValidateItemsAsync(itemUpdate);
+
+                                if (messages.Any()) throw new NotFoundException(messages.FirstOrDefault());
+
+                                await _orderRepository.InsertOrderItemsAsync(itemUpdate, orderID);
+
+                                await _inventoryService.UpdateInventoryAsync(itemUpdate, true);
+                            }
+                        }
+                    }
+                }
+
+                await UpdateOrderValueAsync(orderInput);
+
+                #endregion
+            }
+            catch (Exception) { throw; }
+        }
+
+        private async Task UpdatePaymentAsync(OrderInputModel model, Order_PaymentTable orderPayment, Order order)
+        {
+            try
+            {
+                #region UpdatePaymentAsync
+                
+                if (orderPayment.PaymentStatusID.Equals(1))
+                    throw new ConflictException($"It is not possible to update the order {order.ID}, because the payment is alredy completed.");
+
+                if (!model.Payment.IsCheck && !model.Payment.IsCard && !model.Payment.IsBankTransfer && !orderPayment.PaymentID.Equals(1))
+                {
+                    await _paymentService.DeleteOrderPaymentAsync(orderPayment.Order_PaymentID);
+
+                    await _paymentService.ValidatePaymentMethodAsync(order.Payment);
+
+                    await _paymentService.InsertOrderPaymentAsync(order);
+                }
+
+                if (model.Payment.IsCheck && !orderPayment.PaymentID.Equals(2))
+                {
+                    await _paymentService.DeleteOrderPaymentAsync(orderPayment.Order_PaymentID);
+
+                    await _paymentService.ValidatePaymentMethodAsync(order.Payment);
+
+                    order.Payment.ID = await _paymentService.InsertOrderPaymentAsync(order);
+
+                    await _paymentService.InsertPaymentInfoAsync(order.Payment);
+                }
+
+                if (model.Payment.IsCard && model.Payment.Card.IsCredit && !orderPayment.PaymentID.Equals(4))
+                {
+                    await _paymentService.DeleteOrderPaymentAsync(orderPayment.Order_PaymentID);
+
+                    await _paymentService.ValidatePaymentMethodAsync(order.Payment);
+
+                    order.Payment.ID = await _paymentService.InsertOrderPaymentAsync(order);
+
+                    await _paymentService.InsertPaymentInfoAsync(order.Payment);
+                }
+
+                if (model.Payment.IsCard && !model.Payment.Card.IsCredit && !orderPayment.PaymentID.Equals(3))
+                {
+                    await _paymentService.DeleteOrderPaymentAsync(orderPayment.Order_PaymentID);
+
+                    await _paymentService.ValidatePaymentMethodAsync(order.Payment);
+
+                    order.Payment.ID = await _paymentService.InsertOrderPaymentAsync(order);
+
+                    await _paymentService.InsertPaymentInfoAsync(order.Payment);
+                }
+
+                if (model.Payment.IsBankTransfer && model.Payment.BankInfo.IsMobileTransfer && !orderPayment.PaymentID.Equals(5))
+                {
+                    await _paymentService.DeleteOrderPaymentAsync(orderPayment.Order_PaymentID);
+
+                    await _paymentService.ValidatePaymentMethodAsync(order.Payment);
+
+                    order.Payment.ID = await _paymentService.InsertOrderPaymentAsync(order);
+
+                    await _paymentService.InsertPaymentInfoAsync(order.Payment);
+                }
+
+                if (model.Payment.IsBankTransfer && model.Payment.BankInfo.IsEletronicBankTransfer && !orderPayment.PaymentID.Equals(6))
+                {
+                    await _paymentService.DeleteOrderPaymentAsync(orderPayment.Order_PaymentID);
+
+                    await _paymentService.ValidatePaymentMethodAsync(order.Payment);
+
+                    order.Payment.ID = await _paymentService.InsertOrderPaymentAsync(order);
+
+                    await _paymentService.InsertPaymentInfoAsync(order.Payment);
+                }
+
+                #endregion
             }
             catch (Exception) { throw; }
         }

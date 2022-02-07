@@ -19,6 +19,8 @@ namespace ERP.Store.API.Services.Interfaces
 
         Task<dynamic> GetOrderPaymentInfoAsync(Order_PaymentTable orderPayment);
 
+        Task DeleteOrderPaymentAsync(int orderPaymentID);
+
         Task<Payment> ValidatePaymentMethodAsync(Payment payment);
     }
 }
