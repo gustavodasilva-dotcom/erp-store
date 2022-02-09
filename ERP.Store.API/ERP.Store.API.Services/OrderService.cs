@@ -2,13 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using ERP.Store.API.Entities.Tables;
 using ERP.Store.API.CustomExceptions;
 using ERP.Store.API.Entities.Entities;
 using ERP.Store.API.Services.Interfaces;
 using ERP.Store.API.Repositories.Interfaces;
-using ERP.Store.API.Entities.Models.InputModel;
 using ERP.Store.API.Services.CustomExceptions;
-using ERP.Store.API.Entities.Tables;
+using ERP.Store.API.Entities.Models.InputModel;
 
 namespace ERP.Store.API.Services
 {
@@ -232,7 +232,10 @@ namespace ERP.Store.API.Services
 
                 await UpdateItemsAsync(orderInput, orderID);
 
-                await UpdatePaymentAsync(model, orderPayment, orderInput);
+                await _paymentService.ValidatePaymentMethodAsync(orderInput.Payment);
+
+                if (!orderInput.Payment.ID.Equals(orderPayment.PaymentID))
+                    await UpdatePaymentAsync(model, orderPayment, orderInput);
             }
             catch (Exception) { throw; }
         }
@@ -364,7 +367,18 @@ namespace ERP.Store.API.Services
                         if (itemUpdate.ID.Equals(item.ItemID))
                         {
                             if (!item.Quantity.Equals(itemUpdate.Inventory.Quantity))
+                            {
                                 await _orderRepository.UpdateOrderItemQuantityAsync(orderID, item.ItemID, itemUpdate.Inventory.Quantity);
+
+                                var quantityToBeUpdatedInventory = itemUpdate.Inventory.Quantity - item.Quantity;
+
+                                itemUpdate.Inventory.Quantity = quantityToBeUpdatedInventory;
+
+                                if (itemUpdate.Inventory.Quantity >= item.Quantity)
+                                    await _inventoryService.UpdateInventoryAsync(itemUpdate, true);
+                                else
+                                    await _inventoryService.UpdateInventoryAsync(itemUpdate, false);
+                            }
                         }
                     }
                 }
@@ -403,13 +417,11 @@ namespace ERP.Store.API.Services
                 #region UpdatePaymentAsync
                 
                 if (orderPayment.PaymentStatusID.Equals(1))
-                    throw new ConflictException($"It is not possible to update the order {order.ID}, because the payment is alredy completed.");
+                    throw new ConflictException($"It is not possible to update the payment of the order {order.ID}, because the payment is alredy completed.");
 
                 if (!model.Payment.IsCheck && !model.Payment.IsCard && !model.Payment.IsBankTransfer && !orderPayment.PaymentID.Equals(1))
                 {
                     await _paymentService.DeleteOrderPaymentAsync(orderPayment.Order_PaymentID);
-
-                    await _paymentService.ValidatePaymentMethodAsync(order.Payment);
 
                     await _paymentService.InsertOrderPaymentAsync(order);
                 }
@@ -417,8 +429,6 @@ namespace ERP.Store.API.Services
                 if (model.Payment.IsCheck && !orderPayment.PaymentID.Equals(2))
                 {
                     await _paymentService.DeleteOrderPaymentAsync(orderPayment.Order_PaymentID);
-
-                    await _paymentService.ValidatePaymentMethodAsync(order.Payment);
 
                     order.Payment.ID = await _paymentService.InsertOrderPaymentAsync(order);
 
@@ -429,8 +439,6 @@ namespace ERP.Store.API.Services
                 {
                     await _paymentService.DeleteOrderPaymentAsync(orderPayment.Order_PaymentID);
 
-                    await _paymentService.ValidatePaymentMethodAsync(order.Payment);
-
                     order.Payment.ID = await _paymentService.InsertOrderPaymentAsync(order);
 
                     await _paymentService.InsertPaymentInfoAsync(order.Payment);
@@ -439,8 +447,6 @@ namespace ERP.Store.API.Services
                 if (model.Payment.IsCard && !model.Payment.Card.IsCredit && !orderPayment.PaymentID.Equals(3))
                 {
                     await _paymentService.DeleteOrderPaymentAsync(orderPayment.Order_PaymentID);
-
-                    await _paymentService.ValidatePaymentMethodAsync(order.Payment);
 
                     order.Payment.ID = await _paymentService.InsertOrderPaymentAsync(order);
 
@@ -451,8 +457,6 @@ namespace ERP.Store.API.Services
                 {
                     await _paymentService.DeleteOrderPaymentAsync(orderPayment.Order_PaymentID);
 
-                    await _paymentService.ValidatePaymentMethodAsync(order.Payment);
-
                     order.Payment.ID = await _paymentService.InsertOrderPaymentAsync(order);
 
                     await _paymentService.InsertPaymentInfoAsync(order.Payment);
@@ -461,8 +465,6 @@ namespace ERP.Store.API.Services
                 if (model.Payment.IsBankTransfer && model.Payment.BankInfo.IsEletronicBankTransfer && !orderPayment.PaymentID.Equals(6))
                 {
                     await _paymentService.DeleteOrderPaymentAsync(orderPayment.Order_PaymentID);
-
-                    await _paymentService.ValidatePaymentMethodAsync(order.Payment);
 
                     order.Payment.ID = await _paymentService.InsertOrderPaymentAsync(order);
 

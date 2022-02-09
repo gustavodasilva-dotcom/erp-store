@@ -286,7 +286,7 @@ namespace ERP.Store.API.Services
                 if (isTakeOutQuantity)
                     item.Inventory.Quantity = inventory.Quantity - item.Inventory.Quantity;
                 else
-                    item.Inventory.Quantity = inventory.Quantity + item.Inventory.Quantity;
+                    item.Inventory.Quantity = inventory.Quantity + Math.Abs(item.Inventory.Quantity);
 
                 await _inventoryRepository.UpdateInventoryAsync(item);
             }

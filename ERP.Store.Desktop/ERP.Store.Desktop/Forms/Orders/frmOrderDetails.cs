@@ -88,7 +88,21 @@ namespace ERP.Store.Desktop.Forms.Orders
 
                     listViewItems.View = View.List;
 
-                    foreach (var item in order.items) listViewItems.Items.Add($"#{item.quantity.ToString()} - {item.itemID.ToString()}");
+                    foreach (var item in order.items)
+                    {
+                        listViewItems.Items.Add($"#{item.quantity.ToString()} - {item.itemID.ToString()}");
+
+                        if (Items == null)
+                            Items = new List<ItemEntity>();
+
+                        Items.Add(new ItemEntity
+                        {
+                            ItemID = int.Parse(item.itemID.ToString()),
+                            Quantity = int.Parse(item.quantity.ToString())
+                        });
+                    }
+
+                    foreach (var payment in GetPayments()) comboBoxPayments.Items.Add(payment);
 
                     foreach (var payment in GetPayments()) if (payment.Equals(order.payment.description.ToString())) comboBoxPayments.Text = payment;
                     
@@ -146,12 +160,30 @@ namespace ERP.Store.Desktop.Forms.Orders
 
                     #endregion
 
-                    var orderID = _orderService.Post(orderRequest, User);
+                    if (OperationType == OperationType.Create)
+                    {
+                        var orderID = _orderService.Post(orderRequest, User);
 
-                    if (orderID != 0)
-                        MessageBox.Show($"Order created successfully. Order id: {orderID}.");
+                        if (orderID != 0)
+                            MessageBox.Show($"Order created successfully. Order id: {orderID}.");
+                        else
+                            MessageBox.Show("It was not possible to complete de request.");
+                    }
                     else
-                        MessageBox.Show("It was not possible to complete de request.");
+                    {
+                        if (OperationType == OperationType.Read || OperationType == OperationType.Update)
+                        {
+                            if (int.TryParse(labelOrderID.Text.Substring(1, labelOrderID.Text.Length - 1), out int orderIdFromLabel))
+                            {
+                                var orderID = _orderService.Put(orderRequest, orderIdFromLabel, User);
+
+                                if (orderID != 0)
+                                    MessageBox.Show($"Order {orderID} updated successfully.");
+                                else
+                                    MessageBox.Show("It was not possible to complete de request.");
+                            }
+                        }
+                    }
                 }
                 else
                 {

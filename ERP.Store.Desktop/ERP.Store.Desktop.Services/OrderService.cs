@@ -14,6 +14,21 @@ namespace ERP.Store.Desktop.Services
             _apiRepository = new APIRepository();
         }
 
+        public dynamic Get(int orderID, dynamic user)
+        {
+            try
+            {
+                _apiRepository.Endpoint = ConfigurationManager.ConnectionStrings["OrderEndpoint"].ConnectionString + orderID;
+
+                var response = _apiRepository.Get(user);
+
+                if (response == null) throw new Exception("It was not possible to complete de request.");
+
+                return response;
+            }
+            catch (Exception) { throw; }
+        }
+
         public int Post(OrderRequest order, dynamic user)
         {
             try
@@ -31,17 +46,19 @@ namespace ERP.Store.Desktop.Services
             catch (Exception) { throw; }
         }
 
-        public dynamic Get(int orderID, dynamic user)
+        public dynamic Put(OrderRequest order, int orderID, dynamic user)
         {
             try
             {
+                var json = CreateJson(order);
+
                 _apiRepository.Endpoint = ConfigurationManager.ConnectionStrings["OrderEndpoint"].ConnectionString + orderID;
 
-                var response = _apiRepository.Get(user);
+                var response = _apiRepository.Put(json, user);
 
                 if (response == null) throw new Exception("It was not possible to complete de request.");
 
-                return response;
+                return response.orderID;
             }
             catch (Exception) { throw; }
         }
