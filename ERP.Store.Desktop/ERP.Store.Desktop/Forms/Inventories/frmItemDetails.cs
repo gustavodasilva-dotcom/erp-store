@@ -14,6 +14,8 @@ namespace ERP.Store.Desktop.Forms.Inventories
         public frmItemDetails()
         {
             InitializeComponent();
+
+            Items = new List<ItemEntity>();
         }
 
         public void SetItem(string item)
@@ -51,7 +53,7 @@ namespace ERP.Store.Desktop.Forms.Inventories
                 {
                     if (Items.Count > 0)
                     {
-                        foreach (var item in Items) listViewItems.Items.Add($"{item.ItemID}");
+                        foreach (var item in Items) listViewItems.Items.Add($"#{item.Quantity} - {item.ItemID}");
 
                         listViewItems.View = View.List;
                     }
@@ -75,19 +77,81 @@ namespace ERP.Store.Desktop.Forms.Inventories
 
                 if (string.IsNullOrEmpty(validate))
                 {
-                    if (Items == null) Items = new List<ItemEntity>();
-
-                    Items.Add(new ItemEntity
+                    if (Items.Count == 0)
                     {
-                        ItemID = int.Parse(textBoxEnterItemID.Text),
-                        Quantity = int.Parse(textBoxQuantity.Text)
-                    });
+                        Items.Add(new ItemEntity
+                        {
+                            ItemID = int.Parse(textBoxEnterItemID.Text),
+                            Quantity = int.Parse(textBoxQuantity.Text)
+                        });
+                    }
+                    else
+                    {
+                        foreach (var item in Items)
+                        {
+                            if (!item.ItemID.Equals(int.Parse(textBoxEnterItemID.Text)))
+                            {
+                                Items.Add(new ItemEntity
+                                {
+                                    ItemID = int.Parse(textBoxEnterItemID.Text),
+                                    Quantity = int.Parse(textBoxQuantity.Text)
+                                });
+
+                                break;
+                            }
+                        }
+                    }
 
                     MessageBox.Show($"#{textBoxQuantity.Text} of {textBoxEnterItemID.Text} added successfully.");
                 }
                 else
                 {
                     MessageBox.Show(validate);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The following error occurred: {ex.Message}");
+            }
+        }
+
+        private void buttonUpdate_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Items.Count > 0)
+                {
+                    var isNumeric = int.TryParse(textBoxEnterItemID.Text, out int itemID);
+
+                    if (isNumeric)
+                    {
+                        isNumeric = int.TryParse(textBoxQuantity.Text, out int quantity);
+
+                        if (isNumeric)
+                        {
+                            foreach (var item in Items)
+                            {
+                                if (item.ItemID.Equals(itemID) && !item.Quantity.Equals(quantity))
+                                {
+                                    item.Quantity = quantity;
+
+                                    MessageBox.Show($"#{textBoxQuantity.Text} of {textBoxEnterItemID.Text} updated successfully.");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception($"The {quantity} informed is not a numeric value.");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception($"The {itemID} informed is not a numeric value.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("The list of items is empty.");
                 }
             }
             catch (Exception ex)

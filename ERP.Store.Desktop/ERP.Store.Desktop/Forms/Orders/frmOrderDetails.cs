@@ -121,9 +121,6 @@ namespace ERP.Store.Desktop.Forms.Orders
                         textBoxAgency.Text = order.payment.paymentInfo.agency.ToString();
                     }
 
-                    buttonReload.Enabled = false;
-                    buttonEdit.Enabled = false;
-
                     #endregion
                 }
             }
@@ -205,6 +202,7 @@ namespace ERP.Store.Desktop.Forms.Orders
                     var itemInput = textBoxFindItem.Text.ToLower().Trim();
 
                     var itemDetails = new Inventories.frmItemDetails();
+                    itemDetails.DesableUpdateButton();
                     itemDetails.DesableDeleteButton();
 
                     FrmItemDetails = itemDetails;
@@ -232,16 +230,82 @@ namespace ERP.Store.Desktop.Forms.Orders
 
                 if (FrmItemDetails != null)
                 {
-                    if (Items.Count > 0) Items.Clear();
+                    var alreadyItems = new List<ItemEntity>();
+
+                    var itemsDisplay = new List<ItemEntity>();
 
                     var newItems = FrmItemDetails.Items;
-
-                    foreach (var item in newItems) Items.Add(item);
 
                     listViewItems.View = View.List;
                     listViewItems.Clear();
 
-                    foreach (var item in Items) listViewItems.Items.Add($"#{item.Quantity} - {item.ItemID}");
+                    if (Items != null && !Items.Count.Equals(newItems.Count))
+                    {
+                        if (Items.Count > 0)
+                        {
+                            foreach (var item in Items)
+                            {
+                                alreadyItems.Add(new ItemEntity
+                                {
+                                    ItemID = item.ItemID,
+                                    Quantity = item.Quantity
+                                });
+                            }
+
+                            Items.Clear();
+                        }
+
+                        foreach (var newItem in newItems)
+                        {
+                            itemsDisplay.Add(new ItemEntity
+                            {
+                                ItemID = newItem.ItemID,
+                                Quantity = newItem.Quantity
+                            });
+                        }
+
+                        foreach (var item in alreadyItems)
+                        {
+                            if (itemsDisplay.Contains(item))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                itemsDisplay.Add(new ItemEntity
+                                {
+                                    ItemID = item.ItemID,
+                                    Quantity = item.Quantity
+                                });
+                            }
+                        }
+
+                        foreach (var item in itemsDisplay)
+                        {
+                            Items.Add(new ItemEntity
+                            {
+                                ItemID = item.ItemID,
+                                Quantity = item.Quantity
+                            });
+
+                            listViewItems.Items.Add($"#{item.Quantity} - {item.ItemID}");
+                        }
+                    }
+                    else
+                    {
+                        Items.Clear();
+
+                        foreach (var item in newItems)
+                        {
+                            Items.Add(new ItemEntity
+                            {
+                                ItemID = item.ItemID,
+                                Quantity = item.Quantity
+                            });
+
+                            listViewItems.Items.Add($"#{item.Quantity} - {item.ItemID}");
+                        }
+                    }
 
                     Refresh();
                 }
@@ -267,13 +331,11 @@ namespace ERP.Store.Desktop.Forms.Orders
                         Items = new List<ItemEntity>()
                     };
 
-                    itemDetails.DesableAddButton();
-                    itemDetails.DesableTextBoxQuantity();
-
                     FrmItemDetails = itemDetails;
 
                     foreach (var item in Items) itemDetails.Items.Add(item);
 
+                    itemDetails.DesableAddButton();
                     itemDetails.Show();
                 }
                 else

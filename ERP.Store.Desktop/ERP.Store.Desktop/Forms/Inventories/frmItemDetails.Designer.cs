@@ -34,6 +34,7 @@ namespace ERP.Store.Desktop.Forms.Inventories
             this.textBoxEnterItemID = new System.Windows.Forms.TextBox();
             this.textBoxQuantity = new System.Windows.Forms.TextBox();
             this.buttonDelete = new System.Windows.Forms.Button();
+            this.buttonUpdate = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listViewItems
@@ -81,7 +82,7 @@ namespace ERP.Store.Desktop.Forms.Inventories
             // buttonDelete
             // 
             this.buttonDelete.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonDelete.Location = new System.Drawing.Point(554, 187);
+            this.buttonDelete.Location = new System.Drawing.Point(554, 215);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(100, 23);
             this.buttonDelete.TabIndex = 4;
@@ -89,11 +90,23 @@ namespace ERP.Store.Desktop.Forms.Inventories
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
+            // buttonUpdate
+            // 
+            this.buttonUpdate.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonUpdate.Location = new System.Drawing.Point(554, 184);
+            this.buttonUpdate.Name = "buttonUpdate";
+            this.buttonUpdate.Size = new System.Drawing.Size(100, 23);
+            this.buttonUpdate.TabIndex = 5;
+            this.buttonUpdate.Text = "Update";
+            this.buttonUpdate.UseVisualStyleBackColor = true;
+            this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
+            // 
             // frmItemDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(754, 288);
+            this.Controls.Add(this.buttonUpdate);
             this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.textBoxQuantity);
             this.Controls.Add(this.textBoxEnterItemID);
@@ -120,6 +133,11 @@ namespace ERP.Store.Desktop.Forms.Inventories
             buttonDelete.Enabled = false;
         }
 
+        public void DesableUpdateButton()
+        {
+            buttonUpdate.Enabled = false;
+        }
+
         public void DesableAddButton()
         {
             buttonAdd.Enabled = false;
@@ -129,5 +147,7 @@ namespace ERP.Store.Desktop.Forms.Inventories
         {
             textBoxQuantity.Enabled = false;
         }
+
+        private System.Windows.Forms.Button buttonUpdate;
     }
 }
