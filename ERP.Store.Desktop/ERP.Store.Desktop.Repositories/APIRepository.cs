@@ -40,7 +40,7 @@ namespace ERP.Store.Desktop.Repositories
             catch (Exception) { throw; }
         }
 
-        public dynamic Post(string json, dynamic user)
+        public dynamic Post(string json, dynamic user = null)
         {
             try
             {
@@ -54,7 +54,8 @@ namespace ERP.Store.Desktop.Repositories
                     Method = Method.POST
                 };
 
-                request.AddHeader("Authorization", $"Bearer {user.token.token}");
+                if (user != null)
+                    request.AddHeader("Authorization", $"Bearer {user.token.token}");
 
                 request.AddHeader("Content-Type", "application/json");
 
@@ -95,6 +96,37 @@ namespace ERP.Store.Desktop.Repositories
                 request.AddParameter("application/json", json, ParameterType.RequestBody);
 
                 var response = client.Execute(request);
+
+                if (!response.StatusCode.Equals(HttpStatusCode.Created) && !response.StatusCode.Equals(HttpStatusCode.OK))
+                {
+                    var responseContent = JsonConvert.DeserializeObject<dynamic>(response.Content);
+
+                    throw new Exception(Convert.ToString(responseContent.messages).Replace("{", "").Replace("}", "").Replace("[", "").Replace("]", ""));
+                }
+
+                return JsonConvert.DeserializeObject<dynamic>(response.Content);
+            }
+            catch (Exception) { throw; }
+        }
+
+        public dynamic Delete(dynamic user)
+        {
+            try
+            {
+                var client = new RestClient(Endpoint)
+                {
+                    Timeout = -1
+                };
+
+                var request = new RestRequest(Method.DELETE);
+
+                request.AddHeader("Authorization", $"Bearer {user.token.token}");
+
+                request.AddHeader("Content-Type", "application/json");
+
+                request.AddParameter("application/json", ParameterType.RequestBody);
+
+                IRestResponse response = client.Execute(request);
 
                 if (!response.StatusCode.Equals(HttpStatusCode.Created) && !response.StatusCode.Equals(HttpStatusCode.OK))
                 {

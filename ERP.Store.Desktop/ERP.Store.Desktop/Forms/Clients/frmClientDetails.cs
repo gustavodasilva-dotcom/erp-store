@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using ERP.Store.Desktop.Services;
 using ERP.Store.Desktop.Entities.Entities;
 using ERP.Store.Desktop.Entities.JSON.Request;
-using ERP.Store.Desktop.Entities.JSON.Response;
 
 namespace ERP.Store.Desktop.Forms.Clients
 {
@@ -35,7 +34,7 @@ namespace ERP.Store.Desktop.Forms.Clients
                 buttonDelete.Visible = false;
         }
 
-        public frmClientDetails(dynamic user, ClientResponse client, OperationType operationType)
+        public frmClientDetails(dynamic user, dynamic client, OperationType operationType)
         {
             User = user;
 
@@ -49,27 +48,27 @@ namespace ERP.Store.Desktop.Forms.Clients
 
             #region InitializingComponents
 
-            textBoxFirstName.Text = client.FirstName;
-            textBoxMiddleName.Text = client.MiddleName;
-            textBoxLastName.Text = client.LastName;
-            textBoxIdentification.Text = client.Identification;
+            textBoxFirstName.Text = client.firstName.ToString();
+            textBoxMiddleName.Text = client.middleName.ToString();
+            textBoxLastName.Text = client.lastName.ToString();
+            textBoxIdentification.Text = client.identification.ToString();
 
-            textBoxZip.Text = client.Address.Zip;
-            textBoxStreet.Text = client.Address.Street;
-            textBoxNumber.Text = client.Address.Number;
-            textBoxComment.Text = client.Address.Comment;
-            textBoxNeighborhood.Text = client.Address.Neighborhood;
-            textBoxCity.Text = client.Address.City;
-            textBoxState.Text = client.Address.State;
-            textBoxCountry.Text = client.Address.Country;
+            textBoxZip.Text = client.address.zip.ToString();
+            textBoxStreet.Text = client.address.street.ToString();
+            textBoxNumber.Text = client.address.number.ToString();
+            textBoxComment.Text = client.address.comment.ToString();
+            textBoxNeighborhood.Text = client.address.neighborhood.ToString();
+            textBoxCity.Text = client.address.city.ToString();
+            textBoxState.Text = client.address.state.ToString();
+            textBoxCountry.Text = client.address.country.ToString();
 
-            textBoxEmail.Text = client.Contact.Email;
-            textBoxCellphone.Text = client.Contact.Cellphone;
-            textBoxPhone.Text = client.Contact.Phone;
+            textBoxEmail.Text = client.contact.email.ToString();
+            textBoxCellphone.Text = client.contact.cellphone.ToString();
+            textBoxPhone.Text = client.contact.phone.ToString();
 
-            if (!string.IsNullOrEmpty(client.Image.Base64) && client.Image.IsImage)
+            if (!string.IsNullOrEmpty(client.image.base64.ToString()) && (bool)client.image.isImage)
             {
-                var bytes = Convert.FromBase64String(client.Image.Base64);
+                var bytes = Convert.FromBase64String(client.image.base64.ToString());
 
                 using var ms = new MemoryStream(bytes);
                 pictureBoxImage.Image = Image.FromStream(ms);
@@ -143,25 +142,12 @@ namespace ERP.Store.Desktop.Forms.Clients
                         }
                     };
 
-                    var statusCode = _clientService.Post(newClient, User);
+                    var clientID = _clientService.Post(newClient, User);
 
-                    switch (statusCode)
-                    {
-                        case 201:
-                            message = "Client registered succefully.";
-                            break;
-                        case 401:
-                            message = $"This user doens't have authorization to complete this request.";
-                            break;
-                        case 409:
-                            message = $"There's alredy an employee registered with the identification number {textBoxIdentification.Text}.";
-                            break;
-                        default:
-                            message = "An error occurred while processing the request.";
-                            break;
-                    }
-
-                    MessageBox.Show(message);
+                    if (clientID != null)
+                        MessageBox.Show($"Client registered successfully! Client ID: {clientID}");
+                    else
+                        MessageBox.Show("An error occurred while registering the client.");
 
                     #endregion
                 }
@@ -201,25 +187,12 @@ namespace ERP.Store.Desktop.Forms.Clients
                             }
                         };
 
-                        var statusCode = _clientService.Put(newClient, User);
+                        var clientID = _clientService.Put(newClient, User);
 
-                        switch (statusCode)
-                        {
-                            case 200:
-                                message = "Client updated succefully.";
-                                break;
-                            case 401:
-                                message = $"This user doens't have authorization to complete this request.";
-                                break;
-                            case 409:
-                                message = $"There's alredy an employee registered with the identification number {textBoxIdentification.Text}.";
-                                break;
-                            default:
-                                message = "An error occurred while processing the request.";
-                                break;
-                        }
-
-                        MessageBox.Show(message);
+                        if (clientID != null)
+                            MessageBox.Show($"Client updated successfully! Client ID: {clientID}");
+                        else
+                            MessageBox.Show("An error occurred while registering the client.");
 
                         #endregion
                     }
@@ -235,27 +208,11 @@ namespace ERP.Store.Desktop.Forms.Clients
         {
             try
             {
-                var message = string.Empty;
+                var response = _clientService.Delete(textBoxIdentification.Text, User);
 
-                var statusCode = _clientService.Delete(textBoxIdentification.Text, User);
+                MessageBox.Show(response.ToString());
 
-                switch (statusCode)
-                {
-                    case 200:
-                        message = "Client deleted succefully.";
-                        break;
-                    case 401:
-                        message = $"This user doens't have authorization to complete this request.";
-                        break;
-                    case 404:
-                        message = $"There's no employee registered with the identification number {textBoxIdentification.Text}.";
-                        break;
-                    default:
-                        message = "An error occurred while processing the request.";
-                        break;
-                }
-
-                MessageBox.Show(message);
+                Close();
             }
             catch (Exception ex)
             {

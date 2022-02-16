@@ -129,6 +129,8 @@ namespace ERP.Store.Desktop.Forms.Inventories
 
                     if (OperationType == OperationType.Create)
                     {
+                        item.ItemID = 0;
+
                         itemID = _inventoryService.Post(item, User);
 
                         if (itemID != 0)
@@ -144,8 +146,10 @@ namespace ERP.Store.Desktop.Forms.Inventories
                             {
                                 item.ItemID = itemID;
 
-                                if (_inventoryService.Put(item, User) == 200)
-                                    MessageBox.Show($"Item {itemID} updated successfully.");
+                                item.ItemID = _inventoryService.Put(item, User);
+
+                                if (item.ItemID != 0)
+                                    MessageBox.Show($"Item {item.ItemID} updated successfully.");
                                 else
                                     throw new Exception("It wasn't possible to finish the request.");
                             }

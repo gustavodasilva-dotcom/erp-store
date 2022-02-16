@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
 using ERP.Store.Desktop.Repositories;
 using ERP.Store.Desktop.Entities.JSON.Request;
@@ -7,11 +8,11 @@ namespace ERP.Store.Desktop.Services
 {
     public class UserService
     {
-        private readonly UserRepository _userRepository;
+        private APIRepository _apiRepository { get; set; }
 
         public UserService()
         {
-            _userRepository = new UserRepository();
+            _apiRepository = new APIRepository();
         }
 
         public List<string> CheckInput(UserRequest request)
@@ -38,7 +39,31 @@ namespace ERP.Store.Desktop.Services
         {
             try
             {
-                return _userRepository.Get(request);
+                var json = CreateJson(request);
+
+                _apiRepository.Endpoint = ConfigurationManager.ConnectionStrings["UserEndpoint"].ConnectionString;
+
+                var response = _apiRepository.Post(json);
+
+                if (response == null) throw new Exception("It was not possible to complete de request.");
+
+                return response;
+            }
+            catch (Exception) { throw; }
+        }
+
+        private string CreateJson(UserRequest request)
+        {
+            try
+            {
+                return
+                @"{
+                    " + "\n" +
+                                    $@"  ""username"": ""{request.Username}"",
+                    " + "\n" +
+                                    $@"  ""password"": ""{request.Password}""
+                    " + "\n" +
+                @"}";
             }
             catch (Exception) { throw; }
         }

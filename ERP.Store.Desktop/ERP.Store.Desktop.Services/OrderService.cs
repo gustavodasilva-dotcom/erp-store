@@ -22,7 +22,7 @@ namespace ERP.Store.Desktop.Services
 
                 var response = _apiRepository.Get(user);
 
-                if (response == null) throw new Exception("It was not possible to complete de request.");
+                if (response == null) throw new Exception("It was not possible to complete the request.");
 
                 return response;
             }
@@ -39,7 +39,7 @@ namespace ERP.Store.Desktop.Services
 
                 var response = _apiRepository.Post(json, user);
 
-                if (response == null) throw new Exception("It was not possible to complete de request.");
+                if (response == null) throw new Exception("It was not possible to complete the request.");
 
                 return response.orderID;
             }
@@ -56,7 +56,7 @@ namespace ERP.Store.Desktop.Services
 
                 var response = _apiRepository.Put(json, user);
 
-                if (response == null) throw new Exception("It was not possible to complete de request.");
+                if (response == null) throw new Exception("It was not possible to complete the request.");
 
                 return response.orderID;
             }
