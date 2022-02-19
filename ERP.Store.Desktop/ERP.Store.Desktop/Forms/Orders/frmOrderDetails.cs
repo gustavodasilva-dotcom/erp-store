@@ -11,9 +11,13 @@ namespace ERP.Store.Desktop.Forms.Orders
     {
         private dynamic User { get; set; }
 
+        private dynamic OrderJson { get; set; }
+
         private List<ItemEntity> Items { get; set; }
 
         private OperationType OperationType { get; set; }
+
+        private readonly PdfService _pdfService;
 
         private readonly OrderService _orderService;
 
@@ -36,6 +40,8 @@ namespace ERP.Store.Desktop.Forms.Orders
                 User = user;
 
                 OperationType = operationType;
+
+                _pdfService = new PdfService();
 
                 _orderService = new OrderService();
 
@@ -68,6 +74,8 @@ namespace ERP.Store.Desktop.Forms.Orders
                 User = user;
 
                 OperationType = operationType;
+
+                _pdfService = new PdfService();
 
                 _orderService = new OrderService();
 
@@ -105,7 +113,7 @@ namespace ERP.Store.Desktop.Forms.Orders
                     foreach (var payment in GetPayments()) comboBoxPayments.Items.Add(payment);
 
                     foreach (var payment in GetPayments()) if (payment.Equals(order.payment.description.ToString())) comboBoxPayments.Text = payment;
-                    
+
                     if (order.payment.paymentID == 3 || order.payment.paymentID == 4)
                     {
                         textBoxNameOnCard.Text = order.payment.paymentInfo.nameOnCard.ToString();
@@ -120,6 +128,8 @@ namespace ERP.Store.Desktop.Forms.Orders
                         textBoxNumber.Text = order.payment.paymentInfo.number.ToString();
                         textBoxAgency.Text = order.payment.paymentInfo.agency.ToString();
                     }
+
+                    OrderJson = order;
 
                     #endregion
                 }
@@ -206,7 +216,7 @@ namespace ERP.Store.Desktop.Forms.Orders
                     itemDetails.DesableDeleteButton();
 
                     FrmItemDetails = itemDetails;
-                    
+
                     foreach (var item in _inventoryService.Get(User, CategoryType.Items))
                     {
                         if (Convert.ToString(item.name).ToLower().Contains(itemInput))
@@ -346,6 +356,18 @@ namespace ERP.Store.Desktop.Forms.Orders
             catch (Exception) { throw; }
         }
 
+        private void buttonGetOrderPdf_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _pdfService.CreateOrderPdf(OrderJson);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The following error occurred: {ex.Message}");
+            }
+        }
+
         private List<ItemOrderRequest> SetItems()
         {
             try
@@ -483,7 +505,7 @@ namespace ERP.Store.Desktop.Forms.Orders
                 #region Validation
 
                 if (string.IsNullOrEmpty(textBoxClientIdentification.Text)) return "The client's identification cannot be null or empty.";
-                
+
                 if (listViewItems.Items.Count == 0) return "To finish an order, there must be, at least, one item.";
 
                 if (!long.TryParse(textBoxClientIdentification.Text, out long _)) return "The client's identification must be a numeric value.";

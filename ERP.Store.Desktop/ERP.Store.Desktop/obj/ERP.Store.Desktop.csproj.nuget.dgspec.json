@@ -181,6 +181,12 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "dependencies": {
+            "Aspose.PDF": {
+              "target": "Package",
+              "version": "[22.2.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

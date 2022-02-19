@@ -52,6 +52,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             this.labelIsCompleted = new System.Windows.Forms.Label();
             this.labelCompleted = new System.Windows.Forms.Label();
             this.buttonEdit = new System.Windows.Forms.Button();
+            this.buttonGetOrderPdf = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxClientIdentification
@@ -67,7 +68,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // 
             this.comboBoxPayments.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.comboBoxPayments.FormattingEnabled = true;
-            this.comboBoxPayments.Location = new System.Drawing.Point(488, 57);
+            this.comboBoxPayments.Location = new System.Drawing.Point(488, 23);
             this.comboBoxPayments.Name = "comboBoxPayments";
             this.comboBoxPayments.Size = new System.Drawing.Size(233, 23);
             this.comboBoxPayments.TabIndex = 3;
@@ -75,7 +76,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // textBoxNameOnCard
             // 
             this.textBoxNameOnCard.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxNameOnCard.Location = new System.Drawing.Point(488, 119);
+            this.textBoxNameOnCard.Location = new System.Drawing.Point(488, 85);
             this.textBoxNameOnCard.Name = "textBoxNameOnCard";
             this.textBoxNameOnCard.PlaceholderText = "Name on card";
             this.textBoxNameOnCard.Size = new System.Drawing.Size(233, 23);
@@ -84,7 +85,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // textBoxCardNumber
             // 
             this.textBoxCardNumber.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxCardNumber.Location = new System.Drawing.Point(488, 165);
+            this.textBoxCardNumber.Location = new System.Drawing.Point(488, 131);
             this.textBoxCardNumber.Name = "textBoxCardNumber";
             this.textBoxCardNumber.PlaceholderText = "Card number";
             this.textBoxCardNumber.Size = new System.Drawing.Size(233, 23);
@@ -93,7 +94,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // textBoxMM
             // 
             this.textBoxMM.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxMM.Location = new System.Drawing.Point(488, 209);
+            this.textBoxMM.Location = new System.Drawing.Point(488, 175);
             this.textBoxMM.Name = "textBoxMM";
             this.textBoxMM.PlaceholderText = "MM";
             this.textBoxMM.Size = new System.Drawing.Size(62, 23);
@@ -102,7 +103,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // textBoxYY
             // 
             this.textBoxYY.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxYY.Location = new System.Drawing.Point(556, 209);
+            this.textBoxYY.Location = new System.Drawing.Point(556, 175);
             this.textBoxYY.Name = "textBoxYY";
             this.textBoxYY.PlaceholderText = "YY";
             this.textBoxYY.Size = new System.Drawing.Size(62, 23);
@@ -111,7 +112,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // textBoxCCV
             // 
             this.textBoxCCV.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxCCV.Location = new System.Drawing.Point(659, 209);
+            this.textBoxCCV.Location = new System.Drawing.Point(659, 175);
             this.textBoxCCV.Name = "textBoxCCV";
             this.textBoxCCV.PlaceholderText = "CCV";
             this.textBoxCCV.Size = new System.Drawing.Size(62, 23);
@@ -120,7 +121,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // textBoxBankName
             // 
             this.textBoxBankName.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxBankName.Location = new System.Drawing.Point(488, 272);
+            this.textBoxBankName.Location = new System.Drawing.Point(488, 238);
             this.textBoxBankName.Name = "textBoxBankName";
             this.textBoxBankName.PlaceholderText = "Bank name";
             this.textBoxBankName.Size = new System.Drawing.Size(233, 23);
@@ -129,7 +130,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // textBoxNumber
             // 
             this.textBoxNumber.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxNumber.Location = new System.Drawing.Point(488, 318);
+            this.textBoxNumber.Location = new System.Drawing.Point(488, 284);
             this.textBoxNumber.Name = "textBoxNumber";
             this.textBoxNumber.PlaceholderText = "Number";
             this.textBoxNumber.Size = new System.Drawing.Size(103, 23);
@@ -138,7 +139,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // textBoxAgency
             // 
             this.textBoxAgency.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxAgency.Location = new System.Drawing.Point(618, 318);
+            this.textBoxAgency.Location = new System.Drawing.Point(618, 284);
             this.textBoxAgency.Name = "textBoxAgency";
             this.textBoxAgency.PlaceholderText = "Agency";
             this.textBoxAgency.Size = new System.Drawing.Size(103, 23);
@@ -147,7 +148,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // buttonSend
             // 
             this.buttonSend.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonSend.Location = new System.Drawing.Point(488, 373);
+            this.buttonSend.Location = new System.Drawing.Point(488, 339);
             this.buttonSend.Name = "buttonSend";
             this.buttonSend.Size = new System.Drawing.Size(233, 39);
             this.buttonSend.TabIndex = 12;
@@ -281,11 +282,23 @@ namespace ERP.Store.Desktop.Forms.Orders
             this.buttonEdit.UseVisualStyleBackColor = true;
             this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
             // 
+            // buttonGetOrderPdf
+            // 
+            this.buttonGetOrderPdf.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonGetOrderPdf.Location = new System.Drawing.Point(515, 397);
+            this.buttonGetOrderPdf.Name = "buttonGetOrderPdf";
+            this.buttonGetOrderPdf.Size = new System.Drawing.Size(180, 27);
+            this.buttonGetOrderPdf.TabIndex = 25;
+            this.buttonGetOrderPdf.Text = "Get order PDF";
+            this.buttonGetOrderPdf.UseVisualStyleBackColor = true;
+            this.buttonGetOrderPdf.Click += new System.EventHandler(this.buttonGetOrderPdf_Click);
+            // 
             // frmOrderDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonGetOrderPdf);
             this.Controls.Add(this.buttonEdit);
             this.Controls.Add(this.labelIsCompleted);
             this.Controls.Add(this.labelCompleted);
@@ -341,5 +354,6 @@ namespace ERP.Store.Desktop.Forms.Orders
         private System.Windows.Forms.Label labelIsCompleted;
         private System.Windows.Forms.Label labelCompleted;
         private System.Windows.Forms.Button buttonEdit;
+        private System.Windows.Forms.Button buttonGetOrderPdf;
     }
 }

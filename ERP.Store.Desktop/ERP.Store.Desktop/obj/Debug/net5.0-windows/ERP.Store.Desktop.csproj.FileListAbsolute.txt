@@ -47,3 +47,6 @@ C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.St
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.Forms.Inventories.frmInventoryDetails.resources
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.Forms.Orders.frmOrderDetails.resources
 C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\obj\Debug\net5.0-windows\ERP.Store.Desktop.Forms.Inventories.frmItemDetails.resources
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\bin\Debug\net5.0-windows\Aspose.PDF.dll
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\bin\Debug\net5.0-windows\Microsoft.DotNet.PlatformAbstractions.dll
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.Desktop\ERP.Store.Desktop\bin\Debug\net5.0-windows\Microsoft.Extensions.DependencyModel.dll
