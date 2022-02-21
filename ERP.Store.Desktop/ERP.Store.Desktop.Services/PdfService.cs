@@ -29,6 +29,9 @@ namespace ERP.Store.Desktop.Services
                 InstantializeAddressContent(order.client.address, page);
                 InstantializeContactContent(order.client.contact, page);
                 InstantializeItemsContent(order.items, page);
+                InstantializePaymentMethod(order.payment, page);
+                InstantializePaymentInfo(order.payment, page);
+                InstantializeOrderValue(order.payment, page);
 
                 document.Save($"{_filePath}order_{order.orderID.ToString()}_{DateTime.Now.ToString("G").Replace("/", "").Replace(" ", "").Replace(":", "")}.pdf");
             }
@@ -142,6 +145,7 @@ namespace ERP.Store.Desktop.Services
                 row.Cells.Add("Quantity: ");
                 row.Cells.Add("Category: ");
                 row.Cells.Add("Supplier: ");
+                row.Cells.Add("Price: ");
 
                 foreach (var item in items)
                 {
@@ -150,9 +154,136 @@ namespace ERP.Store.Desktop.Services
                     row.Cells.Add(item.quantity.ToString());
                     row.Cells.Add(item.category.description.ToString());
                     row.Cells.Add(item.inventory.supplier.name.ToString());
+                    row.Cells.Add(item.price.ToString());
                 }
 
                 page.Paragraphs.Add(itemsTable);
+            }
+            catch (Exception) { throw; }
+        }
+
+        private static void InstantializePaymentMethod(dynamic payment, Page page)
+        {
+            try
+            {
+                page.Paragraphs.Add(new TextFragment(""));
+
+                var paymentMehodTable = new Table
+                {
+                    Border = new BorderInfo(BorderSide.All, .5f, Color.FromRgb(System.Drawing.Color.LightGray)),
+                    DefaultCellBorder = new BorderInfo(BorderSide.All, .5f, Color.FromRgb(System.Drawing.Color.LightGray)),
+                    DefaultColumnWidth = "200"
+                };
+
+                paymentMehodTable.DefaultCellPadding = new MarginInfo
+                {
+                    Left = 10,
+                    Right = 10,
+                    Top = 10,
+                    Bottom = 10
+                };
+
+                var row = paymentMehodTable.Rows.Add();
+                row.Cells.Add("Payment method: ");
+                row.Cells.Add($"{payment.description.ToString()}");
+
+                page.Paragraphs.Add(paymentMehodTable);
+            }
+            catch (Exception) { throw; }
+        }
+
+        private static void InstantializePaymentInfo(dynamic payment, Page page)
+        {
+            try
+            {
+                if (int.Parse(payment.paymentID.ToString()) != 1)
+                {
+                    page.Paragraphs.Add(new TextFragment(""));
+
+                    var paymentInfoTable = new Table
+                    {
+                        Border = new BorderInfo(BorderSide.All, .5f, Color.FromRgb(System.Drawing.Color.LightGray)),
+                        DefaultCellBorder = new BorderInfo(BorderSide.All, .5f, Color.FromRgb(System.Drawing.Color.LightGray)),
+                        DefaultColumnWidth = "200"
+                    };
+
+                    paymentInfoTable.DefaultCellPadding = new MarginInfo
+                    {
+                        Left = 10,
+                        Right = 10,
+                        Top = 10,
+                        Bottom = 10
+                    };
+
+                    var row = paymentInfoTable.Rows.Add();
+                    row.Cells.Add("Payment info: ");
+
+                    if (int.Parse(payment.paymentID.ToString()) == 3 || int.Parse(payment.paymentID.ToString()) == 4)
+                    {
+                        row = paymentInfoTable.Rows.Add();
+                        row.Cells.Add("Name on card: ");
+                        row.Cells.Add($"{payment.paymentInfo.nameOnCard.ToString()}");
+
+                        row = paymentInfoTable.Rows.Add();
+                        row.Cells.Add("Card number: ");
+                        row.Cells.Add($"{payment.paymentInfo.cardNumber.ToString()}");
+
+                        row = paymentInfoTable.Rows.Add();
+                        row.Cells.Add("Year expiry date: ");
+                        row.Cells.Add($"{payment.paymentInfo.yearExpiryDate.ToString()}");
+
+                        row = paymentInfoTable.Rows.Add();
+                        row.Cells.Add("Month expiry date: ");
+                        row.Cells.Add($"{payment.paymentInfo.monthExpiryDate.ToString()}");
+                    }
+
+                    if (int.Parse(payment.paymentID.ToString()) == 2 || int.Parse(payment.paymentID.ToString()) == 5 || int.Parse(payment.paymentID.ToString()) == 6)
+                    {
+                        row = paymentInfoTable.Rows.Add();
+                        row.Cells.Add("Bank's number: ");
+                        row.Cells.Add($"{payment.paymentInfo.number.ToString()}");
+
+                        row = paymentInfoTable.Rows.Add();
+                        row.Cells.Add("Agency: ");
+                        row.Cells.Add($"{payment.paymentInfo.agency.ToString()}");
+
+                        row = paymentInfoTable.Rows.Add();
+                        row.Cells.Add("Bank name: ");
+                        row.Cells.Add($"{payment.paymentInfo.bankName.ToString()}");
+                    }
+
+                    page.Paragraphs.Add(paymentInfoTable);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        private static void InstantializeOrderValue(dynamic payment, Page page)
+        {
+            try
+            {
+                page.Paragraphs.Add(new TextFragment(""));
+
+                var paymentInfoTable = new Table
+                {
+                    Border = new BorderInfo(BorderSide.All, .5f, Color.FromRgb(System.Drawing.Color.LightGray)),
+                    DefaultCellBorder = new BorderInfo(BorderSide.All, .5f, Color.FromRgb(System.Drawing.Color.LightGray)),
+                    DefaultColumnWidth = "200"
+                };
+
+                paymentInfoTable.DefaultCellPadding = new MarginInfo
+                {
+                    Left = 10,
+                    Right = 10,
+                    Top = 10,
+                    Bottom = 10
+                };
+
+                var row = paymentInfoTable.Rows.Add();
+                row.Cells.Add("Order value: ");
+                row.Cells.Add($"{payment.totalValue.ToString()}");
+
+                page.Paragraphs.Add(paymentInfoTable);
             }
             catch (Exception) { throw; }
         }

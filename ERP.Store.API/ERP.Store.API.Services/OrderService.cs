@@ -65,6 +65,7 @@ namespace ERP.Store.API.Services
                         {
                             orderItem.ItemID,
                             orderItem.Quantity,
+                            item.Price,
                             item.Category,
                             item.Inventory
                         });
@@ -103,6 +104,7 @@ namespace ERP.Store.API.Services
                     order.OrderID,
                     Payment = new
                     {
+                        TotalValue = orderPayment.Value,
                         orderPayment.PaymentID,
                         payment.Description,
                         PaymentInfo = cardPayment == null ? bankPayment : cardPayment
