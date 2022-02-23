@@ -46,6 +46,23 @@ namespace ERP.Store.Desktop.Services
             catch (Exception) { throw; }
         }
 
+        public int Post(bool isCancel, int orderID, dynamic user)
+        {
+            try
+            {
+                var json = CreateJson(isCancel, orderID);
+
+                _apiRepository.Endpoint = ConfigurationManager.ConnectionStrings["OrderEndpoint"].ConnectionString + orderID;
+
+                var response = _apiRepository.Post(json, user);
+
+                if (response == null) throw new Exception("It was not possible to complete the request.");
+
+                return response.orderID;
+            }
+            catch (Exception) { throw; }
+        }
+
         public dynamic Put(OrderRequest order, int orderID, dynamic user)
         {
             try
@@ -118,6 +135,30 @@ namespace ERP.Store.Desktop.Services
                                 @"  }
                 " + "\n" +
                 @"}";
+
+                #endregion
+            }
+            catch (Exception) { throw; }
+        }
+
+        private string CreateJson(bool isCancel, int orderID)
+        {
+            try
+            {
+                var completeOrder = !isCancel ? true : false;
+                var cancelOrder = isCancel ? true : false;
+
+                #region CreateJson
+
+                return @"{
+                " + "\n" +
+                                $@"    ""orderID"": {orderID},
+                " + "\n" +
+                                $@"    ""completeOrder"": {Convert.ToString(completeOrder).ToLower()},
+                " + "\n" +
+                                $@"    ""cancelOrder"": {Convert.ToString(cancelOrder).ToLower()}
+                " + "\n" +
+                @"}" ;
 
                 #endregion
             }

@@ -53,12 +53,14 @@ namespace ERP.Store.Desktop.Forms.Orders
             this.labelCompleted = new System.Windows.Forms.Label();
             this.buttonEdit = new System.Windows.Forms.Button();
             this.buttonGetOrderPdf = new System.Windows.Forms.Button();
+            this.checkBoxFinishOrder = new System.Windows.Forms.CheckBox();
+            this.checkBoxCancelOrder = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textBoxClientIdentification
             // 
             this.textBoxClientIdentification.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxClientIdentification.Location = new System.Drawing.Point(69, 72);
+            this.textBoxClientIdentification.Location = new System.Drawing.Point(69, 61);
             this.textBoxClientIdentification.Name = "textBoxClientIdentification";
             this.textBoxClientIdentification.PlaceholderText = "Client identification";
             this.textBoxClientIdentification.Size = new System.Drawing.Size(233, 23);
@@ -159,7 +161,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // textBoxFindItem
             // 
             this.textBoxFindItem.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxFindItem.Location = new System.Drawing.Point(69, 210);
+            this.textBoxFindItem.Location = new System.Drawing.Point(69, 170);
             this.textBoxFindItem.Name = "textBoxFindItem";
             this.textBoxFindItem.PlaceholderText = "Enter an item name and press enter";
             this.textBoxFindItem.Size = new System.Drawing.Size(233, 23);
@@ -169,7 +171,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // buttonReload
             // 
             this.buttonReload.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonReload.Location = new System.Drawing.Point(308, 258);
+            this.buttonReload.Location = new System.Drawing.Point(308, 210);
             this.buttonReload.Name = "buttonReload";
             this.buttonReload.Size = new System.Drawing.Size(58, 23);
             this.buttonReload.TabIndex = 14;
@@ -181,7 +183,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // 
             this.listViewItems.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.listViewItems.HideSelection = false;
-            this.listViewItems.Location = new System.Drawing.Point(69, 258);
+            this.listViewItems.Location = new System.Drawing.Point(69, 210);
             this.listViewItems.Name = "listViewItems";
             this.listViewItems.Size = new System.Drawing.Size(233, 154);
             this.listViewItems.TabIndex = 15;
@@ -192,7 +194,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             this.labelOrderIDText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelOrderIDText.AutoSize = true;
             this.labelOrderIDText.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelOrderIDText.Location = new System.Drawing.Point(69, 33);
+            this.labelOrderIDText.Location = new System.Drawing.Point(69, 22);
             this.labelOrderIDText.Name = "labelOrderIDText";
             this.labelOrderIDText.Size = new System.Drawing.Size(69, 20);
             this.labelOrderIDText.TabIndex = 16;
@@ -204,7 +206,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             this.labelOrderID.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelOrderID.AutoSize = true;
             this.labelOrderID.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelOrderID.Location = new System.Drawing.Point(144, 33);
+            this.labelOrderID.Location = new System.Drawing.Point(144, 22);
             this.labelOrderID.Name = "labelOrderID";
             this.labelOrderID.Size = new System.Drawing.Size(17, 20);
             this.labelOrderID.TabIndex = 17;
@@ -215,7 +217,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // 
             this.labelCName.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelCName.AutoSize = true;
-            this.labelCName.Location = new System.Drawing.Point(69, 119);
+            this.labelCName.Location = new System.Drawing.Point(69, 94);
             this.labelCName.Name = "labelCName";
             this.labelCName.Size = new System.Drawing.Size(82, 15);
             this.labelCName.TabIndex = 18;
@@ -225,7 +227,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // 
             this.labelClientsName.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelClientsName.AutoSize = true;
-            this.labelClientsName.Location = new System.Drawing.Point(157, 119);
+            this.labelClientsName.Location = new System.Drawing.Point(157, 94);
             this.labelClientsName.Name = "labelClientsName";
             this.labelClientsName.Size = new System.Drawing.Size(75, 15);
             this.labelClientsName.TabIndex = 19;
@@ -235,7 +237,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // 
             this.labelCanceled.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelCanceled.AutoSize = true;
-            this.labelCanceled.Location = new System.Drawing.Point(69, 138);
+            this.labelCanceled.Location = new System.Drawing.Point(69, 113);
             this.labelCanceled.Name = "labelCanceled";
             this.labelCanceled.Size = new System.Drawing.Size(68, 15);
             this.labelCanceled.TabIndex = 20;
@@ -245,7 +247,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // 
             this.labelIsCanceled.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelIsCanceled.AutoSize = true;
-            this.labelIsCanceled.Location = new System.Drawing.Point(143, 138);
+            this.labelIsCanceled.Location = new System.Drawing.Point(143, 113);
             this.labelIsCanceled.Name = "labelIsCanceled";
             this.labelIsCanceled.Size = new System.Drawing.Size(75, 15);
             this.labelIsCanceled.TabIndex = 21;
@@ -255,7 +257,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // 
             this.labelIsCompleted.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelIsCompleted.AutoSize = true;
-            this.labelIsCompleted.Location = new System.Drawing.Point(153, 157);
+            this.labelIsCompleted.Location = new System.Drawing.Point(153, 132);
             this.labelIsCompleted.Name = "labelIsCompleted";
             this.labelIsCompleted.Size = new System.Drawing.Size(75, 15);
             this.labelIsCompleted.TabIndex = 23;
@@ -265,7 +267,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // 
             this.labelCompleted.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelCompleted.AutoSize = true;
-            this.labelCompleted.Location = new System.Drawing.Point(69, 157);
+            this.labelCompleted.Location = new System.Drawing.Point(69, 132);
             this.labelCompleted.Name = "labelCompleted";
             this.labelCompleted.Size = new System.Drawing.Size(78, 15);
             this.labelCompleted.TabIndex = 22;
@@ -274,7 +276,7 @@ namespace ERP.Store.Desktop.Forms.Orders
             // buttonEdit
             // 
             this.buttonEdit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonEdit.Location = new System.Drawing.Point(308, 287);
+            this.buttonEdit.Location = new System.Drawing.Point(308, 239);
             this.buttonEdit.Name = "buttonEdit";
             this.buttonEdit.Size = new System.Drawing.Size(58, 23);
             this.buttonEdit.TabIndex = 24;
@@ -293,11 +295,35 @@ namespace ERP.Store.Desktop.Forms.Orders
             this.buttonGetOrderPdf.UseVisualStyleBackColor = true;
             this.buttonGetOrderPdf.Click += new System.EventHandler(this.buttonGetOrderPdf_Click);
             // 
+            // checkBoxFinishOrder
+            // 
+            this.checkBoxFinishOrder.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBoxFinishOrder.AutoSize = true;
+            this.checkBoxFinishOrder.Location = new System.Drawing.Point(69, 387);
+            this.checkBoxFinishOrder.Name = "checkBoxFinishOrder";
+            this.checkBoxFinishOrder.Size = new System.Drawing.Size(88, 19);
+            this.checkBoxFinishOrder.TabIndex = 26;
+            this.checkBoxFinishOrder.Text = "Finish order";
+            this.checkBoxFinishOrder.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxCancelOrder
+            // 
+            this.checkBoxCancelOrder.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBoxCancelOrder.AutoSize = true;
+            this.checkBoxCancelOrder.Location = new System.Drawing.Point(181, 387);
+            this.checkBoxCancelOrder.Name = "checkBoxCancelOrder";
+            this.checkBoxCancelOrder.Size = new System.Drawing.Size(93, 19);
+            this.checkBoxCancelOrder.TabIndex = 27;
+            this.checkBoxCancelOrder.Text = "Cancel order";
+            this.checkBoxCancelOrder.UseVisualStyleBackColor = true;
+            // 
             // frmOrderDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.checkBoxCancelOrder);
+            this.Controls.Add(this.checkBoxFinishOrder);
             this.Controls.Add(this.buttonGetOrderPdf);
             this.Controls.Add(this.buttonEdit);
             this.Controls.Add(this.labelIsCompleted);
@@ -355,5 +381,7 @@ namespace ERP.Store.Desktop.Forms.Orders
         private System.Windows.Forms.Label labelCompleted;
         private System.Windows.Forms.Button buttonEdit;
         private System.Windows.Forms.Button buttonGetOrderPdf;
+        private System.Windows.Forms.CheckBox checkBoxFinishOrder;
+        private System.Windows.Forms.CheckBox checkBoxCancelOrder;
     }
 }

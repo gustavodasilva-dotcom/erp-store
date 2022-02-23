@@ -129,6 +129,9 @@ namespace ERP.Store.Desktop.Forms.Orders
                         textBoxAgency.Text = order.payment.paymentInfo.agency.ToString();
                     }
 
+                    if ((bool)order.isCompleted) checkBoxFinishOrder.Checked = true;
+                    if ((bool)order.isCanceled) checkBoxCancelOrder.Checked = true;
+
                     OrderJson = order;
 
                     #endregion
@@ -145,6 +148,8 @@ namespace ERP.Store.Desktop.Forms.Orders
             try
             {
                 var validation = ValidateInput();
+
+                if (checkBoxCancelOrder.Checked && checkBoxFinishOrder.Checked) throw new Exception("It's not possible to finish and cancel an order at the same time.");
 
                 if (string.IsNullOrEmpty(validation))
                 {
@@ -169,12 +174,22 @@ namespace ERP.Store.Desktop.Forms.Orders
 
                     if (OperationType == OperationType.Create)
                     {
+                        if (checkBoxCancelOrder.Checked) throw new Exception("It's not possible to created and cancel an order that is being created.");
+                        if (checkBoxFinishOrder.Checked) throw new Exception("It's not possible to created and finish an order at the same time.");
+
                         var orderID = _orderService.Post(orderRequest, User);
 
                         if (orderID != 0)
+                        {
                             MessageBox.Show($"Order created successfully. Order id: {orderID}.");
+
+                            this.Close();
+                            this.Dispose();
+                        }
                         else
+                        {
                             MessageBox.Show("It was not possible to complete de request.");
+                        }
                     }
                     else
                     {
@@ -188,6 +203,26 @@ namespace ERP.Store.Desktop.Forms.Orders
                                     MessageBox.Show($"Order {orderID} updated successfully.");
                                 else
                                     MessageBox.Show("It was not possible to complete de request.");
+
+                                if (!(bool)OrderJson.isCanceled && checkBoxCancelOrder.Checked)
+                                {
+                                    orderID = _orderService.Post(true, orderIdFromLabel, User);
+
+                                    if (orderID != 0)
+                                        MessageBox.Show($"Order {orderID} canceled successfully.");
+                                    else
+                                        MessageBox.Show("It was not possible to complete de request.");
+                                }
+
+                                if (!(bool)OrderJson.isCompleted && checkBoxFinishOrder.Checked)
+                                {
+                                    orderID = _orderService.Post(false, orderIdFromLabel, User);
+
+                                    if (orderID != 0)
+                                        MessageBox.Show($"Order {orderID} finished successfully.");
+                                    else
+                                        MessageBox.Show("It was not possible to complete de request.");
+                                }
                             }
                         }
                     }

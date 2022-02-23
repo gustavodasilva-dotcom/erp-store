@@ -130,6 +130,7 @@ namespace ERP.Store.Desktop.Services
                 {
                     Border = new BorderInfo(BorderSide.All, .5f, Color.FromRgb(System.Drawing.Color.LightGray)),
                     DefaultCellBorder = new BorderInfo(BorderSide.All, .5f, Color.FromRgb(System.Drawing.Color.LightGray)),
+                    DefaultColumnWidth = "80"
                 };
 
                 itemsTable.DefaultCellPadding = new MarginInfo
@@ -143,18 +144,18 @@ namespace ERP.Store.Desktop.Services
                 var row = itemsTable.Rows.Add();
                 row.Cells.Add("Item ID: ");
                 row.Cells.Add("Quantity: ");
+                row.Cells.Add("Price: ");
                 row.Cells.Add("Category: ");
                 row.Cells.Add("Supplier: ");
-                row.Cells.Add("Price: ");
 
                 foreach (var item in items)
                 {
                     row = itemsTable.Rows.Add();
                     row.Cells.Add(item.itemID.ToString());
                     row.Cells.Add(item.quantity.ToString());
+                    row.Cells.Add($"R$ {item.price.ToString()}");
                     row.Cells.Add(item.category.description.ToString());
                     row.Cells.Add(item.inventory.supplier.name.ToString());
-                    row.Cells.Add(item.price.ToString());
                 }
 
                 page.Paragraphs.Add(itemsTable);
