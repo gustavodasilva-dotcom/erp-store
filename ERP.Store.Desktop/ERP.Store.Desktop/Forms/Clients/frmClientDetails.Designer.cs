@@ -253,8 +253,8 @@ namespace ERP.Store.Desktop.Forms.Clients
             this.Controls.Add(this.textBoxLastName);
             this.Controls.Add(this.textBoxMiddleName);
             this.Controls.Add(this.textBoxFirstName);
-            this.Name = "frmClientDetails";
-            this.Text = "frmClientDetails";
+            this.Name = "Client Details";
+            this.Text = "Client Details";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

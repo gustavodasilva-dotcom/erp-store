@@ -15,6 +15,8 @@ namespace ERP.Store.Desktop.Forms.Find
 
         private readonly ClientService _clientService;
 
+        private readonly SupplierService _supplierService;
+
         private readonly EmployeeService _employeeService;
 
         private readonly InventoryService _inventoryService;
@@ -28,6 +30,8 @@ namespace ERP.Store.Desktop.Forms.Find
             _orderService = new OrderService();
 
             _clientService = new ClientService();
+
+            _supplierService = new SupplierService();
 
             _employeeService = new EmployeeService();
 
@@ -89,6 +93,17 @@ namespace ERP.Store.Desktop.Forms.Find
 
                             frmOrderDetails.Show();
                         }
+                    }
+                }
+                else if (SearchType == SearchType.Supplier)
+                {
+                    var supplier = _supplierService.Get(inputData, User);
+
+                    if (supplier != null)
+                    {
+                        var frmSupplierDetails = new Suppliers.frmSupplierDetails(User, supplier, OperationType.Update);
+
+                        frmSupplierDetails.Show();
                     }
                 }
             }

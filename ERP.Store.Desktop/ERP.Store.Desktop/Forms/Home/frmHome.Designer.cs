@@ -32,6 +32,7 @@ namespace ERP.Store.Desktop.Forms.Home
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ordersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.registerNewOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inventoriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getItemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.registerNewItemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,10 +40,11 @@ namespace ERP.Store.Desktop.Forms.Home
             this.registerNewClientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findClientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.suppliersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getSupplierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.registerNewSupplierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.employeesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.registerNewEmployeeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findEmployeeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.getOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,9 +74,16 @@ namespace ERP.Store.Desktop.Forms.Home
             // registerNewOrderToolStripMenuItem
             // 
             this.registerNewOrderToolStripMenuItem.Name = "registerNewOrderToolStripMenuItem";
-            this.registerNewOrderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.registerNewOrderToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.registerNewOrderToolStripMenuItem.Text = "Register new order";
             this.registerNewOrderToolStripMenuItem.Click += new System.EventHandler(this.registerNewOrderToolStripMenuItem_Click);
+            // 
+            // getOrderToolStripMenuItem
+            // 
+            this.getOrderToolStripMenuItem.Name = "getOrderToolStripMenuItem";
+            this.getOrderToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.getOrderToolStripMenuItem.Text = "Get order";
+            this.getOrderToolStripMenuItem.Click += new System.EventHandler(this.getOrderToolStripMenuItem_Click);
             // 
             // inventoriesToolStripMenuItem
             // 
@@ -124,9 +133,26 @@ namespace ERP.Store.Desktop.Forms.Home
             // 
             // suppliersToolStripMenuItem
             // 
+            this.suppliersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.getSupplierToolStripMenuItem,
+            this.registerNewSupplierToolStripMenuItem});
             this.suppliersToolStripMenuItem.Name = "suppliersToolStripMenuItem";
             this.suppliersToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
             this.suppliersToolStripMenuItem.Text = "Suppliers";
+            // 
+            // getSupplierToolStripMenuItem
+            // 
+            this.getSupplierToolStripMenuItem.Name = "getSupplierToolStripMenuItem";
+            this.getSupplierToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.getSupplierToolStripMenuItem.Text = "Get supplier";
+            this.getSupplierToolStripMenuItem.Click += new System.EventHandler(this.getSupplierToolStripMenuItem_Click);
+            // 
+            // registerNewSupplierToolStripMenuItem
+            // 
+            this.registerNewSupplierToolStripMenuItem.Name = "registerNewSupplierToolStripMenuItem";
+            this.registerNewSupplierToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.registerNewSupplierToolStripMenuItem.Text = "Register new supplier";
+            this.registerNewSupplierToolStripMenuItem.Click += new System.EventHandler(this.registerNewSupplierToolStripMenuItem_Click);
             // 
             // employeesToolStripMenuItem
             // 
@@ -150,13 +176,6 @@ namespace ERP.Store.Desktop.Forms.Home
             this.findEmployeeToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.findEmployeeToolStripMenuItem.Text = "Find employee";
             this.findEmployeeToolStripMenuItem.Click += new System.EventHandler(this.findEmployeeToolStripMenuItem_Click);
-            // 
-            // getOrderToolStripMenuItem
-            // 
-            this.getOrderToolStripMenuItem.Name = "getOrderToolStripMenuItem";
-            this.getOrderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.getOrderToolStripMenuItem.Text = "Get order";
-            this.getOrderToolStripMenuItem.Click += new System.EventHandler(this.getOrderToolStripMenuItem_Click);
             // 
             // frmHome
             // 
@@ -190,5 +209,7 @@ namespace ERP.Store.Desktop.Forms.Home
         private System.Windows.Forms.ToolStripMenuItem registerNewItemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem registerNewOrderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem getOrderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem getSupplierToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem registerNewSupplierToolStripMenuItem;
     }
 }
