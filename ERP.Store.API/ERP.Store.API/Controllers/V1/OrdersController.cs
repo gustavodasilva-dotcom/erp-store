@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using ERP.Store.API.CustomExceptions;
 using ERP.Store.API.Services.Interfaces;
 using ERP.Store.API.Entities.Models.InputModel;
+using ERP.Store.API.Services.CustomExceptions;
 
 namespace ERP.Store.API.Controllers.V1
 {
@@ -28,7 +29,7 @@ namespace ERP.Store.API.Controllers.V1
         }
 
         [HttpGet("{orderID:int}")]
-        [Authorize(Roles = "1")]
+        [Authorize(Roles = "1,2")]
         public async Task<ActionResult<dynamic>> GetOrderAsync([FromRoute] int orderID)
         {
             try
@@ -53,15 +54,55 @@ namespace ERP.Store.API.Controllers.V1
             }
         }
 
-        [HttpPost]
-        [Authorize(Roles = "1")]
-        public async Task<ActionResult> RegisterOrderAsync([FromBody] OrderInputModel model)
+        [HttpPost("{orderID:int}")]
+        [Authorize(Roles = "1,2")]
+        public async Task<ActionResult<dynamic>> CompleteOrCancelOrderAsync([FromRoute] int orderID, [FromBody] CompleteOrderInputModel model)
         {
             try
             {
-                await _orderService.RegisterOrderAsync(model);
+                if (orderID != model.OrderID) throw new BadRequestException("The order ID at the route and the order ID at the body must be the same.");
 
-                return Ok();
+                await _logService.LogAsync(model, "Requesting completion or cancelation of order.", "CompleteOrderAsync() : OrdersController", model.OrderID);
+
+                await _orderService.CompleteOrCancelOrderAsync(model);
+
+                await _logService.LogAsync(model, $"Order {model.OrderID} completed or canceled.", "CompleteOrderAsync() : OrdersController", model.OrderID);
+
+                return Ok(await _orderService.GetOrderAsync(model.OrderID));
+            }
+            catch (BadRequestException e)
+            {
+                await _logService.LogAsync(model, e.Message, "CompleteOrderAsync() : InventoriesController");
+
+                var returnModel = await _validationService.InitializingReturn(e.Message, BadRequest().StatusCode);
+
+                return BadRequest(returnModel);
+            }
+            catch (NotFoundException e)
+            {
+                await _logService.LogAsync(model, e.Message, "CompleteOrderAsync() : OrdersController");
+
+                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
+
+                return NotFound(returnModel);
+            }
+            catch (Exception e)
+            {
+                await _logService.LogAsync(model, e.Message, "CompleteOrderAsync() : OrdersController");
+
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
+
+                return StatusCode(500, returnModel);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "1,2")]
+        public async Task<ActionResult<dynamic>> RegisterOrderAsync([FromBody] OrderInputModel model)
+        {
+            try
+            {
+                return Created(string.Empty, await _orderService.GetOrderAsync(await _orderService.RegisterOrderAsync(model)));
             }
             catch (NotFoundException e)
             {
@@ -74,6 +115,42 @@ namespace ERP.Store.API.Controllers.V1
             catch (Exception e)
             {
                 await _logService.LogAsync(model, e.Message, "RegisterOrderAsync() : OrdersController");
+
+                var returnModel = await _validationService.InitializingReturn(e.Message, 500);
+
+                return StatusCode(500, returnModel);
+            }
+        }
+
+        [HttpPut("{orderID:int}")]
+        [Authorize(Roles = "1,2")]
+        public async Task<ActionResult> UpdateOrderAsync([FromBody] OrderInputModel model, [FromRoute] int orderID)
+        {
+            try
+            {
+                await _orderService.UpdateOrderAsync(model, orderID);
+
+                return Ok(await _orderService.GetOrderAsync(orderID));
+            }
+            catch (NotFoundException e)
+            {
+                await _logService.LogAsync(model, e.Message, "UpdateOrderAsync() : OrdersController");
+
+                var returnModel = await _validationService.InitializingReturn(e.Message, NotFound().StatusCode);
+
+                return NotFound(returnModel);
+            }
+            catch (ConflictException e)
+            {
+                await _logService.LogAsync(model, e.Message, "UpdateOrderAsync() : OrdersController");
+
+                var returnModel = await _validationService.InitializingReturn(e.Message, Conflict().StatusCode);
+
+                return Conflict(returnModel);
+            }
+            catch (Exception e)
+            {
+                await _logService.LogAsync(model, e.Message, "UpdateOrderAsync() : OrdersController");
 
                 var returnModel = await _validationService.InitializingReturn(e.Message, 500);
 

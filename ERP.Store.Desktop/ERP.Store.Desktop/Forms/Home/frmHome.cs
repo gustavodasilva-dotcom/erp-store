@@ -98,5 +98,61 @@ namespace ERP.Store.Desktop.Forms.Home
                 MessageBox.Show($"The following error occured: {ex.Message} Please, contact the system administrator.");
             }
         }
+
+        private void registerNewOrderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var orderDetails = new Orders.frmOrderDetails(User, OperationType.Create);
+
+                orderDetails.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The following error occured: {ex.Message} Please, contact the system administrator.");
+            }
+        }
+
+        private void getOrderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var getOrder = new Find.frmFind(User, SearchType.Order);
+
+                getOrder.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The following error occured: {ex.Message} Please, contact the system administrator.");
+            }
+        }
+
+        private void registerNewSupplierToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var supplierDetails = new Suppliers.frmSupplierDetails(User, OperationType.Create);
+
+                supplierDetails.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The following error occured: {ex.Message} Please, contact the system administrator.");
+            }
+        }
+
+        private void getSupplierToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var getSupplier = new Find.frmFind(User, SearchType.Supplier);
+
+                getSupplier.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The following error occured: {ex.Message} Please, contact the system administrator.");
+            }
+        }
     }
 }

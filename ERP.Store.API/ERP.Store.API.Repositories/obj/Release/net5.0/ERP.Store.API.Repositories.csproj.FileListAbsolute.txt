@@ -1,0 +1,15 @@
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\bin\Release\net5.0\ERP.Store.API.Repositories.deps.json
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\bin\Release\net5.0\ERP.Store.API.Repositories.dll
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\bin\Release\net5.0\ref\ERP.Store.API.Repositories.dll
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\bin\Release\net5.0\ERP.Store.API.Repositories.pdb
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\bin\Release\net5.0\ERP.Store.API.Entities.dll
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\bin\Release\net5.0\ERP.Store.API.Entities.pdb
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\obj\Release\net5.0\ERP.Store.API.Repositories.csproj.AssemblyReference.cache
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\obj\Release\net5.0\ERP.Store.API.Repositories.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\obj\Release\net5.0\ERP.Store.API.Repositories.AssemblyInfoInputs.cache
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\obj\Release\net5.0\ERP.Store.API.Repositories.AssemblyInfo.cs
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\obj\Release\net5.0\ERP.Store.API.Repositories.csproj.CoreCompileInputs.cache
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\obj\Release\net5.0\ERP.Store.API.Repositories.csproj.CopyComplete
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\obj\Release\net5.0\ERP.Store.API.Repositories.dll
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\obj\Release\net5.0\ref\ERP.Store.API.Repositories.dll
+C:\Users\gusta\source\repos\ERP.Store\API\ERP.Store.API\ERP.Store.API\ERP.Store.API.Repositories\obj\Release\net5.0\ERP.Store.API.Repositories.pdb

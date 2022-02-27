@@ -80,7 +80,7 @@ namespace ERP.Store.API.Controllers.V1
 
                 await _logService.LogAsync(model, "Client registered successfully.", "RegisterClientAsync() : ClientsController", client.ID);
 
-                return Created("Created", client);
+                return Created(string.Empty, client);
             }
             catch (ConflictException e)
             {
@@ -151,7 +151,7 @@ namespace ERP.Store.API.Controllers.V1
             {
                 if (await _clientService.DeleteClientAsync(identification))
                 {
-                    await _logService.LogAsync(identification, "Employee client successfully.", "DeleteClientAsync() : ClientsController");
+                    await _logService.LogAsync(identification, "Client deleted successfully.", "DeleteClientAsync() : ClientsController");
 
                     return Ok("Client deleted successfully.");
                 }

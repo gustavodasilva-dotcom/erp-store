@@ -48,6 +48,26 @@ namespace ERP.Store.API.Services
             catch (Exception) { throw; }
         }
 
+        public async Task<IEnumerable<dynamic>> GetShortListOfItemsAsync()
+        {
+            try
+            {
+                var items = await _inventoryRepository.GetShortListOfItemsAsync();
+
+                if (items == null)
+                    throw new NotFoundException("No items were found.");
+
+                return items.Select(i => new
+                {
+                    i.ItemID,
+                    i.Name,
+                    i.Price,
+                    i.Quantity
+                }).ToList();
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task<ItemViewModel> GetItemAsync(int itemID)
         {
             try
@@ -231,6 +251,44 @@ namespace ERP.Store.API.Services
                 }
 
                 return messages;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task<IEnumerable<string>> ValidateItemsAsync(Item item)
+        {
+            try
+            {
+                var messages = new List<string>();
+
+                if (await _inventoryRepository.GetItemAsync(item.ID) == null)
+                {
+                    messages.Add($"The id {item.ID} does not correspond to an actual item.");
+                }
+                else
+                {
+                    if (!await IsAvailable(item)) messages.Add($"The item {item.ID} is not available.");
+                }
+
+                return messages;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task UpdateInventoryAsync(Item item, bool isTakeOutQuantity)
+        {
+            try
+            {
+                var inventory = await _inventoryRepository.GetInventoryAsync(item.ID);
+
+                if (inventory == null) throw new NotFoundException($"It wasn't found an inventory to the item {item.ID}.");
+
+                if (isTakeOutQuantity)
+                    item.Inventory.Quantity = inventory.Quantity - item.Inventory.Quantity;
+                else
+                    item.Inventory.Quantity = inventory.Quantity + Math.Abs(item.Inventory.Quantity);
+
+                await _inventoryRepository.UpdateInventoryAsync(item);
             }
             catch (Exception) { throw; }
         }

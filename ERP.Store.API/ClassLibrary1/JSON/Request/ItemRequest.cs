@@ -2,6 +2,8 @@
 {
     public class ItemRequest
     {
+        public int ItemID { get; set; }
+
         public string Name { get; set; }
 
         public double Price { get; set; }

@@ -114,7 +114,7 @@ namespace ERP.Store.API.Repositories
                 {
                     #region SQL
 
-                    var query = @"SELECT * FROM CardsInfo (NOLOCK) WHERE Order_PaymentID = @orderPaymentID;";
+                    var query = @"SELECT * FROM CardsInfo (NOLOCK) WHERE Order_PaymentID = @orderPaymentID AND Deleted = 0;";
 
                     #endregion
 
@@ -132,7 +132,7 @@ namespace ERP.Store.API.Repositories
                 {
                     #region SQL
 
-                    var query = @"SELECT * FROM BankInfo (NOLOCK) WHERE Order_PaymentID = @orderPaymentID;";
+                    var query = @"SELECT * FROM BankInfo (NOLOCK) WHERE Order_PaymentID = @orderPaymentID AND Deleted = 0;";
 
                     #endregion
 
@@ -150,11 +150,29 @@ namespace ERP.Store.API.Repositories
                 {
                     #region SQL
 
-                    var query = @"SELECT * FROM Order_Payment (NOLOCK) WHERE OrderID = @orderID;";
+                    var query = @"SELECT * FROM Order_Payment (NOLOCK) WHERE OrderID = @orderID AND Deleted = 0;";
 
                     #endregion
 
                     return await db.QueryFirstOrDefaultAsync<Order_PaymentTable>(query, new { @orderID = orderID }, commandTimeout: 30);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task DeleteOrderPaymentAsync(int orderPaymentID)
+        {
+            try
+            {
+                using (var db = new SqlConnection(_connectionString))
+                {
+                    #region SQL
+
+                    var query = @"UPDATE Order_Payment SET Deleted = 1 WHERE Order_PaymentID = @orderPaymentID;";
+
+                    #endregion
+
+                    await db.ExecuteAsync(query, new { @orderPaymentID = orderPaymentID },  commandTimeout: 30);
                 }
             }
             catch (Exception) { throw; }

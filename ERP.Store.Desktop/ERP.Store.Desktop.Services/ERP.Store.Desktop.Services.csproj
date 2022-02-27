@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspose.PDF" Version="22.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\ERP.Store.API\ClassLibrary1\ERP.Store.Desktop.Entities.csproj" />
     <ProjectReference Include="..\ERP.Store.Desktop.Repositories\ERP.Store.Desktop.Repositories.csproj" />
   </ItemGroup>

@@ -8,8 +8,18 @@ namespace ERP.Store.API.Repositories.Interfaces
     {
         Task<OrdersTable> GetOrderAsync(int orderID);
 
+        Task CompleteOrCancelOrderAsync(int orderID, bool completeOrder);
+
         Task<int> InsertOrderAsync(Order order);
 
         Task InsertOrderItemsAsync(Order order);
+
+        Task InsertOrderItemsAsync(Item item, int orderID);
+
+        Task UpdateClientsOrderAsync(int clientID, int orderID);
+
+        Task UpdateOrderItemQuantityAsync(int orderID, int itemID, int quantity);
+
+        Task UpdateOrderValueAsync(Order order);
     }
 }

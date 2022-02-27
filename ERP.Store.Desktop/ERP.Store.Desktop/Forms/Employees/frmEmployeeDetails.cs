@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using ERP.Store.Desktop.Services;
 using ERP.Store.Desktop.Entities.Entities;
 using ERP.Store.Desktop.Entities.JSON.Request;
-using ERP.Store.Desktop.Entities.JSON.Response;
 
 namespace ERP.Store.Desktop.Forms.Employees
 {
@@ -13,7 +12,7 @@ namespace ERP.Store.Desktop.Forms.Employees
     {
         private dynamic User { get; set; }
 
-        public EmployeeResponse Employee { get; set; }
+        public dynamic Employee { get; set; }
 
         public OperationType OperationType { get; set; }
 
@@ -50,7 +49,7 @@ namespace ERP.Store.Desktop.Forms.Employees
                 buttonDelete.Visible = false;
         }
 
-        public frmEmployeeDetails(dynamic user, EmployeeResponse employee, OperationType operationType)
+        public frmEmployeeDetails(dynamic user, dynamic employee, OperationType operationType)
         {
             User = user;
 
@@ -75,34 +74,34 @@ namespace ERP.Store.Desktop.Forms.Employees
             comboBoxJob.Items.Add("Administrator");
             comboBoxJob.Items.Add("Salesperson");
 
-            textBoxFirstName.Text = employee.FirstName;
-            textBoxMiddleName.Text = employee.MiddleName;
-            textBoxLastName.Text = employee.LastName;
-            textBoxIdentification.Text = employee.Identification;
+            textBoxFirstName.Text = employee.firstName.ToString();
+            textBoxMiddleName.Text = employee.middleName.ToString();
+            textBoxLastName.Text = employee.lastName.ToString();
+            textBoxIdentification.Text = employee.identification.ToString();
 
-            textBoxUsername.Text = employee.UserInfo.Username;
-            textBoxPassword.Text = Convert.ToString(employee.UserInfo.Password);
+            textBoxUsername.Text = employee.userInfo.username.ToString();
+            textBoxPassword.Text = Convert.ToString(employee.userInfo.password.ToString());
 
-            textBoxZip.Text = employee.Address.Zip;
-            textBoxStreet.Text = employee.Address.Street;
-            textBoxNumber.Text = employee.Address.Number;
-            textBoxComment.Text = employee.Address.Comment;
-            textBoxNeighborhood.Text = employee.Address.Neighborhood;
-            textBoxCity.Text = employee.Address.City;
-            textBoxState.Text = employee.Address.State;
-            textBoxCountry.Text = employee.Address.Country;
+            textBoxZip.Text = employee.address.zip.ToString();
+            textBoxStreet.Text = employee.address.street.ToString();
+            textBoxNumber.Text = employee.address.number.ToString();
+            textBoxComment.Text = employee.address.comment.ToString();
+            textBoxNeighborhood.Text = employee.address.neighborhood.ToString();
+            textBoxCity.Text = employee.address.city.ToString();
+            textBoxState.Text = employee.address.state.ToString();
+            textBoxCountry.Text = employee.address.country.ToString();
 
-            textBoxEmail.Text = employee.Contact.Email;
-            textBoxCellphone.Text = employee.Contact.Cellphone;
-            textBoxPhone.Text = employee.Contact.Phone;
+            textBoxEmail.Text = employee.contact.email.ToString();
+            textBoxCellphone.Text = employee.contact.cellphone.ToString();
+            textBoxPhone.Text = employee.contact.phone.ToString();
 
-            comboBoxAccessLevel.SelectedIndex = employee.ExtraInfo.AccessLevelID - 1;
-            textBoxSalary.Text = Convert.ToString(employee.ExtraInfo.Salary);
-            comboBoxJob.SelectedIndex = employee.ExtraInfo.JobID - 1;
+            comboBoxAccessLevel.SelectedIndex = int.Parse(employee.extraInfo.accessLevelID.ToString()) - 1;
+            textBoxSalary.Text = Convert.ToString(employee.extraInfo.salary);
+            comboBoxJob.SelectedIndex = int.Parse(employee.extraInfo.jobID.ToString()) - 1;
 
-            if (!string.IsNullOrEmpty(employee.Image.Base64) && employee.Image.IsImage)
+            if (!string.IsNullOrEmpty(employee.image.base64.ToString()) && (bool)employee.image.isImage)
             {
-                var bytes = Convert.FromBase64String(employee.Image.Base64);
+                var bytes = Convert.FromBase64String(employee.image.base64.ToString());
 
                 using var ms = new MemoryStream(bytes);
                 pictureBoxImage.Image = Image.FromStream(ms);
@@ -256,25 +255,12 @@ namespace ERP.Store.Desktop.Forms.Employees
                             }
                         };
 
-                        var statusCode = _employeeService.Put(newEmployee, User);
+                        var employeeID = _employeeService.Put(newEmployee, User);
 
-                        switch (statusCode)
-                        {
-                            case 200:
-                                message = "Employee updated succefully.";
-                                break;
-                            case 401:
-                                message = $"This user doens't have authorization to complete this request.";
-                                break;
-                            case 409:
-                                message = $"There's alredy an employee registered with the identification number {textBoxIdentification.Text}.";
-                                break;
-                            default:
-                                message = "An error occurred while processing the request.";
-                                break;
-                        }
-
-                        MessageBox.Show(message);
+                        if (employeeID != 0)
+                            MessageBox.Show($"Employee updated sucessfully. ID: {employeeID}");
+                        else
+                            MessageBox.Show("An error occurred while updating the employee.");
 
                         #endregion
                     }
@@ -290,26 +276,8 @@ namespace ERP.Store.Desktop.Forms.Employees
         {
             try
             {
-                var message = string.Empty;
-
-                var statusCode = _employeeService.Delete(textBoxIdentification.Text, User);
-
-                switch (statusCode)
-                {
-                    case 200:
-                        message = "Employee deleted succefully.";
-                        break;
-                    case 401:
-                        message = $"This user doens't have authorization to complete this request.";
-                        break;
-                    case 404:
-                        message = $"There's no employee registered with the identification number {textBoxIdentification.Text}.";
-                        break;
-                    default:
-                        message = "An error occurred while processing the request.";
-                        break;
-                }
-
+                var message = _employeeService.Delete(textBoxIdentification.Text, User);
+                
                 MessageBox.Show(message);
             }
             catch (Exception ex)
